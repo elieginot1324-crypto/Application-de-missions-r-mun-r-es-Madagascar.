@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087c54">
+<title>MADAGASCAR EARN</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f7f5;color:#18352b;font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#087c54,#075b9b);color:white;padding:25px 18px 35px;border-radius:0 0 25px 25px}
+.logo{font-size:23px;font-weight:900;letter-spacing:.5px}
+.logo span{color:#b9f5cf}
+header p{font-size:13px;margin-bottom:22px}
+.balance{background:white;color:#18352b;border-radius:17px;padding:18px;box-shadow:0 5px 20px #0002}
+.balance small{color:#65756e}
+.amount{font-size:30px;font-weight:bold;margin:9px 0}
+main{padding:18px;max-width:650px;margin:auto}
+h3{font-size:17px;margin:22px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.item{background:white;border-radius:15px;padding:17px 12px;box-shadow:0 3px 12px #0000000b}
+.item b{display:block;margin:8px 0 4px}
+.item small{color:#718078;font-size:12px}
+.symbol{font-size:25px}
+button{border:0;border-radius:10px;background:#087c54;color:white;padding:12px;font-weight:bold;width:100%;margin-top:12px}
+.notice{background:#e6f5ed;padding:14px;border-radius:12px;font-size:13px;line-height:1.6}
+footer{text-align:center;color:#78867f;font-size:12px;padding:25px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">MADAGASCAR <span>EARN</span></div>
+  <p>Miasa • Mahazo vola • Mandroso</p>
+  <div class="balance">
+    <small>Solde disponible</small>
+    <div class="amount">0 Ar</div>
+    <small>Kaontinao MADAGASCAR EARN</small>
+  </div>
+</header>
+
+<main>
+  <h3>👋 Tongasoa eto amin'ny MADAGASCAR EARN</h3>
+  <div class="notice">
+    Sehatra natao hanampiana anao hahazo valisoa amin'ny
+    alalan'ny missions sy lalao misy fanamby.
+  </div>
+
+  <h3>📌 Tolotra sy asa</h3>
+  <div class="grid">
+    <div class="item">
+      <div class="symbol">💼</div>
+      <b>Missions</b>
+      <small>Asa sy iraka misy valisoa</small>
+      <button onclick="alert('Ho ampidirina rehefa vonona ny serveur.')">Hijery</button>
+    </div>
+    <div class="item">
+      <div class="symbol">🎮</div>
+      <b>Lalao</b>
+      <small>Quiz, Puzzle, Memory, Word</small>
+      <button onclick="alert('Ho ampidirina rehefa vonona ny lalao.')">Hilalao</button>
+    </div>
+    <div class="item">
+      <div class="symbol">👥</div>
+      <b>Parrainage</b>
+      <small>Bonus 1 000 Ar rehefa voamarina ny fepetra</small>
+      <button onclick="alert('Ho ampidirina ny rafitra parrainage.')">Hijery</button>
+    </div>
+    <div class="item">
+      <div class="symbol">💳</div>
+      <b>Retrait</b>
+      <small>Airtel Money sy MVola</small>
+      <button onclick="alert('Minimum retrait: 8 000 Ar. Tsy mbola mandeha ny paiement.')">Hijery</button>
+    </div>
+  </div>
+
+  <h3>🔐 Fiarovana</h3>
+  <div class="notice">
+    Voalahatra ny hampiasa fanamarinana kaonty,
+    fiarovana ny tenimiafina, fanaraha-maso ny valisoa
+    ary fanamarinana ataon'ny serveur.
+  </div>
+</main>
+
+<footer>
+MADAGASCAR EARN © 2026<br>
+Miasa am-pahamarinana, mandroso miaraka.
+</footer>
+</body>
+</html>
