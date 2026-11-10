@@ -13,10 +13,11 @@ header{background:linear-gradient(135deg,#075b42,#087c54,#075b9b);color:white;pa
 nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .logo{font-size:23px;font-weight:900}
 .logo span{color:#b9f5cf}
-.actions{display:flex;gap:8px}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 button{cursor:pointer;border:0;border-radius:10px;padding:12px 17px;font-weight:bold}
 .login{background:white;color:#087c54}
 .register{background:#b9f5cf;color:#075b42}
+.language{background:#ffffff;color:#075b42;padding:10px 13px}
 .hero{max-width:850px;margin:45px auto 25px;text-align:center}
 .hero h1{font-size:35px;margin:10px 0}
 .hero p{line-height:1.7}
@@ -28,9 +29,12 @@ h2{font-size:21px;margin-top:32px}
 .card .symbol{font-size:32px}
 .card p{font-size:13px;color:#718078;line-height:1.6}
 .card button{width:100%;background:#e6f5ed;color:#087c54}
-.info{background:#e6f5ed;padding:18px;border-radius:15px;line-height:1.8}
+.info{background:#e6f5ed;padding:18px;border-radius:15px;line-height:1.9}
 footer{text-align:center;padding:30px;color:#718078;font-size:12px}
-@media(max-width:480px){.hero h1{font-size:27px}.logo{font-size:19px}}
+@media(max-width:480px){
+ .hero h1{font-size:27px}
+ .logo{font-size:19px}
+}
 </style>
 </head>
 <body>
@@ -39,73 +43,76 @@ footer{text-align:center;padding:30px;color:#718078;font-size:12px}
 <nav>
 <div class="logo">MADAGASCAR <span>EARN</span></div>
 <div class="actions">
-<button class="login" onclick="access('hiditra')">Hiditra</button>
-<button class="register" onclick="access('hisoratra')">Hisoratra anarana</button>
+<button class="language" onclick="changeLanguage('mg')">🇲🇬 MG</button>
+<button class="language" onclick="changeLanguage('fr')">🇫🇷 FR</button>
+<button class="login" onclick="access('login')" data-i18n="login">Hiditra</button>
+<button class="register" onclick="access('register')" data-i18n="register">Hisoratra anarana</button>
 </div>
 </nav>
 
 <div class="hero">
 <div style="font-size:45px">🇲🇬</div>
-<h1>Miasa, Mahazo vola, Mandroso!</h1>
-<p>Sehatra Malagasy ahafahanao mahita asa madinika, manao fanamby ary mahazo valisoa rehefa voamarina ny asa vitanao.</p>
-<button class="register" onclick="access('hisoratra')">Hanomboka izao</button>
+<h1 data-i18n="slogan">Miasa, Mahazo vola, Mandroso!</h1>
+<p data-i18n="intro">Sehatra Malagasy ahafahanao mahita asa madinika, manao fanamby ary mahazo valisoa rehefa voamarina ny asa vitanao.</p>
+<button class="register" onclick="access('register')" data-i18n="start">Hanomboka izao</button>
 </div>
 </header>
 
 <main>
-<h2>📌 Fantaro ny MADAGASCAR EARN</h2>
+<h2 data-i18n="discover">📌 Fantaro ny MADAGASCAR EARN</h2>
+
 <div class="grid">
 <div class="card">
 <div class="symbol">💼</div>
-<h3>Missions sy asa</h3>
-<p>Mitadiava asa, tanteraho ny iraka ary alefaso hohamarinina ny vokatra.</p>
-<button onclick="access('hiditra')">Hijery missions</button>
+<h3 data-i18n="missions">Missions sy asa</h3>
+<p data-i18n="missionsText">Mitadiava asa, tanteraho ny iraka ary alefaso hohamarinina ny vokatra.</p>
+<button onclick="access('login')" data-i18n="seeMissions">Hijery missions</button>
 </div>
 
 <div class="card">
 <div class="symbol">🎮</div>
-<h3>Lalao sy fanamby</h3>
-<p>Quiz, Puzzle, Memory ary lalao hafa misy valisoa rehefa voamarina.</p>
-<button onclick="access('hiditra')">Hijery lalao</button>
+<h3 data-i18n="games">Lalao sy fanamby</h3>
+<p data-i18n="gamesText">Quiz, Puzzle, Memory ary lalao hafa misy valisoa rehefa voamarina.</p>
+<button onclick="access('login')" data-i18n="seeGames">Hijery lalao</button>
 </div>
 
 <div class="card">
 <div class="symbol">👥</div>
-<h3>Parrainage</h3>
-<p>Mahazo bonus 1 000 Ar rehefa voamarina ny fepetra momba ny olona nasainao.</p>
-<button onclick="access('hiditra')">Hijery</button>
+<h3 data-i18n="referral">Parrainage</h3>
+<p data-i18n="referralText">Mahazo bonus 1 000 Ar rehefa voamarina ny fepetra momba ny olona nasainao.</p>
+<button onclick="access('login')" data-i18n="seeMore">Hijery</button>
 </div>
 
 <div class="card">
 <div class="symbol">💳</div>
-<h3>Fakana vola</h3>
-<p>Airtel Money sy MVola. Fisintonana manomboka amin'ny 8 000 Ar.</p>
-<button onclick="access('hiditra')">Hijery</button>
+<h3 data-i18n="withdraw">Fakana vola</h3>
+<p data-i18n="withdrawText">Airtel Money sy MVola. Fisintonana manomboka amin'ny 8 000 Ar.</p>
+<button onclick="access('login')" data-i18n="withdrawInfo">Hijery ny fepetra</button>
 </div>
 </div>
 
-<h2>💰 Fitsipika momba ny vola</h2>
+<h2 data-i18n="moneyRules">💰 Fitsipika momba ny vola</h2>
 <div class="info">
-• Vola ampiasaina: Ariary (Ar)<br>
-• Retrait minimum: 8 000 Ar<br>
-• Saram-pisintonana: 500 Ar<br>
-• Bonus parrainage: 1 000 Ar<br>
-• Komisiona amin'ny sehatra: 10%
+<div data-i18n="currency">• Vola ampiasaina: Ariary (Ar)</div>
+<div data-i18n="minimum">• Retrait minimum: 8 000 Ar</div>
+<div data-i18n="fee">• Saram-pisintonana: 500 Ar</div>
+<div data-i18n="bonus">• Bonus parrainage: 1 000 Ar</div>
+<div data-i18n="commission">• Komisiona amin'ny sehatra: 10%</div>
 </div>
 
-<h2>🔐 Fiarovana sy fahatokisana</h2>
-<div class="info">
+<h2 data-i18n="securityTitle">🔐 Fiarovana sy fahatokisana</h2>
+<div class="info" data-i18n="securityText">
 Ny asa sy ny valisoa dia tsy maintsy hamarinina. Ny solde sy ny fangatahana retrait dia hotantanan'ny rafitra azo antoka rehefa vita ny fametrahana ny serveur.
 </div>
 
-<h2>📢 Tolotra dokambarotra</h2>
+<h2 data-i18n="adsTitle">📢 Tolotra dokambarotra</h2>
 <div class="grid">
 <div class="card">
-<h3>7 andro</h3>
+<h3 data-i18n="sevenDays">7 andro</h3>
 <strong>5 000 Ar</strong>
 </div>
 <div class="card">
-<h3>30 andro</h3>
+<h3 data-i18n="thirtyDays">30 andro</h3>
 <strong>15 000 Ar</strong>
 </div>
 </div>
@@ -113,15 +120,100 @@ Ny asa sy ny valisoa dia tsy maintsy hamarinina. Ny solde sy ny fangatahana retr
 
 <footer>
 MADAGASCAR EARN © 2026<br>
-Miasa am-pahamarinana, mandroso miaraka. 🇲🇬
+<span data-i18n="footer">Miasa am-pahamarinana, mandroso miaraka. 🇲🇬</span>
 </footer>
 
 <script>
-function access(type){
-alert(type === 'hiditra'
-? 'Ho avy ny pejy fidirana.'
-: 'Ho avy ny pejy fisoratana anarana.');
+const translations = {
+mg: {
+login:"Hiditra",
+register:"Hisoratra anarana",
+slogan:"Miasa, Mahazo vola, Mandroso!",
+intro:"Sehatra Malagasy ahafahanao mahita asa madinika, manao fanamby ary mahazo valisoa rehefa voamarina ny asa vitanao.",
+start:"Hanomboka izao",
+discover:"📌 Fantaro ny MADAGASCAR EARN",
+missions:"Missions sy asa",
+missionsText:"Mitadiava asa, tanteraho ny iraka ary alefaso hohamarinina ny vokatra.",
+seeMissions:"Hijery missions",
+games:"Lalao sy fanamby",
+gamesText:"Quiz, Puzzle, Memory ary lalao hafa misy valisoa rehefa voamarina.",
+seeGames:"Hijery lalao",
+referral:"Parrainage",
+referralText:"Mahazo bonus 1 000 Ar rehefa voamarina ny fepetra momba ny olona nasainao.",
+seeMore:"Hijery",
+withdraw:"Fakana vola",
+withdrawText:"Airtel Money sy MVola. Fisintonana manomboka amin'ny 8 000 Ar.",
+withdrawInfo:"Hijery ny fepetra",
+moneyRules:"💰 Fitsipika momba ny vola",
+currency:"• Vola ampiasaina: Ariary (Ar)",
+minimum:"• Retrait minimum: 8 000 Ar",
+fee:"• Saram-pisintonana: 500 Ar",
+bonus:"• Bonus parrainage: 1 000 Ar",
+commission:"• Komisiona amin'ny sehatra: 10%",
+securityTitle:"🔐 Fiarovana sy fahatokisana",
+securityText:"Ny asa sy ny valisoa dia tsy maintsy hamarinina. Ny solde sy ny fangatahana retrait dia hotantanan'ny rafitra azo antoka rehefa vita ny fametrahana ny serveur.",
+adsTitle:"📢 Tolotra dokambarotra",
+sevenDays:"7 andro",
+thirtyDays:"30 andro",
+footer:"Miasa am-pahamarinana, mandroso miaraka. 🇲🇬",
+loginMessage:"Ho avy ny pejy fidirana.",
+registerMessage:"Ho avy ny pejy fisoratana anarana."
+},
+fr: {
+login:"Connexion",
+register:"Créer un compte",
+slogan:"Travaillez, gagnez de l'argent, avancez !",
+intro:"Une plateforme malgache pour trouver des petites missions, relever des défis et recevoir des récompenses après validation de votre travail.",
+start:"Commencer maintenant",
+discover:"📌 Découvrez MADAGASCAR EARN",
+missions:"Missions et travaux",
+missionsText:"Trouvez des missions, réalisez-les et envoyez votre travail pour validation.",
+seeMissions:"Voir les missions",
+games:"Jeux et défis",
+gamesText:"Quiz, puzzle, mémoire et autres jeux avec des récompenses après vérification.",
+seeGames:"Voir les jeux",
+referral:"Parrainage",
+referralText:"Recevez un bonus de 1 000 Ar lorsque les conditions de parrainage sont vérifiées.",
+seeMore:"Voir",
+withdraw:"Retrait d'argent",
+withdrawText:"Airtel Money et MVola. Retrait à partir de 8 000 Ar.",
+withdrawInfo:"Voir les conditions",
+moneyRules:"💰 Règles financières",
+currency:"• Monnaie utilisée : Ariary (Ar)",
+minimum:"• Retrait minimum : 8 000 Ar",
+fee:"• Frais de retrait : 500 Ar",
+bonus:"• Bonus de parrainage : 1 000 Ar",
+commission:"• Commission de la plateforme : 10%",
+securityTitle:"🔐 Sécurité et confiance",
+securityText:"Les missions et les récompenses doivent être vérifiées. Le solde et les demandes de retrait seront gérés par un système sécurisé après la mise en place du serveur.",
+adsTitle:"📢 Offres publicitaires",
+sevenDays:"7 jours",
+thirtyDays:"30 jours",
+footer:"Travailler honnêtement, avancer ensemble. 🇲🇬",
+loginMessage:"La page de connexion sera bientôt disponible.",
+registerMessage:"La page d'inscription sera bientôt disponible."
 }
+};
+
+let currentLanguage = localStorage.getItem("earnLanguage") || "mg";
+
+function changeLanguage(language) {
+currentLanguage = language;
+localStorage.setItem("earnLanguage", language);
+document.documentElement.lang = language;
+
+document.querySelectorAll("[data-i18n]").forEach(element => {
+const key = element.getAttribute("data-i18n");
+element.textContent = translations[language][key];
+});
+}
+
+function access(type) {
+const key = type === "login" ? "loginMessage" : "registerMessage";
+alert(translations[currentLanguage][key]);
+}
+
+changeLanguage(currentLanguage);
 </script>
 </body>
 </html>
