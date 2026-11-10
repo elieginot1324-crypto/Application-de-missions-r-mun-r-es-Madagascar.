@@ -1,89 +1,127 @@
+
 <!DOCTYPE html>
 <html lang="mg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#087c54">
 <title>MADAGASCAR EARN</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f3f7f5;color:#18352b;font-family:Arial,sans-serif}
-header{background:linear-gradient(135deg,#087c54,#075b9b);color:white;padding:25px 18px 35px;border-radius:0 0 25px 25px}
-.logo{font-size:23px;font-weight:900;letter-spacing:.5px}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#18352b}
+header{background:linear-gradient(135deg,#075b42,#087c54,#075b9b);color:white;padding:22px 6%;border-radius:0 0 28px 28px}
+nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{font-size:23px;font-weight:900}
 .logo span{color:#b9f5cf}
-header p{font-size:13px;margin-bottom:22px}
-.balance{background:white;color:#18352b;border-radius:17px;padding:18px;box-shadow:0 5px 20px #0002}
-.balance small{color:#65756e}
-.amount{font-size:30px;font-weight:bold;margin:9px 0}
-main{padding:18px;max-width:650px;margin:auto}
-h3{font-size:17px;margin:22px 0 12px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.item{background:white;border-radius:15px;padding:17px 12px;box-shadow:0 3px 12px #0000000b}
-.item b{display:block;margin:8px 0 4px}
-.item small{color:#718078;font-size:12px}
-.symbol{font-size:25px}
-button{border:0;border-radius:10px;background:#087c54;color:white;padding:12px;font-weight:bold;width:100%;margin-top:12px}
-.notice{background:#e6f5ed;padding:14px;border-radius:12px;font-size:13px;line-height:1.6}
-footer{text-align:center;color:#78867f;font-size:12px;padding:25px}
+.actions{display:flex;gap:8px}
+button{cursor:pointer;border:0;border-radius:10px;padding:12px 17px;font-weight:bold}
+.login{background:white;color:#087c54}
+.register{background:#b9f5cf;color:#075b42}
+.hero{max-width:850px;margin:45px auto 25px;text-align:center}
+.hero h1{font-size:35px;margin:10px 0}
+.hero p{line-height:1.7}
+.hero .register{margin:12px}
+main{max-width:950px;margin:auto;padding:20px}
+h2{font-size:21px;margin-top:32px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.card{background:white;padding:20px;border-radius:17px;box-shadow:0 4px 15px #0000000b}
+.card .symbol{font-size:32px}
+.card p{font-size:13px;color:#718078;line-height:1.6}
+.card button{width:100%;background:#e6f5ed;color:#087c54}
+.info{background:#e6f5ed;padding:18px;border-radius:15px;line-height:1.8}
+footer{text-align:center;padding:30px;color:#718078;font-size:12px}
+@media(max-width:480px){.hero h1{font-size:27px}.logo{font-size:19px}}
 </style>
 </head>
 <body>
+
 <header>
-  <div class="logo">MADAGASCAR <span>EARN</span></div>
-  <p>Miasa • Mahazo vola • Mandroso</p>
-  <div class="balance">
-    <small>Solde disponible</small>
-    <div class="amount">0 Ar</div>
-    <small>Kaontinao MADAGASCAR EARN</small>
-  </div>
+<nav>
+<div class="logo">MADAGASCAR <span>EARN</span></div>
+<div class="actions">
+<button class="login" onclick="access('hiditra')">Hiditra</button>
+<button class="register" onclick="access('hisoratra')">Hisoratra anarana</button>
+</div>
+</nav>
+
+<div class="hero">
+<div style="font-size:45px">🇲🇬</div>
+<h1>Miasa, Mahazo vola, Mandroso!</h1>
+<p>Sehatra Malagasy ahafahanao mahita asa madinika, manao fanamby ary mahazo valisoa rehefa voamarina ny asa vitanao.</p>
+<button class="register" onclick="access('hisoratra')">Hanomboka izao</button>
+</div>
 </header>
 
 <main>
-  <h3>👋 Tongasoa eto amin'ny MADAGASCAR EARN</h3>
-  <div class="notice">
-    Sehatra natao hanampiana anao hahazo valisoa amin'ny
-    alalan'ny missions sy lalao misy fanamby.
-  </div>
+<h2>📌 Fantaro ny MADAGASCAR EARN</h2>
+<div class="grid">
+<div class="card">
+<div class="symbol">💼</div>
+<h3>Missions sy asa</h3>
+<p>Mitadiava asa, tanteraho ny iraka ary alefaso hohamarinina ny vokatra.</p>
+<button onclick="access('hiditra')">Hijery missions</button>
+</div>
 
-  <h3>📌 Tolotra sy asa</h3>
-  <div class="grid">
-    <div class="item">
-      <div class="symbol">💼</div>
-      <b>Missions</b>
-      <small>Asa sy iraka misy valisoa</small>
-      <button onclick="alert('Ho ampidirina rehefa vonona ny serveur.')">Hijery</button>
-    </div>
-    <div class="item">
-      <div class="symbol">🎮</div>
-      <b>Lalao</b>
-      <small>Quiz, Puzzle, Memory, Word</small>
-      <button onclick="alert('Ho ampidirina rehefa vonona ny lalao.')">Hilalao</button>
-    </div>
-    <div class="item">
-      <div class="symbol">👥</div>
-      <b>Parrainage</b>
-      <small>Bonus 1 000 Ar rehefa voamarina ny fepetra</small>
-      <button onclick="alert('Ho ampidirina ny rafitra parrainage.')">Hijery</button>
-    </div>
-    <div class="item">
-      <div class="symbol">💳</div>
-      <b>Retrait</b>
-      <small>Airtel Money sy MVola</small>
-      <button onclick="alert('Minimum retrait: 8 000 Ar. Tsy mbola mandeha ny paiement.')">Hijery</button>
-    </div>
-  </div>
+<div class="card">
+<div class="symbol">🎮</div>
+<h3>Lalao sy fanamby</h3>
+<p>Quiz, Puzzle, Memory ary lalao hafa misy valisoa rehefa voamarina.</p>
+<button onclick="access('hiditra')">Hijery lalao</button>
+</div>
 
-  <h3>🔐 Fiarovana</h3>
-  <div class="notice">
-    Voalahatra ny hampiasa fanamarinana kaonty,
-    fiarovana ny tenimiafina, fanaraha-maso ny valisoa
-    ary fanamarinana ataon'ny serveur.
-  </div>
+<div class="card">
+<div class="symbol">👥</div>
+<h3>Parrainage</h3>
+<p>Mahazo bonus 1 000 Ar rehefa voamarina ny fepetra momba ny olona nasainao.</p>
+<button onclick="access('hiditra')">Hijery</button>
+</div>
+
+<div class="card">
+<div class="symbol">💳</div>
+<h3>Fakana vola</h3>
+<p>Airtel Money sy MVola. Fisintonana manomboka amin'ny 8 000 Ar.</p>
+<button onclick="access('hiditra')">Hijery</button>
+</div>
+</div>
+
+<h2>💰 Fitsipika momba ny vola</h2>
+<div class="info">
+• Vola ampiasaina: Ariary (Ar)<br>
+• Retrait minimum: 8 000 Ar<br>
+• Saram-pisintonana: 500 Ar<br>
+• Bonus parrainage: 1 000 Ar<br>
+• Komisiona amin'ny sehatra: 10%
+</div>
+
+<h2>🔐 Fiarovana sy fahatokisana</h2>
+<div class="info">
+Ny asa sy ny valisoa dia tsy maintsy hamarinina. Ny solde sy ny fangatahana retrait dia hotantanan'ny rafitra azo antoka rehefa vita ny fametrahana ny serveur.
+</div>
+
+<h2>📢 Tolotra dokambarotra</h2>
+<div class="grid">
+<div class="card">
+<h3>7 andro</h3>
+<strong>5 000 Ar</strong>
+</div>
+<div class="card">
+<h3>30 andro</h3>
+<strong>15 000 Ar</strong>
+</div>
+</div>
 </main>
 
 <footer>
 MADAGASCAR EARN © 2026<br>
-Miasa am-pahamarinana, mandroso miaraka.
+Miasa am-pahamarinana, mandroso miaraka. 🇲🇬
 </footer>
+
+<script>
+function access(type){
+alert(type === 'hiditra'
+? 'Ho avy ny pejy fidirana.'
+: 'Ho avy ny pejy fisoratana anarana.');
+}
+</script>
 </body>
 </html>
