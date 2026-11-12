@@ -1357,21 +1357,69 @@
     return true;
   }
 
+ 
   /* 7. FANDRAISANA NY FORMULAIRE */
 
-  authForm.addEventListener("submit", (event) => {
+  authForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearAuthMessage();
 
     if (modalMode === "register") {
       if (!validateRegistration()) return;
 
-      showAuthMessage(
-        currentLanguage === "mg"
-          ? "Voamarina ny famenoana. Mbola tsy mifandray amin'ny serveur ny fisoratana anarana. Tsy mbola misy kaonty voaforona."
-          : "Les informations sont valides. L'inscription n'est pas encore connectée au serveur. Aucun compte n'a été créé.",
-        "info"
-      );
+      const originalText = authSubmit.textContent;
+      authSubmit.disabled = true;
+      authSubmit.textContent =
+        currentLanguage === "mg" ? "Andraso kely..." : "Veuillez patienter...";
+
+      try {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            full_name: authName.value.trim(),
+            email: authEmail.value.trim(),
+            phone: authPhone.value.trim(),
+            password: authPassword.value,
+            role: authRole.value
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(
+            result.message ||
+            (currentLanguage === "mg"
+              ? "Tsy nahomby ny fisoratana anarana."
+              : "L'inscription a échoué.")
+          );
+        }
+
+        showAuthMessage(
+          result.message ||
+          (currentLanguage === "mg"
+            ? "Vita soa aman-tsara ny fisoratana anarana."
+            : "Inscription effectuée avec succès."),
+          "info"
+        );
+
+        authForm.reset();
+
+      } catch (error) {
+        showAuthMessage(
+          error.message ||
+          (currentLanguage === "mg"
+            ? "Nisy olana tamin'ny fifandraisana amin'ny serveur."
+            : "Problème de connexion au serveur."),
+          "error"
+        );
+      } finally {
+        authSubmit.disabled = false;
+        authSubmit.textContent = originalText;
+      }
 
       return;
     }
@@ -1380,8 +1428,8 @@
 
     showAuthMessage(
       currentLanguage === "mg"
-        ? "Voamarina ny famenoana. Mbola tsy mifandray amin'ny serveur ny fidirana. Tsy mbola misy kaonty tafiditra."
-        : "Les informations sont valides. La connexion n'est pas encore reliée au serveur. Aucun compte n'a été connecté.",
+        ? "Mbola tsy tafapetraka ny rafitra fidirana amin'ny kaonty."
+        : "Le système de connexion au compte n'est pas encore configuré.",
       "info"
     );
   });
