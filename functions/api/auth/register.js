@@ -114,7 +114,10 @@ export async function onRequestPost({ request, env }) {
       message: "Vita soa aman-tsara ny fisoratana anarana. Miandry fanamarinana ny kaontinao."
     }, { status: 201 });
 
+
   } catch (error) {
+    console.error("REGISTER_ERROR:", error);
+
     const message = String(error?.message || "");
 
     if (message.includes("UNIQUE")) {
@@ -126,7 +129,8 @@ export async function onRequestPost({ request, env }) {
 
     return Response.json({
       success: false,
-      message: "Nisy olana teo am-pisoratana anarana."
+      message: "Nisy olana teo am-pisoratana anarana.",
+      debug: message
     }, { status: 500 });
   }
 }
