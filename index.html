@@ -1095,7 +1095,8 @@
     </div>
   </div>
 
-  <script>
+
+<script>
   "use strict";
 
   /* 1. SINGA HTML */
@@ -1143,6 +1144,10 @@
     currentYear.textContent = new Date().getFullYear();
   }
 
+  function translated(mg, fr) {
+    return currentLanguage === "mg" ? mg : fr;
+  }
+
   /* 3. FANOVANA TENY */
 
   function applyLanguage() {
@@ -1150,10 +1155,10 @@
       currentLanguage === "mg" ? "mg" : "fr";
 
     document.querySelectorAll("[data-mg][data-fr]").forEach((element) => {
-      const translatedText =
-        currentLanguage === "mg"
-          ? element.dataset.mg
-          : element.dataset.fr;
+      const translatedText = translated(
+        element.dataset.mg,
+        element.dataset.fr
+      );
 
       if (element.tagName === "H1" && element.closest(".hero")) {
         element.innerHTML = translatedText;
@@ -1165,17 +1170,31 @@
     document.querySelectorAll(
       "[data-placeholder-mg][data-placeholder-fr]"
     ).forEach((element) => {
-      element.placeholder =
-        currentLanguage === "mg"
-          ? element.dataset.placeholderMg
-          : element.dataset.placeholderFr;
+      element.placeholder = translated(
+        element.dataset.placeholderMg,
+        element.dataset.placeholderFr
+      );
     });
+
+    if (langButton) {
+      langButton.textContent =
+        currentLanguage === "mg" ? "FR" : "MG";
+
+      langButton.setAttribute(
+        "aria-label",
+        translated("Hamadika ho teny frantsay", "Passer en malgache")
+      );
+    }
+
+    updateAuthInterface();
   }
 
   function changeLanguage() {
-    currentLanguage = currentLanguage === "mg" ? "fr" : "mg";
+    currentLanguage =
+      currentLanguage === "mg" ? "fr" : "mg";
+
     applyLanguage();
-    updateAuthInterface();
+    clearAuthMessage();
   }
 
   /* 4. VARAVARANKELY */
@@ -1202,10 +1221,13 @@
     authModal.classList.remove("active");
     authModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
+
     clearAuthMessage();
   }
 
   function clearAuthMessage() {
+    if (!authMessage) return;
+
     authMessage.textContent = "";
     authMessage.className = "auth-message";
   }
@@ -1232,33 +1254,38 @@
     authPassword.autocomplete =
       isRegister ? "new-password" : "current-password";
 
-    authTitle.textContent = isRegister
-      ? (currentLanguage === "mg" ? "Mamorona kaonty" : "Créer un compte")
-      : (currentLanguage === "mg" ? "Hiditra amin'ny kaonty" : "Connexion au compte");
+    authTitle.textContent = translated(
+      isRegister ? "Mamorona kaonty" : "Hiditra amin'ny kaonty",
+      isRegister ? "Créer un compte" : "Connexion au compte"
+    );
 
-    authDescription.textContent = isRegister
-      ? (currentLanguage === "mg"
-          ? "Fenoy tsara ireto mombamomba ireto."
-          : "Remplissez correctement les informations suivantes.")
-      : (currentLanguage === "mg"
-          ? "Ampidiro ny mailaka na laharana finday sy ny teny miafinao."
-          : "Entrez votre e-mail ou numéro de téléphone et votre mot de passe.");
+    authDescription.textContent = translated(
+      isRegister
+        ? "Fenoy tsara ireto mombamomba ireto."
+        : "Ampidiro ny mailaka na laharana finday sy ny teny miafinao.",
+      isRegister
+        ? "Remplissez correctement les informations suivantes."
+        : "Entrez votre e-mail ou numéro de téléphone et votre mot de passe."
+    );
 
-    authSubmit.textContent = isRegister
-      ? (currentLanguage === "mg" ? "Mamorona kaonty" : "Créer un compte")
-      : (currentLanguage === "mg" ? "Hiditra" : "Se connecter");
+    authSubmit.textContent = translated(
+      isRegister ? "Mamorona kaonty" : "Hiditra",
+      isRegister ? "Créer un compte" : "Se connecter"
+    );
 
-    authSwitchText.textContent = isRegister
-      ? (currentLanguage === "mg"
-          ? "Efa manana kaonty ve ianao?"
-          : "Vous avez déjà un compte ?")
-      : (currentLanguage === "mg"
-          ? "Mbola tsy manana kaonty ve ianao?"
-          : "Vous n'avez pas encore de compte ?");
+    authSwitchText.textContent = translated(
+      isRegister
+        ? "Efa manana kaonty ve ianao?"
+        : "Mbola tsy manana kaonty ve ianao?",
+      isRegister
+        ? "Vous avez déjà un compte ?"
+        : "Vous n'avez pas encore de compte ?"
+    );
 
-    authSwitchButton.textContent = isRegister
-      ? (currentLanguage === "mg" ? "Hiditra" : "Se connecter")
-      : (currentLanguage === "mg" ? "Hisoratra anarana" : "S'inscrire");
+    authSwitchButton.textContent = translated(
+      isRegister ? "Hiditra" : "Hisoratra anarana",
+      isRegister ? "Se connecter" : "S'inscrire"
+    );
   }
 
   /* 6. HAFATRA SY FANAMARINANA */
@@ -1277,9 +1304,10 @@
 
     if (!name || !email || !phone || !password || !confirmation) {
       showAuthMessage(
-        currentLanguage === "mg"
-          ? "Fenoy avokoa azafady ny saha rehetra."
-          : "Veuillez remplir tous les champs.",
+        translated(
+          "Fenoy avokoa azafady ny saha rehetra.",
+          "Veuillez remplir tous les champs."
+        ),
         "error"
       );
       return false;
@@ -1289,9 +1317,10 @@
 
     if (!emailPattern.test(email)) {
       showAuthMessage(
-        currentLanguage === "mg"
-          ? "Tsy mety ny adiresy mailaka."
-          : "L'adresse e-mail n'est pas valide.",
+        translated(
+          "Tsy mety ny adiresy mailaka.",
+          "L'adresse e-mail n'est pas valide."
+        ),
         "error"
       );
       return false;
@@ -1299,9 +1328,10 @@
 
     if (phone.replace(/\D/g, "").length < 8) {
       showAuthMessage(
-        currentLanguage === "mg"
-          ? "Jereo tsara ny laharana finday."
-          : "Vérifiez le numéro de téléphone.",
+        translated(
+          "Jereo tsara ny laharana finday.",
+          "Vérifiez le numéro de téléphone."
+        ),
         "error"
       );
       return false;
@@ -1309,9 +1339,10 @@
 
     if (password.length < 8) {
       showAuthMessage(
-        currentLanguage === "mg"
-          ? "Tsy maintsy misy tarehintsoratra 8 farafahakeliny ny teny miafina."
-          : "Le mot de passe doit contenir au moins 8 caractères.",
+        translated(
+          "Tsy maintsy misy tarehintsoratra 8 farafahakeliny ny teny miafina.",
+          "Le mot de passe doit contenir au moins 8 caractères."
+        ),
         "error"
       );
       return false;
@@ -1319,9 +1350,10 @@
 
     if (password !== confirmation) {
       showAuthMessage(
-        currentLanguage === "mg"
-          ? "Tsy mitovy ny teny miafina roa."
-          : "Les deux mots de passe ne correspondent pas.",
+        translated(
+          "Tsy mitovy ny teny miafina roa.",
+          "Les deux mots de passe ne correspondent pas."
+        ),
         "error"
       );
       return false;
@@ -1336,9 +1368,10 @@
 
     if (!identifier || !password) {
       showAuthMessage(
-        currentLanguage === "mg"
-          ? "Ampidiro ny mailaka na laharana finday sy ny teny miafina."
-          : "Entrez votre e-mail ou numéro de téléphone et votre mot de passe.",
+        translated(
+          "Ampidiro ny mailaka na laharana finday sy ny teny miafina.",
+          "Entrez votre e-mail ou numéro de téléphone et votre mot de passe."
+        ),
         "error"
       );
       return false;
@@ -1346,9 +1379,10 @@
 
     if (password.length < 8) {
       showAuthMessage(
-        currentLanguage === "mg"
-          ? "Tsy ampy ny halavan'ny teny miafina."
-          : "Le mot de passe est trop court.",
+        translated(
+          "Tsy ampy ny halavan'ny teny miafina.",
+          "Le mot de passe est trop court."
+        ),
         "error"
       );
       return false;
@@ -1357,96 +1391,191 @@
     return true;
   }
 
- 
-  /* 7. FANDRAISANA NY FORMULAIRE */
+  /* 7. FIFANDRAISANA AMIN'NY SERVEUR */
+
+  async function sendAuthRequest(endpoint, payload) {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    let result;
+
+    try {
+      result = await response.json();
+    } catch {
+      throw new Error(
+        translated(
+          "Tsy nahazo valiny mazava avy amin'ny serveur.",
+          "Réponse invalide du serveur."
+        )
+      );
+    }
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message ||
+        translated(
+          "Nisy olana. Avereno andramana azafady.",
+          "Une erreur est survenue. Veuillez réessayer."
+        )
+      );
+    }
+
+    return result;
+  }
+
+  /* 8. FISORATANA ANARANA */
+
+  async function registerAccount() {
+    if (!validateRegistration()) return;
+
+    const originalText = authSubmit.textContent;
+
+    authSubmit.disabled = true;
+    authSubmit.textContent = translated(
+      "Andraso kely...",
+      "Veuillez patienter..."
+    );
+
+    try {
+      const result = await sendAuthRequest(
+        "/api/auth/register",
+        {
+          full_name: authName.value.trim(),
+          email: authEmail.value.trim(),
+          phone: authPhone.value.trim(),
+          password: authPassword.value,
+          role: authRole.value
+        }
+      );
+
+      showAuthMessage(
+        result.message ||
+        translated(
+          "Vita soa aman-tsara ny fisoratana anarana.",
+          "Inscription effectuée avec succès."
+        ),
+        "info"
+      );
+
+      authPassword.value = "";
+      authConfirmPassword.value = "";
+
+    } catch (error) {
+      showAuthMessage(
+        error.message ||
+        translated(
+          "Nisy olana tamin'ny fisoratana anarana.",
+          "Une erreur est survenue lors de l'inscription."
+        ),
+        "error"
+      );
+    } finally {
+      authSubmit.disabled = false;
+      authSubmit.textContent = originalText;
+    }
+  }
+
+  /* 9. FIDIRANA AMIN'NY KAONTY */
+
+  async function loginAccount() {
+    if (!validateLogin()) return;
+
+    const originalText = authSubmit.textContent;
+
+    authSubmit.disabled = true;
+    authSubmit.textContent = translated(
+      "Miditra...",
+      "Connexion en cours..."
+    );
+
+    try {
+      const result = await sendAuthRequest(
+        "/api/auth/login",
+        {
+          identifier: authIdentifier.value.trim(),
+          password: authPassword.value
+        }
+      );
+
+      const userName =
+        result.user && result.user.full_name
+          ? result.user.full_name
+          : "";
+
+      showAuthMessage(
+        translated(
+          "Tafiditra soa aman-tsara ianao" +
+          (userName ? ", " + userName : "") +
+          ".",
+          "Connexion réussie" +
+          (userName ? ", " + userName : "") +
+          "."
+        ),
+        "info"
+      );
+
+      authPassword.value = "";
+
+    } catch (error) {
+      showAuthMessage(
+        error.message ||
+        translated(
+          "Tsy afaka niditra ianao. Hamarino ny mombamomba anao.",
+          "Connexion impossible. Vérifiez vos identifiants."
+        ),
+        "error"
+      );
+    } finally {
+      authSubmit.disabled = false;
+      authSubmit.textContent = originalText;
+    }
+  }
+
+  /* 10. FANDRAISANA NY FORMULAIRE */
 
   authForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearAuthMessage();
 
     if (modalMode === "register") {
-      if (!validateRegistration()) return;
-
-      const originalText = authSubmit.textContent;
-      authSubmit.disabled = true;
-      authSubmit.textContent =
-        currentLanguage === "mg" ? "Andraso kely..." : "Veuillez patienter...";
-
-      try {
-        const response = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            full_name: authName.value.trim(),
-            email: authEmail.value.trim(),
-            phone: authPhone.value.trim(),
-            password: authPassword.value,
-            role: authRole.value
-          })
-        });
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-          throw new Error(
-            result.message ||
-            (currentLanguage === "mg"
-              ? "Tsy nahomby ny fisoratana anarana."
-              : "L'inscription a échoué.")
-          );
-        }
-
-        showAuthMessage(
-          result.message ||
-          (currentLanguage === "mg"
-            ? "Vita soa aman-tsara ny fisoratana anarana."
-            : "Inscription effectuée avec succès."),
-          "info"
-        );
-
-        authForm.reset();
-
-      } catch (error) {
-        showAuthMessage(
-          error.message ||
-          (currentLanguage === "mg"
-            ? "Nisy olana tamin'ny fifandraisana amin'ny serveur."
-            : "Problème de connexion au serveur."),
-          "error"
-        );
-      } finally {
-        authSubmit.disabled = false;
-        authSubmit.textContent = originalText;
-      }
-
-      return;
+      await registerAccount();
+    } else {
+      await loginAccount();
     }
-
-    if (!validateLogin()) return;
-
-    showAuthMessage(
-      currentLanguage === "mg"
-        ? "Mbola tsy tafapetraka ny rafitra fidirana amin'ny kaonty."
-        : "Le système de connexion au compte n'est pas encore configuré.",
-      "info"
-    );
   });
 
-  /* 8. BOKOTRA */
+  /* 11. BOKOTRA */
 
   langButton.addEventListener("click", changeLanguage);
 
-  loginButton.addEventListener("click", () => openAuthModal("login"));
-  registerButton.addEventListener("click", () => openAuthModal("register"));
-  heroRegisterButton.addEventListener("click", () => openAuthModal("register"));
-  ctaRegisterButton.addEventListener("click", () => openAuthModal("register"));
+  loginButton.addEventListener("click", () => {
+    openAuthModal("login");
+  });
+
+  registerButton.addEventListener("click", () => {
+    openAuthModal("register");
+  });
+
+  heroRegisterButton.addEventListener("click", () => {
+    openAuthModal("register");
+  });
+
+  ctaRegisterButton.addEventListener("click", () => {
+    openAuthModal("register");
+  });
 
   authClose.addEventListener("click", closeAuthModal);
 
   authSwitchButton.addEventListener("click", () => {
-    modalMode = modalMode === "register" ? "login" : "register";
+    modalMode =
+      modalMode === "register" ? "login" : "register";
+
     clearAuthMessage();
     updateAuthInterface();
   });
@@ -1466,12 +1595,12 @@
     }
   });
 
-  /* 9. FANOMBOHANA */
+  /* 12. FANOMBOHANA */
 
   applyLanguage();
   updateAuthInterface();
 
-  </script>
+</script>
 
 </body>
 </html>
