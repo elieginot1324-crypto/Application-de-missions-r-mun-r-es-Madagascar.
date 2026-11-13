@@ -90,13 +90,30 @@ export async function onRequestPost({ request, env }) {
        LIMIT 1`
     ).bind(identifier, identifier).first();
 
-    if (!user || !(await verifyPassword(password, user.password_hash))) {
-      return Response.json({
-        success: false,
-        message: "Diso ny mombamomba ny fidirana."
-      }, { status: 401 });
-    }
+  if (!user) {
+  console.log("LOGIN_CHECK: USER_NOT_FOUND");
 
+  return Response.json({
+    success: false,
+    message: "Tsy hita ny kaonty."
+  }, { status: 401 });
+}
+
+const passwordValid = await verifyPassword(
+  password,
+  user.password_hash
+);
+
+if (!passwordValid) {
+  console.log("LOGIN_CHECK: PASSWORD_INVALID");
+
+  return Response.json({
+    success: false,
+    message: "Tsy mifanaraka ny tenimiafina."
+  }, { status: 401 });
+}
+
+console.log("LOGIN_CHECK: PASSWORD_VALID");
     if (user.status !== "active") {
       return Response.json({
         success: false,
