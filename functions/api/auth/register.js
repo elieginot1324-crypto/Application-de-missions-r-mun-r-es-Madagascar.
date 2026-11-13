@@ -15,7 +15,7 @@ async function hashPassword(password) {
     {
       name: "PBKDF2",
       salt,
-      iterations: 210000,
+      iterations: 100000,
       hash: "SHA-256"
     },
     key,
@@ -25,7 +25,7 @@ async function hashPassword(password) {
   const toBase64 = (bytes) =>
     btoa(String.fromCharCode(...new Uint8Array(bytes)));
 
-  return `pbkdf2$210000$${toBase64(salt)}$${toBase64(bits)}`;
+  return `pbkdf2$100000$${toBase64(salt)}$${toBase64(bits)}`;
 }
 
 export async function onRequestPost({ request, env }) {
@@ -113,7 +113,6 @@ export async function onRequestPost({ request, env }) {
       success: true,
       message: "Vita soa aman-tsara ny fisoratana anarana. Miandry fanamarinana ny kaontinao."
     }, { status: 201 });
-
 
   } catch (error) {
     console.error("REGISTER_ERROR:", error);
