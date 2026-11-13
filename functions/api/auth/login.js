@@ -8,7 +8,7 @@ async function verifyPassword(password, storedHash) {
     }
 
     const iterations = Number(parts[1]);
-    if (!Number.isInteger(iterations) || iterations !== 210000) {
+    if (!Number.isInteger(iterations) || iterations !== 100000) {
       return false;
     }
 
