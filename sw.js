@@ -1,5 +1,5 @@
-const CACHE_NAME = "madagascar-earn-shell-v7";
-const APP_SHELL = ["/", "/index.html", "/manifest.webmanifest", "/assets/icon.svg", "/assets/hero.svg", "/assets/visual.css"];
+const CACHE_NAME = "madagascar-earn-shell-v8";
+const APP_SHELL = ["/", "/index.html", "/manifest.webmanifest", "/assets/icon.svg", "/assets/hero.svg", "/assets/visual.css", "/assets/mdg-earn-background.svg"];
 
 self.addEventListener("install", event => {
   event.waitUntil(
