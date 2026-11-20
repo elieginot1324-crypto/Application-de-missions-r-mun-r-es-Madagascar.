@@ -7,7 +7,7 @@ async function hashToken(token) {
 }
 async function getUser(request, env) {
   const cookie = request.headers.get("Cookie") || "";
-  const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
   if (!match) return null;
   return env.DB.prepare(`SELECT users.id, users.role, users.status FROM sessions
     JOIN users ON users.id = sessions.user_id
