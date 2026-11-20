@@ -72,7 +72,7 @@ export async function onRequestPost({ request, env }) {
     const rawIdentifier = String(data.identifier || "").trim();
     const identifier = rawIdentifier.includes("@")
       ? rawIdentifier.toLowerCase()
-      : rawIdentifier.replace(/[\\s()-]/g, "");
+      : rawIdentifier.replace(/[\s()-]/g, "");
 
     const password = String(data.password || "");
 
