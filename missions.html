@@ -44,7 +44,7 @@ button:disabled{opacity:.55;cursor:wait}
 </section>
 <section id="workerMissions" class="panel hidden"><h2>Iraka misokatra</h2><div id="missionList" class="grid"></div></section>
 <section id="mySubmissions" class="panel hidden"><h2>Asa nalefako</h2><div id="mySubmissionList" class="grid"></div></section>
-<section id="clientSubmissions" class="panel hidden"><h2>Asa nalefan'ny Mpiasa</h2><p class="muted">Azonao averina amin'ny Mpiasa hanitsiany, na lavina. Ny fankatoavana sy ny famindrana vola dia hatao rehefa vita ny rafitra fiarovana ny famatsiam-bola.</p><div id="clientSubmissionList" class="grid"></div></section>
+<section id="clientSubmissions" class="panel hidden"><h2>Asa nalefan'ny Mpiasa</h2><p class="muted">Azonao ekena ny asa vita, averina amin'ny Mpiasa hanitsiany, na lavina. Tsy hafindra ny valisoa raha tsy voamarina ny famatsiam-bola. Ny fankatoavana sy ny famindrana vola dia hatao rehefa vita ny rafitra fiarovana ny famatsiam-bola.</p><div id="clientSubmissionList" class="grid"></div></section>
 <section class="notice">Fanamarihana: mbola tsy mandeha eto ny famatsiam-bola, ny fankatoavana farany ary ny fandoavana valisoa. Tsy tokony hisy vola tena izy hafindra raha tsy vita ny fanamarinana sy ny fiarovana azy.</section>
 </main>
 <script>
@@ -121,7 +121,7 @@ async function loadClientSubmissions(){
    <article class="card"><h3>${esc(s.mission_title)}</h3><p class="muted">Mpiasa: ${esc(s.worker_name)}</p>
    <span class="tag">${esc(s.status)}</span><p>${esc(s.details||"")}</p>
    ${s.proof_url?'<p><a target="_blank" rel="noopener noreferrer" href="'+esc(s.proof_url)+'">Hijery porofo</a></p>':""}
-   ${s.status==="submitted"?'<button class="secondary" onclick="review('+Number(s.id)+',\'revision\')">Angataho ny fanitsiana</button><button class="danger" onclick="review('+Number(s.id)+',\'rejected\')">Lavina</button>':""}</article>`).join(""):"<p class='muted'>Tsy mbola misy asa nalefan'ny Mpiasa.</p>";
+   ${s.status==="submitted"?'<button onclick="review('+Number(s.id)+',\'approved\')">Ekena ny asa</button><button class="secondary" onclick="review('+Number(s.id)+',\'revision\')">Angataho ny fanitsiana</button><button class="danger" onclick="review('+Number(s.id)+',\'rejected\')">Lavina</button>':""}</article>`).join(""):"<p class='muted'>Tsy mbola misy asa nalefan'ny Mpiasa.</p>";
  }catch(error){$("clientSubmissionList").textContent=error.message;}
 }
 function showSubmit(id,title){
