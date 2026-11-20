@@ -158,6 +158,22 @@
   </div>
 </section>
     <section class="welcome">
+      <h2>Asa nalefa sy valiny</h2>
+      <p id="submissionStatus" class="stat-status">Miandry ny angona...</p>
+      <div class="statistics">
+        <article class="stat-card"><h3>Asa miandry fanamarinana</h3><strong id="submittedCount">—</strong></article>
+        <article class="stat-card"><h3>Asa neken'ny Mpanjifa</h3><strong id="approvedCount">—</strong></article>
+        <article class="stat-card"><h3>Fanitsiana angatahina</h3><strong id="revisionCount">—</strong></article>
+        <article class="stat-card"><h3>Fangatahana fisintonana (Ar)</h3><strong id="pendingWithdrawalAmount">—</strong></article>
+        <article class="stat-card"><h3>Fisoratana referral miandry</h3><strong id="pendingReferralCount">—</strong></article>
+      </div>
+    </section>
+    <section class="welcome">
+      <h2>Fampandrenesana ho an'ny Administrateur</h2>
+      <p id="adminNotificationStatus" class="stat-status">Miandry ny angona...</p>
+      <ul id="adminNotificationList" style="padding-left:22px;line-height:1.6"></ul>
+    </section>
+    <section class="welcome">
       <h2>Iraka miandry fanamarinana</h2>
       <p>Jereo aloha ny antsipiriany. Avoahy ihany ny iraka rehefa voamarina ivelan'ny rafitra fa voaray ny famatsiam-bola.</p>
       <p id="pendingMissionStatus" class="stat-status">Miandry ny angona...</p>
@@ -246,6 +262,12 @@ async function loadStatistics() {
     document.getElementById("totalBalance").textContent =
       number(stats.wallets.total_balance) + " Ar";
 
+    document.getElementById("submittedCount").textContent = number(stats.submissions.submitted);
+    document.getElementById("approvedCount").textContent = number(stats.submissions.approved);
+    document.getElementById("revisionCount").textContent = number(stats.submissions.revision);
+    document.getElementById("pendingWithdrawalAmount").textContent = number(stats.withdrawals.pending_amount);
+    document.getElementById("pendingReferralCount").textContent = number(stats.referrals.pending);
+
     status.textContent =
       "Tafiditra soa aman-tsara ny antontan'isa.";
 
@@ -256,6 +278,34 @@ async function loadStatistics() {
 }
 
 loadStatistics();
+
+async function loadAdminNotifications(){
+  const status = document.getElementById("adminNotificationStatus");
+  const list = document.getElementById("adminNotificationList");
+  try {
+    const response = await fetch("/api/notifications", {credentials:"same-origin",cache:"no-store"});
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || "Tsy afaka naka fampandrenesana.");
+    const items = result.notifications || [];
+    status.textContent = items.length ? items.length + " fampandrenesana farany" : "Tsy mbola misy fampandrenesana.";
+    list.replaceChildren();
+    for (const item of items) {
+      const li = document.createElement("li");
+      const strong = document.createElement("strong");
+      strong.textContent = (Number(item.is_read) === 1 ? "" : "● ") + (item.title || "Fampandrenesana");
+      const message = document.createElement("div");
+      message.textContent = item.message || "";
+      const date = document.createElement("small");
+      date.textContent = item.created_at ? new Date(item.created_at).toLocaleString("fr-FR") : "";
+      li.append(strong, message, date);
+      li.style.marginBottom = "12px";
+      list.append(li);
+    }
+  } catch (error) {
+    status.textContent = error.message || "Tsy afaka naka fampandrenesana.";
+  }
+}
+loadAdminNotifications();
 
 async function loadPendingMissions() {
   const status = document.getElementById("pendingMissionStatus");
