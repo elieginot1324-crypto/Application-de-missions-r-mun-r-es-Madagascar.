@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "MADAGASCAR EARN",
+  "short_name": "Mada Earn",
+  "description": "Sehatra mampifandray ny mpanjifa sy ny mpiasa eto Madagasikara.",
+  "lang": "mg",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f8f6",
+  "theme_color": "#087c54",
+  "icons": [
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
