@@ -22,15 +22,28 @@ export async function onRequest(context) {
   const { request, env, next } = context;
   const url = new URL(request.url);
 
-  if (url.pathname !== "/admin.html") {
+  const isAdminPage = url.pathname === "/admin.html";
+  const isAdminApi = url.pathname.startsWith("/api/admin/");
+
+  if (!isAdminPage && !isAdminApi) {
     return next();
   }
 
+  const deny = (message, status) => {
+    if (isAdminApi) {
+      return jsonError(message, status);
+    }
+
+    return Response.redirect(new URL("/", request.url), 302);
+  };
+
   const cookie = request.headers.get("Cookie") || "";
-  const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookie.match(
+    /(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/
+  );
 
   if (!match) {
-    return Response.redirect(new URL("/", request.url), 302);
+    return deny("Tsy nahazo alalana.", 401);
   }
 
   try {
@@ -43,10 +56,12 @@ export async function onRequest(context) {
        WHERE sessions.token_hash = ?
          AND sessions.expires_at > ?
        LIMIT 1`
-    ).bind(tokenHash, new Date().toISOString()).first();
+    )
+      .bind(tokenHash, new Date().toISOString())
+      .first();
 
     if (!user || user.role !== "admin" || user.status !== "active") {
-      return Response.redirect(new URL("/", request.url), 302);
+      return deny("Tsy mahazo miditra amin'ity sehatra ity ianao.", 403);
     }
 
     const response = await next();
@@ -63,6 +78,10 @@ export async function onRequest(context) {
 
   } catch (error) {
     console.error("ADMIN_ACCESS_ERROR:", error);
-    return jsonError("Nisy olana teo am-panamarinana ny fidirana.", 500);
+
+    return jsonError(
+      "Nisy olana teo am-panamarinana ny fidirana.",
+      500
+    );
   }
 }
