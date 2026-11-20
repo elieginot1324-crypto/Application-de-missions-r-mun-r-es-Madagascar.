@@ -69,9 +69,10 @@ export async function onRequestPost({ request, env }) {
   try {
     const data = await request.json();
 
-    const identifier = String(data.identifier || "")
-      .trim()
-      .toLowerCase();
+    const rawIdentifier = String(data.identifier || "").trim();
+    const identifier = rawIdentifier.includes("@")
+      ? rawIdentifier.toLowerCase()
+      : rawIdentifier.replace(/[\\s()-]/g, "");
 
     const password = String(data.password || "");
 
@@ -91,8 +92,6 @@ export async function onRequestPost({ request, env }) {
     ).bind(identifier, identifier).first();
 
   if (!user) {
-  console.log("LOGIN_CHECK: USER_NOT_FOUND");
-
   return Response.json({
     success: false,
     message: "Tsy hita ny kaonty."
@@ -105,16 +104,13 @@ const passwordValid = await verifyPassword(
 );
 
 if (!passwordValid) {
-  console.log("LOGIN_CHECK: PASSWORD_INVALID");
-
   return Response.json({
     success: false,
     message: "Tsy mifanaraka ny tenimiafina."
   }, { status: 401 });
 }
 
-console.log("LOGIN_CHECK: PASSWORD_VALID");
-    if (user.status !== "active") {
+if (user.status !== "active") {
       return Response.json({
         success: false,
         message: "Mbola tsy nekena na tsy afaka miditra ny kaontinao."
