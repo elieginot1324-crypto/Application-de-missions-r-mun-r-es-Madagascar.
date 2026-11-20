@@ -1,5 +1,5 @@
-const CACHE_NAME = "madagascar-earn-shell-v16";
-const APP_SHELL = ["/", "/index.html", "/dashboard.html", "/missions.html", "/manifest.webmanifest", "/assets/icon.svg", "/assets/hero.svg", "/assets/visual.css", "/assets/mdg-earn-background.svg", "/assets/madagascar-earn-hero.jpg"];
+const CACHE_NAME = "madagascar-earn-shell-v17";
+const APP_SHELL = ["/", "/index.html", "/dashboard.html", "/missions.html", "/manifest.webmanifest", "/assets/icon.svg", "/assets/hero.svg", "/assets/visual.css", "/assets/mdg-earn-background.svg", "/assets/madagascar-earn-hero.jpg", "/assets/Panorama%20tropical%20de%20Madagascar%20en%20couleurs%281%29.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(
