@@ -753,11 +753,13 @@
       box-shadow: 0 10px 28px rgba(15,70,48,.12);
     }
     .withdraw-highlight-copy {
-      flex: 1 1 190px;
+      flex: 1 1 100%;
       color: #075c40;
-      font-size: 15px;
-      font-weight: 800;
-      line-height: 1.4;
+      font-size: 19px;
+      font-weight: 950;
+      line-height: 1.25;
+      letter-spacing: .35px;
+      text-transform: uppercase;
     }
     .withdraw-highlight-methods {
       display: flex;
@@ -786,13 +788,13 @@
       object-fit: contain;
       flex: 0 0 auto;
     }
-    .withdraw-logo.telma-logo {
-      width: 38px;
-      height: 38px;
+    .withdraw-logo.mvola-logo {
+      width: 78px;
+      height: 44px;
     }
     @media (max-width: 700px) {
       .withdraw-highlight { margin-top: 18px; padding: 13px; }
-      .withdraw-highlight-copy { flex-basis: 100%; font-size: 14px; }
+      .withdraw-highlight-copy { flex-basis: 100%; font-size: 17px; }
       .withdraw-method { flex: 1 1 auto; }
     }
   </style>
@@ -861,20 +863,18 @@
             </a>
           </div>
 
-          <div class="withdraw-highlight" aria-label="Fomba fisintonam-bola">
+          <div class="withdraw-highlight" aria-label="Retrait direct par Mobile Money">
             <div class="withdraw-highlight-copy"
-              data-mg="Fisintonam-bola amin'ny:"
-              data-fr="Retrait disponible via :">
-              Fisintonam-bola amin'ny :
+              data-mg="FISINTONANA MIVANTANA AMIN'NY MOBILE MONEY"
+              data-fr="RETRAIT DIRECT PAR MOBILE MONEY">
+              RETRAIT DIRECT PAR MOBILE MONEY
             </div>
             <div class="withdraw-highlight-methods">
               <span class="withdraw-method">
-                <img class="withdraw-logo airtel-logo" src="/assets/airtel-money-logo.svg" alt="Logo Airtel">
-                <span>Airtel Money</span>
+                <img class="withdraw-logo airtel-logo" src="/assets/airtel-money-logo.svg" alt="Logo Airtel Money officiel">
               </span>
               <span class="withdraw-method">
-                <img class="withdraw-logo telma-logo" src="/assets/telma-logo.svg" alt="Logo Telma">
-                <span>MVola</span>
+                <img class="withdraw-logo mvola-logo" src="https://mvola.mg/wp-content/uploads/2023/12/Group-1000001991.svg" alt="Logo officiel MVola">
               </span>
             </div>
           </div>
