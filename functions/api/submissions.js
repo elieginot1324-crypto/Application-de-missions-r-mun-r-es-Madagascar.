@@ -84,16 +84,23 @@ export async function onRequestPost({ request, env }) {
       if (user.role !== "client") return json({success:false,message:"Ny Mpanjifa tompon'ny iraka ihany no afaka mijery ny asa."},403);
       const submissionId = Number(data.submission_id);
       const decision = String(data.decision || "");
-      if (!Number.isSafeInteger(submissionId) || submissionId < 1 || !["revision","rejected"].includes(decision)) {
+      if (!Number.isSafeInteger(submissionId) || submissionId < 1 || !["revision","rejected","approved"].includes(decision)) {
         return json({success:false,message:"Safidy fanamarinana tsy mety."},400);
       }
       const submission = await env.DB.prepare(`
-        SELECT s.id FROM submissions s JOIN missions m ON m.id = s.mission_id
+        SELECT s.id, s.worker_id, m.title AS mission_title FROM submissions s JOIN missions m ON m.id = s.mission_id
         WHERE s.id = ? AND m.client_id = ? AND s.status = 'submitted' LIMIT 1
       `).bind(submissionId,user.id).first();
       if (!submission) return json({success:false,message:"Tsy hita ilay asa na efa voakarakara."},404);
-      await env.DB.prepare("UPDATE submissions SET status = ? WHERE id = ?").bind(decision,submissionId).run();
-      return json({success:true,message:decision === "revision" ? "Naverina amin'ny Mpiasa ilay asa mba hanitsiany azy." : "Voarainao ny fandavana ilay asa."});
+      const update = await env.DB.prepare("UPDATE submissions SET status = ? WHERE id = ? AND status = 'submitted'").bind(decision,submissionId).run();
+      if (!update.meta?.changes) return json({success:false,message:"Efa nisy nikarakara ity asa ity."},409);
+      const title = decision === "approved" ? "Neken'ny Mpanjifa ny asanao" : decision === "revision" ? "Mila fanitsiana ny asanao" : "Nolavin'ny Mpanjifa ny asanao";
+      const message = decision === "approved" ? "Neken'ny Mpanjifa ny asa nataonao ho an'ny iraka: " + submission.mission_title + ". Mbola miandry fanamarinana famatsiam-bola ny valisoa." : decision === "revision" ? "Angatahin'ny Mpanjifa ny hanitsianao ny asa ho an'ny iraka: " + submission.mission_title : "Nolavin'ny Mpanjifa ny asa nalefanao ho an'ny iraka: " + submission.mission_title;
+      await env.DB.batch([
+        env.DB.prepare("INSERT INTO notifications (user_id, title, message, is_read) VALUES (?, ?, ?, 0)").bind(submission.worker_id,title,message),
+        env.DB.prepare("INSERT INTO audit_logs (actor_user_id, action, target_type, target_id, details) VALUES (?, ?, 'submission', ?, ?)").bind(user.id,"submission_"+decision,submissionId,"Fanapahan-kevitry ny Mpanjifa: "+decision)
+      ]);
+      return json({success:true,message:decision === "approved" ? "Nekena ny asa. Hampandrenesina ny Mpiasa; mbola tsy nafindra ny valisoa raha tsy voamarina ny famatsiam-bola." : decision === "revision" ? "Naverina amin'ny Mpiasa ilay asa mba hanitsiany azy." : "Voarainao ny fandavana ilay asa."});
     }
     return json({success:false,message:"Asa angatahina tsy fantatra."},400);
   } catch(error) {
