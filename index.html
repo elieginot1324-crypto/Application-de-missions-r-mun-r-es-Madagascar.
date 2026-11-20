@@ -738,6 +738,51 @@
         transition-duration: .01ms !important;
       }
     }
+    .withdraw-highlight {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+      padding: 15px 18px;
+      max-width: 560px;
+      border: 2px solid rgba(8,124,84,.28);
+      border-left: 6px solid #087c54;
+      border-radius: 16px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 10px 28px rgba(15,70,48,.12);
+    }
+    .withdraw-highlight-copy {
+      flex: 1 1 190px;
+      color: #075c40;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+    .withdraw-highlight-methods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .withdraw-method {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 7px 12px;
+      border: 1px solid #d7e8dd;
+      border-radius: 10px;
+      background: #f0faf4;
+      color: #064d37;
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    @media (max-width: 700px) {
+      .withdraw-highlight { margin-top: 18px; padding: 13px; }
+      .withdraw-highlight-copy { flex-basis: 100%; font-size: 14px; }
+      .withdraw-method { flex: 1 1 auto; }
+    }
   </style>
   <link rel="stylesheet" href="/assets/visual.css">
 </head>
@@ -802,6 +847,18 @@
               data-fr="Découvrir le fonctionnement">
               Fantaro ny fomba fiasa
             </a>
+          </div>
+
+          <div class="withdraw-highlight" aria-label="Fomba fisintonam-bola">
+            <div class="withdraw-highlight-copy"
+              data-mg="Fisintonam-bola amin'ny:"
+              data-fr="Retrait disponible via :">
+              Fisintonam-bola amin'ny :
+            </div>
+            <div class="withdraw-highlight-methods">
+              <span class="withdraw-method">Airtel Money</span>
+              <span class="withdraw-method">MVola</span>
+            </div>
           </div>
         </div>
 
