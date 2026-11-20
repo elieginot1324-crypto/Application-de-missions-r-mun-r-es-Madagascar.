@@ -250,22 +250,29 @@
       margin: 2px auto 4px;
     }
  
-    .hero-photo-panel {
+    .hero-visual.hero-photo-panel {
       min-height: 0;
+      height: fit-content;
+      align-self: center;
       padding: 0;
       display: block;
       overflow: hidden;
       border: 1px solid var(--border);
       border-radius: 22px;
-      background: #fff;
+      background: transparent;
     }
 
-    .hero-photo {
+    .hero-visual.hero-photo-panel::before {
+      content: none;
+    }
+
+    .hero-visual.hero-photo-panel .hero-photo {
       display: block;
       width: 100%;
       height: auto;
-      aspect-ratio: 3 / 2;
-      object-fit: cover;
+      aspect-ratio: auto;
+      margin: 0;
+      object-fit: contain;
     }
 
     .hero-visual::before {
