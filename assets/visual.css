@@ -147,3 +147,8 @@ body {
 .hero-card-icon{color:#087c54;background:linear-gradient(145deg,#e8f8ee,#d8f0e2);box-shadow:inset 0 0 0 1px rgba(8,124,84,.08)}
 .hero-card-icon .me-icon-svg{width:28px;height:28px}
 @media(max-width:700px){.feature-icon{width:54px;height:54px;border-radius:17px}.feature-icon .me-icon-svg{width:28px;height:28px}}
+
+/* Marika sy kisary ofisialy MADAGASCAR EARN */
+.logo-icon { overflow: hidden; padding: 0; }
+.logo-icon .brand-mark { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.feature-icon .me-icon-svg, .hero-card-icon .me-icon-svg { width: 30px; height: 30px; }
