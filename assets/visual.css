@@ -152,3 +152,49 @@ body {
 .logo-icon { overflow: hidden; padding: 0; }
 .logo-icon .brand-mark { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 .feature-icon .me-icon-svg, .hero-card-icon .me-icon-svg { width: 30px; height: 30px; }
+
+
+/* Fampisehoana vaovao MDG EARN — olona, finday ary menu */
+.mdg-showcase{min-height:0;padding:22px;border-radius:30px;background:linear-gradient(145deg,#e9f8ef 0%,#fff8e7 100%);border:1px solid rgba(8,124,84,.15);box-shadow:0 24px 60px rgba(7,66,44,.14)}
+.showcase-topline{display:flex;align-items:center;gap:8px;color:#47695a;font-size:12px;font-weight:700}
+.showcase-topline strong{margin-left:auto;color:#087c54;letter-spacing:1.3px;font-size:13px}
+.showcase-live{width:9px;height:9px;border-radius:50%;background:#18b66e;box-shadow:0 0 0 4px #d7f3e3}
+.showcase-scene{display:grid;grid-template-columns:.92fr 1.08fr;align-items:center;gap:12px;min-height:300px;padding-top:12px}
+.showcase-people{position:relative;min-height:280px;display:flex;align-items:flex-end;justify-content:center;gap:0;padding-bottom:55px;background:radial-gradient(ellipse at 50% 80%,#d6efdf 0,transparent 66%)}
+.person{position:relative;width:48%;height:210px}
+.person-face{position:absolute;z-index:2;top:28px;left:50%;transform:translateX(-50%);width:66px;height:78px;border-radius:46% 46% 43% 43%;background:linear-gradient(135deg,#b96d43,#e8aa79);box-shadow:inset -7px -3px 0 rgba(90,42,24,.12)}
+.person-hair{position:absolute;z-index:3;top:18px;left:50%;transform:translateX(-50%);width:74px;height:47px;border-radius:55% 55% 25% 25%;background:#211b19}
+.person-woman .person-hair{width:82px;height:100px;top:17px;border-radius:48% 48% 25% 25%;background:#171513}
+.person-woman .person-face{top:31px}
+.person-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:112px;height:112px;border-radius:42px 42px 12px 12px;background:linear-gradient(145deg,#13a66f,#075c40);color:#fff;text-align:center;padding-top:42px;box-shadow:0 10px 20px rgba(5,76,49,.17);font-size:14px;line-height:1.05}
+.person-woman .person-body{background:linear-gradient(145deg,#fff,#e7f0e9);color:#087c54}
+.person-body small{display:block;font-weight:900;letter-spacing:1px}
+.people-caption{position:absolute;bottom:0;left:0;right:0;text-align:center;display:flex;flex-direction:column;gap:3px}
+.people-caption b{color:#075c40;font-size:14px}
+.people-caption span{color:#61756b;font-size:10px;line-height:1.3}
+.showcase-phone{position:relative;padding:8px;border-radius:28px;background:linear-gradient(145deg,#26332e,#070d0a);box-shadow:0 18px 32px rgba(5,36,23,.25);transform:rotate(2deg)}
+.phone-speaker{position:absolute;z-index:2;top:12px;left:50%;transform:translateX(-50%);width:48px;height:7px;border-radius:10px;background:#202a25}
+.phone-screen{overflow:hidden;border-radius:21px;background:#f7fbf8;min-height:290px;padding:23px 10px 10px}
+.phone-header{display:flex;align-items:center;gap:6px;padding:6px 4px 11px;color:#fff;background:#087c54;border-radius:10px;font-size:11px}
+.phone-header>span:last-child{margin-left:auto}
+.phone-brand-mark{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#fff;color:#087c54;font-weight:900}
+.phone-welcome{display:flex;flex-direction:column;padding:10px 5px 8px;color:#244b38;font-size:12px}
+.phone-welcome small{font-size:9px;color:#718078}
+.phone-balance{display:flex;flex-direction:column;gap:2px;padding:9px 10px;border-radius:10px;background:#e3f5e9;color:#286449;font-size:9px}
+.phone-balance strong{font-size:19px;color:#087c54}
+.phone-balance strong small{font-size:11px}
+.phone-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:9px}
+.phone-menu>div{min-height:65px;padding:7px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;border:1px solid #e4ece6;border-radius:9px;background:#fff;box-shadow:0 3px 8px rgba(20,60,40,.05)}
+.phone-menu b{font-size:8px;line-height:1.2;color:#33483c}
+.menu-symbol{width:25px;height:25px;display:grid;place-items:center;border-radius:8px;font-style:normal;font-weight:900;font-size:15px;background:#e5f6eb;color:#087c54}
+.wallet-symbol{background:#fff2d4;color:#bd8513}.referral-symbol{background:#fff0e6;color:#d87928}.game-symbol{background:#f1eaff;color:#8052c5}.stats-symbol{background:#e8f2ff;color:#3478c6}.settings-symbol{background:#edf0f1;color:#5d6d68}
+.phone-bottom-nav{display:flex;justify-content:space-around;margin-top:9px;padding:6px 0 1px;border-top:1px solid #e4ece6;color:#087c54;font-size:15px}
+.showcase-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.showcase-actions .btn{min-height:44px;padding:9px 10px;font-size:12px;text-align:center}
+.showcase-actions .btn-primary{color:#fff}
+.showcase-actions .btn-outline{background:#fff}
+.showcase-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:13px;color:#456c57;font-size:10px}
+.showcase-trust span{display:flex;align-items:center;gap:4px}
+.showcase-trust span:first-child{color:#087c54}
+@media(max-width:700px){.mdg-showcase{padding:17px;border-radius:24px}.showcase-scene{grid-template-columns:.85fr 1.15fr;gap:8px;min-height:260px}.showcase-people{min-height:235px;padding-bottom:48px}.person{height:175px}.person-face{width:53px;height:65px}.person-hair{width:61px;height:39px}.person-woman .person-hair{width:68px;height:82px}.person-body{width:88px;height:92px;padding-top:36px;font-size:11px}.people-caption b{font-size:12px}.people-caption span{font-size:9px}.phone-screen{min-height:255px;padding:22px 7px 8px}.phone-menu>div{min-height:57px}.phone-menu b{font-size:7px}.phone-balance strong{font-size:16px}.showcase-actions{grid-template-columns:1fr}.showcase-trust{gap:8px;font-size:9px}}
+@media(max-width:390px){.showcase-scene{grid-template-columns:.78fr 1.22fr}.showcase-phone{padding:6px}.phone-screen{min-height:245px}.showcase-trust{font-size:8px}}
