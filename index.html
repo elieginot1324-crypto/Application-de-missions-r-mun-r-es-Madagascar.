@@ -730,6 +730,8 @@
           data-mg="Hiditra" data-fr="Connexion">Hiditra</button>
         <button type="button" id="registerButton" class="btn btn-primary"
           data-mg="Hisoratra anarana" data-fr="S'inscrire">Hisoratra anarana</button>
+        <button type="button" id="logoutButton" class="btn btn-outline" hidden
+          data-mg="Hivoaka" data-fr="Déconnexion">Hivoaka</button>
       </div>
     </div>
   </header>
@@ -1119,6 +1121,7 @@
   const langButton = document.getElementById("langButton");
   const loginButton = document.getElementById("loginButton");
   const registerButton = document.getElementById("registerButton");
+  const logoutButton = document.getElementById("logoutButton");
   const heroRegisterButton = document.getElementById("heroRegisterButton");
   const ctaRegisterButton = document.getElementById("ctaRegisterButton");
 
@@ -1154,6 +1157,52 @@
 
   let currentLanguage = "mg";
   let modalMode = "register";
+  let authenticatedUser = null;
+
+  function updateAuthenticationUI() {
+    const loggedIn = Boolean(authenticatedUser);
+    [loginButton, registerButton, heroRegisterButton, ctaRegisterButton]
+      .forEach(button => { if (button) button.hidden = loggedIn; });
+    if (logoutButton) logoutButton.hidden = !loggedIn;
+  }
+
+  function setAuthenticatedUser(user) {
+    authenticatedUser = user || null;
+    updateAuthenticationUI();
+  }
+
+  async function loadCurrentSession() {
+    try {
+      const response = await fetch("/api/auth/me", {
+        credentials: "same-origin",
+        cache: "no-store"
+      });
+      const result = await response.json();
+      setAuthenticatedUser(response.ok && result.success ? result.user : null);
+    } catch {
+      setAuthenticatedUser(null);
+    }
+  }
+
+  async function logoutAccount() {
+    if (!logoutButton) return;
+    logoutButton.disabled = true;
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store"
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || "Fivoahana tsy tontosa.");
+      setAuthenticatedUser(null);
+      window.alert(translated("Nivoaka soa aman-tsara ianao.", "Vous êtes déconnecté."));
+    } catch (error) {
+      window.alert(error.message || translated("Tsy afaka nivoaka.", "Déconnexion impossible."));
+    } finally {
+      logoutButton.disabled = false;
+    }
+  }
 
   if (currentYear) {
     currentYear.textContent = new Date().getFullYear();
@@ -1536,6 +1585,7 @@
       );
 
       authPassword.value = "";
+      setAuthenticatedUser(result.user);
 
     } catch (error) {
       showAuthMessage(
@@ -1568,6 +1618,7 @@
   /* 11. BOKOTRA */
 
   langButton.addEventListener("click", changeLanguage);
+  logoutButton.addEventListener("click", logoutAccount);
 
   loginButton.addEventListener("click", () => {
     openAuthModal("login");
@@ -1614,6 +1665,7 @@
 
   applyLanguage();
   updateAuthInterface();
+  loadCurrentSession();
 
   // Apetraka ho application azo apetraka amin'ny Android sy ampiasaina offline ny pejy.
   if ("serviceWorker" in navigator) {
