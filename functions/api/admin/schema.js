@@ -19,7 +19,7 @@ async function hashToken(token) {
 export async function onRequestGet({ request, env }) {
   try {
     const cookie = request.headers.get("Cookie") || "";
-    const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+    const match = cookie.match(/(?:^|;[ \t]*)me_session=([a-f0-9]{64})(?:;|$)/);
 
     if (!match) {
       return jsonResponse({ success: false, message: "Tsy nahazo alalana." }, 401);
