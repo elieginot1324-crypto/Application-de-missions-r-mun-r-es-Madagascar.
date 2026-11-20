@@ -1,39 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="title desc">
-  <title id="title">MADAGASCAR EARN</title>
-  <desc id="desc">Finday mampiseho asa sy valisoa, miaraka amin'ny olona miasa.</desc>
-  <defs>
-    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#087c54"/><stop offset="1" stop-color="#0da875"/>
-    </linearGradient>
-  </defs>
-  <circle cx="145" cy="145" r="118" fill="#d9f1e4"/>
-  <circle cx="590" cy="75" r="48" fill="#fff0c8"/>
-  <path d="M70 245h580" stroke="#a8cdb9" stroke-width="8" stroke-linecap="round"/>
-  <rect x="252" y="20" width="210" height="260" rx="27" fill="#173c2e"/>
-  <rect x="263" y="34" width="188" height="232" rx="18" fill="#fff"/>
-  <rect x="280" y="55" width="154" height="55" rx="12" fill="url(#screen)"/>
-  <circle cx="304" cy="82" r="13" fill="#fff" opacity=".95"/>
-  <path d="M297 82h14m-7-7v14" stroke="#087c54" stroke-width="3" stroke-linecap="round"/>
-  <rect x="325" y="72" width="88" height="7" rx="3.5" fill="#fff"/>
-  <rect x="325" y="86" width="62" height="5" rx="2.5" fill="#c5ead7"/>
-  <rect x="280" y="124" width="154" height="42" rx="9" fill="#edf7f1"/>
-  <circle cx="300" cy="145" r="10" fill="#e6b94c"/>
-  <rect x="319" y="137" width="92" height="6" rx="3" fill="#7e9e8c"/>
-  <rect x="319" y="149" width="65" height="5" rx="2.5" fill="#b4c9bd"/>
-  <rect x="280" y="178" width="154" height="42" rx="9" fill="#fff7e5"/>
-  <circle cx="300" cy="199" r="10" fill="#087c54"/>
-  <path d="m295 199 4 4 7-8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-  <rect x="319" y="191" width="92" height="6" rx="3" fill="#7e9e8c"/>
-  <rect x="319" y="203" width="65" height="5" rx="2.5" fill="#b4c9bd"/>
-  <circle cx="145" cy="116" r="35" fill="#d99b70"/>
-  <path d="M109 111c3-40 65-50 75-4-16-8-25-18-29-28-7 18-24 29-46 32" fill="#173c2e"/>
-  <path d="M90 232c2-55 27-83 56-83 34 0 60 29 63 83" fill="#087c54"/>
-  <path d="M126 162h39l-5 26h-29z" fill="#fff"/>
-  <path d="M515 192c4-39 25-60 50-60 25 0 45 21 49 60" fill="#0a7651"/>
-  <circle cx="565" cy="111" r="27" fill="#d99b70"/>
-  <path d="M538 107c1-33 52-42 61-4-15-4-27-14-31-22-5 14-16 23-30 26" fill="#173c2e"/>
-  <path d="M550 153h31l-3 23h-25z" fill="#fff"/>
-  <circle cx="590" cy="205" r="27" fill="#e6b94c"/>
-  <path d="M590 188v34m-9-25c0-8 18-8 18 0 0 11-18 3-18 14 0 8 18 8 18 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-  <path d="m207 55 9-17 9 17 17 9-17 9-9 17-9-17-17-9z" fill="#e6b94c"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 390" role="img" aria-labelledby="t d">
+<title id="t">MADAGASCAR EARN — asa sy fidiram-bola</title>
+<desc id="d">Olona Malagasy mampiasa finday sy solosaina, mahita asa ary mandray valisoa.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dff5e8"/><stop offset="1" stop-color="#fff2d5"/></linearGradient>
+ <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0ba16b"/><stop offset="1" stop-color="#075a3e"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8d77e"/><stop offset="1" stop-color="#e8ad35"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#174d35" flood-opacity=".14"/></filter>
+</defs>
+<circle cx="380" cy="190" r="177" fill="url(#bg)"/>
+<circle cx="96" cy="76" r="32" fill="#f6d77e" opacity=".65"/>
+<circle cx="670" cy="294" r="48" fill="#ccebd8" opacity=".8"/>
+<path d="M66 340 Q380 310 698 340" fill="none" stroke="#a6d3b6" stroke-width="9" stroke-linecap="round"/>
+<!-- small floating task card -->
+<g filter="url(#shadow)" transform="translate(62 142)">
+ <rect width="170" height="105" rx="18" fill="#fff"/>
+ <rect x="15" y="15" width="38" height="38" rx="12" fill="#e4f6eb"/>
+ <path d="M26 35h16M34 27v16" stroke="#087c54" stroke-width="3" stroke-linecap="round"/>
+ <rect x="65" y="19" width="86" height="8" rx="4" fill="#8da99a"/>
+ <rect x="65" y="35" width="65" height="6" rx="3" fill="#c6d7cc"/>
+ <rect x="15" y="70" width="140" height="20" rx="10" fill="#e8f7ee"/>
+ <text x="85" y="84" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#087c54">ASA VOAMARINA</text>
+</g>
+<!-- laptop -->
+<g filter="url(#shadow)" transform="translate(442 210)">
+ <rect x="0" y="0" width="205" height="118" rx="13" fill="#173e30"/>
+ <rect x="8" y="8" width="189" height="100" rx="8" fill="#fff"/>
+ <rect x="21" y="20" width="163" height="25" rx="7" fill="url(#screen)"/>
+ <circle cx="35" cy="32" r="5" fill="#fff"/>
+ <rect x="47" y="28" width="84" height="7" rx="3.5" fill="#fff" opacity=".9"/>
+ <rect x="22" y="57" width="72" height="39" rx="7" fill="#e8f6ed"/>
+ <rect x="103" y="57" width="81" height="7" rx="3.5" fill="#9ab5a5"/>
+ <rect x="103" y="71" width="61" height="6" rx="3" fill="#d0ddd4"/>
+ <rect x="103" y="84" width="72" height="12" rx="6" fill="#fff1d1"/>
+ <path d="M-13 120h231l-17 13H4z" fill="#547969"/>
+</g>
+<!-- person -->
+<g filter="url(#shadow)">
+ <path d="M250 332c8-82 38-128 93-128s87 47 95 128z" fill="#087c54"/>
+ <path d="M314 210h58l-8 48h-42z" fill="#fff"/>
+ <path d="M321 253l22 28 22-28" fill="none" stroke="#e7bd59" stroke-width="5" stroke-linecap="round"/>
+ <ellipse cx="343" cy="145" rx="47" ry="54" fill="#a96743"/>
+ <path d="M297 143c-3-65 92-81 103-12-15-8-28-23-34-37-12 24-34 39-69 49z" fill="#1a2c25"/>
+ <path d="M300 155c-5-23-1-39 5-49 5 29 29 42 71 39 11-1 20-5 26-11 2 25-4 47-17 60-14 17-36 22-57 12-17-8-26-26-28-51z" fill="#b8754f"/>
+ <path d="M320 151h9m28 0h9" stroke="#3d2c25" stroke-width="4" stroke-linecap="round"/>
+ <path d="M335 176c7 7 16 7 23 0" fill="none" stroke="#6c382c" stroke-width="3" stroke-linecap="round"/>
+ <path d="M306 130c5-25 25-42 51-43 20-1 35 10 43 27-22-4-37-17-43-30-12 25-29 39-51 46z" fill="#172b24"/>
+</g>
+<!-- phone -->
+<g filter="url(#shadow)" transform="translate(515 52) rotate(8)">
+ <rect width="91" height="157" rx="17" fill="#173e30"/>
+ <rect x="6" y="8" width="79" height="141" rx="12" fill="#fff"/>
+ <rect x="15" y="24" width="61" height="30" rx="7" fill="url(#screen)"/>
+ <text x="45" y="43" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#fff">+ 8 000 Ar</text>
+ <rect x="15" y="64" width="61" height="28" rx="7" fill="#e8f6ed"/>
+ <circle cx="27" cy="78" r="6" fill="#e9b64a"/>
+ <rect x="38" y="73" width="29" height="5" rx="2.5" fill="#8da99a"/>
+ <rect x="38" y="82" width="21" height="4" rx="2" fill="#c5d7cb"/>
+ <rect x="15" y="100" width="61" height="34" rx="7" fill="#fff4dc"/>
+ <path d="M25 117l7 7 15-16" fill="none" stroke="#087c54" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<!-- reward coin -->
+<g filter="url(#shadow)" transform="translate(652 115)">
+ <circle r="31" fill="url(#gold)"/><circle r="24" fill="none" stroke="#fff6d9" stroke-width="2"/>
+ <text y="8" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="800" fill="#fff">Ar</text>
+</g>
+<path d="M231 83l8-15 8 15 15 8-15 8-8 15-8-15-15-8z" fill="#e9b64a"/>
+<path d="M672 44l5-10 5 10 10 5-10 5-5 10-5-10-10-5z" fill="#0b9563"/>
 </svg>
