@@ -11,7 +11,7 @@ async function hashToken(token) {
 
 export async function onRequestPost({ request, env }) {
   const cookie = request.headers.get("Cookie") || "";
-  const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
 
   try {
     if (match) {
