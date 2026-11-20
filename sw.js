@@ -1,5 +1,5 @@
-const CACHE_NAME = "madagascar-earn-shell-v23";
-const APP_SHELL = ["/", "/index.html", "/dashboard.html", "/missions.html", "/manifest.webmanifest", "/assets/icon.svg", "/assets/airtel-money-logo.svg", "/assets/hero.svg", "/assets/visual.css", "/assets/mdg-earn-background.svg", "/assets/madagascar-earn-hero.jpg", "/assets/Panorama%2520tropical%2520de%2520Madagascar%2520en%2520couleurs%25281%2529.png"];
+const CACHE_NAME = "madagascar-earn-shell-v24";
+const APP_SHELL = ["/", "/index.html", "/dashboard.html", "/missions.html", "/manifest.webmanifest", "/assets/icon.svg", "/assets/airtel-money-logo.svg", "/assets/mission-mobile-v2.svg", "/assets/mission-design-v2.svg", "/assets/mission-writing-v2.svg", "/assets/mission-other-v2.svg", "/assets/hero.svg", "/assets/visual.css", "/assets/mdg-earn-background.svg", "/assets/madagascar-earn-hero.jpg", "/assets/Panorama%2520tropical%2520de%2520Madagascar%2520en%2520couleurs%25281%2529.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(
