@@ -140,3 +140,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .feature-card, .hero-card, .btn { transition: none; }
 }
+/* Kisary SVG tena izy — MADAGASCAR EARN */
+.me-icon-svg{display:block;width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.feature-icon{color:#087c54;background:linear-gradient(145deg,#e7f8ee,#d8f0e2);border:1px solid rgba(8,124,84,.10);box-shadow:0 8px 18px rgba(8,124,84,.08),inset 0 1px 0 rgba(255,255,255,.85)}
+.feature-icon .me-icon-svg{width:29px;height:29px}
+.hero-card-icon{color:#087c54;background:linear-gradient(145deg,#e8f8ee,#d8f0e2);box-shadow:inset 0 0 0 1px rgba(8,124,84,.08)}
+.hero-card-icon .me-icon-svg{width:28px;height:28px}
+@media(max-width:700px){.feature-icon{width:54px;height:54px;border-radius:17px}.feature-icon .me-icon-svg{width:28px;height:28px}}
