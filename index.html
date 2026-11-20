@@ -731,6 +731,7 @@
           data-mg="Hiditra" data-fr="Connexion">Hiditra</button>
         <button type="button" id="registerButton" class="btn btn-primary"
           data-mg="Hisoratra anarana" data-fr="S'inscrire">Hisoratra anarana</button>
+        <a href="/dashboard.html" id="dashboardButton" class="btn btn-primary" hidden data-mg="Ny kaontiko" data-fr="Mon espace">Ny kaontiko</a>
         <button type="button" id="logoutButton" class="btn btn-outline" hidden
           data-mg="Hivoaka" data-fr="Déconnexion">Hivoaka</button>
       </div>
@@ -1147,6 +1148,7 @@
   const loginButton = document.getElementById("loginButton");
   const registerButton = document.getElementById("registerButton");
   const logoutButton = document.getElementById("logoutButton");
+  const dashboardButton = document.getElementById("dashboardButton");
   const heroRegisterButton = document.getElementById("heroRegisterButton");
   const showcaseRegisterButton = document.getElementById("showcaseRegisterButton");
   const showcaseLoginButton = document.getElementById("showcaseLoginButton");
@@ -1195,6 +1197,7 @@
     [registerButton, heroRegisterButton, ctaRegisterButton]
       .forEach(button => { if (button) button.hidden = false; });
     if (logoutButton) logoutButton.hidden = !loggedIn;
+    if (dashboardButton) dashboardButton.hidden = !loggedIn;
   }
 
   function setAuthenticatedUser(user) {
