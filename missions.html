@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#087c54">
+<title>Asa sy iraka - MADAGASCAR EARN</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f7f4;color:#18352b;font-family:Arial,sans-serif}
+header{background:linear-gradient(120deg,#066b49,#0b9565);color:#fff;padding:20px 16px}
+.top,main{max-width:1050px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+a{color:inherit}header a{font-weight:bold}main{padding:22px 15px 50px}
+h1{font-size:24px;margin:0}h2{font-size:20px;color:#087c54;margin-top:0}
+.panel{background:#fff;border:1px solid #e0eae4;border-radius:16px;padding:20px;margin:0 0 18px;box-shadow:0 5px 18px #153e2410}
+.muted{color:#687b71;line-height:1.55}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+label{display:block;font-weight:bold;font-size:14px;margin:12px 0 6px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #cbd9d0;border-radius:9px;font:inherit;background:#fff;color:#18352b}
+textarea{min-height:110px;resize:vertical}
+button{border:0;border-radius:9px;padding:11px 15px;background:#087c54;color:#fff;font-weight:bold;cursor:pointer;margin:8px 6px 0 0}
+button.secondary{background:#e8f2ec;color:#176044}button.danger{background:#a63a35}
+button:disabled{opacity:.55;cursor:wait}
+.card{border:1px solid #e0eae4;border-radius:13px;padding:16px;background:#fff}
+.card h3{margin:0 0 8px;color:#087c54}.tag{display:inline-block;background:#e8f4ed;color:#176044;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.notice{padding:12px;border-radius:10px;background:#fff7df;color:#755a14;margin:12px 0}
+.status{margin:10px 0;color:#52685d;min-height:20px}
+.hidden{display:none!important}.money{font-size:18px;font-weight:bold;color:#087c54}
+@media(max-width:560px){.panel{padding:16px}h1{font-size:21px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><h1>MADAGASCAR EARN</h1><div>Asa sy iraka</div></div><nav><a href="/dashboard.html">Ny kaontiko</a> · <a href="/">Fandraisana</a></nav></div></header>
+<main>
+<section class="panel"><h2 id="welcome">Tongasoa</h2><p class="muted" id="intro">Ampifandraisina amin'ny kaontinao ny asa sy iraka.</p><div class="status" id="pageStatus">Miandry ny angona...</div></section>
+<section id="clientCreate" class="panel hidden">
+<h2>Hamoaka iraka vaovao</h2>
+<p class="muted">Fenoy ny antsipiriany. Hojerena aloha ny iraka ary tsy haseho amin'ny Mpiasa raha tsy voamarina sy voalamina ny famatsiam-bola.</p>
+<form id="missionForm">
+<label for="title">Lohatenin'ny iraka</label><input id="title" required minlength="5" maxlength="120" placeholder="Ohatra: Fanoratana lahatsoratra">
+<label for="category">Sokajy</label><input id="category" maxlength="60" placeholder="Ohatra: Asa an-tserasera">
+<label for="description">Fanazavana sy toromarika</label><textarea id="description" required minlength="20" maxlength="5000" placeholder="Hazavao mazava ny asa tokony hatao..."></textarea>
+<div class="grid"><div><label for="budget">Tetibola manontolo (Ar)</label><input id="budget" type="number" min="1000" step="1" required placeholder="Ohatra: 50000"></div><div><label for="workers">Isan'ny Mpiasa</label><input id="workers" type="number" min="1" max="1000" step="1" value="1" required></div></div>
+<button type="submit">Alefa hojerena</button>
+</form><div id="createStatus" class="status"></div>
+</section>
+<section id="workerMissions" class="panel hidden"><h2>Iraka misokatra</h2><div id="missionList" class="grid"></div></section>
+<section id="mySubmissions" class="panel hidden"><h2>Asa nalefako</h2><div id="mySubmissionList" class="grid"></div></section>
+<section id="clientSubmissions" class="panel hidden"><h2>Asa nalefan'ny Mpiasa</h2><p class="muted">Azonao averina amin'ny Mpiasa hanitsiany, na lavina. Ny fankatoavana sy ny famindrana vola dia hatao rehefa vita ny rafitra fiarovana ny famatsiam-bola.</p><div id="clientSubmissionList" class="grid"></div></section>
+<section class="notice">Fanamarihana: mbola tsy mandeha eto ny famatsiam-bola, ny fankatoavana farany ary ny fandoavana valisoa. Tsy tokony hisy vola tena izy hafindra raha tsy vita ny fanamarinana sy ny fiarovana azy.</section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = value => Number(value||0).toLocaleString("fr-FR")+" Ar";
+let currentUser = null;
+async function api(url, options={}) {
+  const response = await fetch(url,{credentials:"same-origin",cache:"no-store",...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});
+  const result = await response.json().catch(()=>({success:false,message:"Valiny tsy fantatra avy amin'ny mpizara."}));
+  if(!response.ok || !result.success) throw new Error(result.message || "Nisy olana.");
+  return result;
+}
+async function load() {
+ try {
+  const profile = await api("/api/dashboard");
+  currentUser = profile.user;
+  $("welcome").textContent = "Tongasoa, "+currentUser.full_name;
+  if(currentUser.role==="client") {
+   $("intro").textContent="Afaka mamorona iraka ianao ary mijery ny asa nalefan'ny Mpiasa.";
+   $("clientCreate").classList.remove("hidden");
+   $("clientSubmissions").classList.remove("hidden");
+   await loadClientSubmissions();
+  } else if(currentUser.role==="worker") {
+   $("intro").textContent="Jereo ny iraka misokatra, fidio izay mifanaraka aminao, ary alefaso ny asa vita.";
+   $("workerMissions").classList.remove("hidden");
+   $("mySubmissions").classList.remove("hidden");
+   await loadMissions(); await loadMySubmissions();
+  } else {
+   $("pageStatus").textContent="Tsy natao ho an'ity karazana kaonty ity ny fizarana iraka.";
+  }
+  $("pageStatus").textContent="Tafiditra soa aman-tsara.";
+ } catch(error) {
+  $("pageStatus").textContent=error.message;
+  if(error.message.toLowerCase().includes("midira")) setTimeout(()=>location.href="/",1200);
+ }
+}
+$("missionForm").addEventListener("submit",async event=>{
+ event.preventDefault(); const button=event.submitter; button.disabled=true;
+ $("createStatus").textContent="Alefa...";
+ try {
+  const result=await api("/api/missions",{method:"POST",body:JSON.stringify({
+   title:$("title").value,category:$("category").value,description:$("description").value,
+   budget_ariary:Number($("budget").value),workers_needed:Number($("workers").value)
+  })});
+  $("createStatus").textContent=result.message; $("missionForm").reset();
+  $("workers").value="1";
+ } catch(error){$("createStatus").textContent=error.message;}
+ finally{button.disabled=false;}
+});
+async function loadMissions(){
+ try{
+  const result=await api("/api/missions");
+  $("missionList").innerHTML=result.missions.length?result.missions.map(m=>`
+   <article class="card"><span class="tag">${esc(m.category||"Iraka")}</span><h3>${esc(m.title)}</h3>
+   <p class="muted">${esc(m.description)}</p><p class="money">${money(m.reward_per_worker)} / Mpiasa</p>
+   <p class="muted">Mpanjifa: ${esc(m.client_name)} · Mpiasa ilaina: ${esc(m.workers_needed)}</p>
+   <button onclick="showSubmit(${Number(m.id)},'${esc(m.title).replace(/'/g,"&#39;")}')">Handefa asa</button></article>`).join(""):"<p class='muted'>Tsy mbola misy iraka misokatra amin'izao.</p>";
+ }catch(error){$("missionList").textContent=error.message;}
+}
+async function loadMySubmissions(){
+ try{
+  const result=await api("/api/submissions");
+  $("mySubmissionList").innerHTML=result.submissions.length?result.submissions.map(s=>`
+   <article class="card"><h3>${esc(s.mission_title)}</h3><span class="tag">${esc(s.status)}</span>
+   <p class="muted">${esc(s.details||"")}</p>${s.proof_url?'<p><a target="_blank" rel="noopener noreferrer" href="'+esc(s.proof_url)+'">Hijery porofo</a></p>':""}
+   ${s.status==="revision"?'<button onclick="showSubmit('+Number(s.mission_id)+',\''+esc(s.mission_title).replace(/'/g,"&#39;")+'\')">Hanitsy sy handefa indray</button>':""}</article>`).join(""):"<p class='muted'>Tsy mbola nandefa asa ianao.</p>";
+ }catch(error){$("mySubmissionList").textContent=error.message;}
+}
+async function loadClientSubmissions(){
+ try{
+  const result=await api("/api/submissions");
+  $("clientSubmissionList").innerHTML=result.submissions.length?result.submissions.map(s=>`
+   <article class="card"><h3>${esc(s.mission_title)}</h3><p class="muted">Mpiasa: ${esc(s.worker_name)}</p>
+   <span class="tag">${esc(s.status)}</span><p>${esc(s.details||"")}</p>
+   ${s.proof_url?'<p><a target="_blank" rel="noopener noreferrer" href="'+esc(s.proof_url)+'">Hijery porofo</a></p>':""}
+   ${s.status==="submitted"?'<button class="secondary" onclick="review('+Number(s.id)+',\'revision\')">Angataho ny fanitsiana</button><button class="danger" onclick="review('+Number(s.id)+',\'rejected\')">Lavina</button>':""}</article>`).join(""):"<p class='muted'>Tsy mbola misy asa nalefan'ny Mpiasa.</p>";
+ }catch(error){$("clientSubmissionList").textContent=error.message;}
+}
+function showSubmit(id,title){
+ const details=prompt("Soraty eto ny fanazavana momba ny asa vita: "+title);
+ if(details===null)return;
+ const proof=prompt("Rohy porofo HTTPS (raha misy). Avelao ho banga raha tsy misy:")||"";
+ sendSubmission(id,details,proof);
+}
+async function sendSubmission(id,details,proof){
+ try{const result=await api("/api/submissions",{method:"POST",body:JSON.stringify({action:"submit",mission_id:id,details,proof_url:proof})});alert(result.message);await loadMySubmissions();await loadMissions();}
+ catch(error){alert(error.message);}
+}
+async function review(id,decision){
+ const label=decision==="revision"?"hangataka fanitsiana":"handà";
+ if(!confirm("Azonao antoka ve fa "+label+" ity asa ity?"))return;
+ try{const result=await api("/api/submissions",{method:"POST",body:JSON.stringify({action:"review",submission_id:id,decision})});alert(result.message);await loadClientSubmissions();}
+ catch(error){alert(error.message);}
+}
+load();
+</script>
+</body>
+</html>
