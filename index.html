@@ -5,6 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#087c54">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/icon.svg">
   <meta name="description" content="MADAGASCAR EARN - Sehatra mampifandray ny mpanjifa sy ny mpiasa eto Madagasikara.">
   <title>MADAGASCAR EARN</title>
 
@@ -1599,6 +1605,15 @@
 
   applyLanguage();
   updateAuthInterface();
+
+  // Apetraka ho application azo apetraka amin'ny Android sy ampiasaina offline ny pejy.
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        // Tsy manakana ny fampiasana ny sehatra raha tsy mandeha ny cache offline.
+      });
+    });
+  }
 
 </script>
 
