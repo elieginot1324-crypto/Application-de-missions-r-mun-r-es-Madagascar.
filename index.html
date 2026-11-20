@@ -249,6 +249,24 @@
       object-fit: contain;
       margin: 2px auto 4px;
     }
+ 
+    .hero-photo-panel {
+      min-height: 0;
+      padding: 0;
+      display: block;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: #fff;
+    }
+
+    .hero-photo {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+    }
 
     .hero-visual::before {
       content: "MADAGASCAR EARN";
@@ -771,37 +789,14 @@
           </div>
         </div>
 
-        <div class="hero-visual mdg-showcase">
-          <div class="showcase-topline"><span class="showcase-live"></span><span data-mg="Sehatra Malagasy" data-fr="Plateforme malgache">Sehatra Malagasy</span><strong>MDG EARN</strong></div>
-          <div class="showcase-scene">
-            <div class="showcase-people" aria-label="Olona mampiasa MADAGASCAR EARN">
-              <div class="person person-man"><span class="person-hair"></span><span class="person-face"></span><span class="person-body"><b>MDG</b><small>EARN</small></span></div>
-              <div class="person person-woman"><span class="person-hair"></span><span class="person-face"></span><span class="person-body"><b>MDG</b><small>EARN</small></span></div>
-              <div class="people-caption"><b data-mg="Miaraka mandroso" data-fr="Réussir ensemble">Miaraka mandroso</b><span data-mg="Fahafahana ho an'ny rehetra eto Madagasikara" data-fr="Des opportunités pour tous à Madagascar">Fahafahana ho an'ny rehetra eto Madagasikara</span></div>
-            </div>
-            <div class="showcase-phone">
-              <div class="phone-speaker"></div>
-              <div class="phone-screen">
-                <div class="phone-header"><span class="phone-brand-mark">M</span><b>MDG EARN</b><span>●</span></div>
-                <div class="phone-welcome"><small data-mg="Tongasoa eto amin'ny sehatra" data-fr="Bienvenue sur la plateforme">Tongasoa eto amin'ny sehatra</small><b>MDG EARN</b></div>
-                <div class="phone-balance"><span data-mg="Vola ao anaty kaonty" data-fr="Solde du portefeuille">Vola ao anaty kaonty</span><strong>12 500 <small>Ar</small></strong></div>
-                <div class="phone-menu">
-                  <div><i class="menu-symbol mission-symbol">✓</i><b data-mg="Asa sy iraka" data-fr="Missions">Asa sy iraka</b></div>
-                  <div><i class="menu-symbol wallet-symbol">Ar</i><b data-mg="Ny kitapom-bolako" data-fr="Mon portefeuille">Ny kitapom-bolako</b></div>
-                  <div><i class="menu-symbol referral-symbol">＋</i><b data-mg="Fanasana namana" data-fr="Parrainage">Fanasana namana</b></div>
-                  <div><i class="menu-symbol game-symbol">★</i><b data-mg="Lalao valisoa" data-fr="Jeux récompenses">Lalao valisoa</b></div>
-                  <div><i class="menu-symbol stats-symbol">↗</i><b data-mg="Tatitra" data-fr="Statistiques">Tatitra</b></div>
-                  <div><i class="menu-symbol settings-symbol">⚙</i><b data-mg="Fikirana" data-fr="Paramètres">Fikirana</b></div>
-                </div>
-                <div class="phone-bottom-nav"><span>⌂</span><span>▤</span><span>◉</span><span>☰</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-actions">
-            <button type="button" id="showcaseRegisterButton" class="btn btn-primary" data-mg="Hisoratra anarana maimaim-poana" data-fr="Inscription gratuite">Hisoratra anarana maimaim-poana</button>
-            <button type="button" id="showcaseLoginButton" class="btn btn-outline" data-mg="Efa manana kaonty? Hiditra" data-fr="Déjà inscrit ? Connexion">Efa manana kaonty? Hiditra</button>
-          </div>
-          <div class="showcase-trust"><span>✓ <b data-mg="Asa voamarina" data-fr="Missions vérifiées">Asa voamarina</b></span><span>◆ <b data-mg="Ariary (Ar)" data-fr="Ariary (Ar)">Ariary (Ar)</b></span><span>♧ <b data-mg="Airtel Money • MVola" data-fr="Airtel Money • MVola">Airtel Money • MVola</b></span></div>
+        <div class="hero-visual hero-photo-panel">
+          <img
+            class="hero-photo"
+            src="/assets/madagascar-earn-hero.jpg"
+            alt="Tanora roa mampiasa MADAGASCAR EARN, miaraka amin'ny safidy fandoavana Airtel Money sy MVola"
+            width="1536"
+            height="1024"
+            fetchpriority="high">
         </div>
       </div>
     </section>
