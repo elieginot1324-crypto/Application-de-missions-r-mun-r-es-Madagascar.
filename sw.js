@@ -1,4 +1,4 @@
-const CACHE_NAME = "madagascar-earn-shell-v13";
+const CACHE_NAME = "madagascar-earn-shell-v14";
 const APP_SHELL = ["/", "/index.html", "/dashboard.html", "/missions.html", "/manifest.webmanifest", "/assets/icon.svg", "/assets/hero.svg", "/assets/visual.css", "/assets/mdg-earn-background.svg"];
 
 self.addEventListener("install", event => {
