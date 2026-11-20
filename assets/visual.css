@@ -198,3 +198,13 @@ body {
 .showcase-trust span:first-child{color:#087c54}
 @media(max-width:700px){.mdg-showcase{padding:17px;border-radius:24px}.showcase-scene{grid-template-columns:.85fr 1.15fr;gap:8px;min-height:260px}.showcase-people{min-height:235px;padding-bottom:48px}.person{height:175px}.person-face{width:53px;height:65px}.person-hair{width:61px;height:39px}.person-woman .person-hair{width:68px;height:82px}.person-body{width:88px;height:92px;padding-top:36px;font-size:11px}.people-caption b{font-size:12px}.people-caption span{font-size:9px}.phone-screen{min-height:255px;padding:22px 7px 8px}.phone-menu>div{min-height:57px}.phone-menu b{font-size:7px}.phone-balance strong{font-size:16px}.showcase-actions{grid-template-columns:1fr}.showcase-trust{gap:8px;font-size:9px}}
 @media(max-width:390px){.showcase-scene{grid-template-columns:.78fr 1.22fr}.showcase-phone{padding:6px}.phone-screen{min-height:245px}.showcase-trust{font-size:8px}}
+
+
+/* Bokotra maso: mampiseho/manafina teny miafina */
+.password-control{position:relative;display:flex;align-items:center;width:100%}
+.password-control input{padding-right:52px!important}
+.password-toggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:38px;height:36px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:#648074;cursor:pointer;transition:background .18s,color .18s}
+.password-toggle:hover,.password-toggle:focus-visible{background:#e8f6ed;color:#087c54}
+.password-toggle svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.password-toggle.is-visible{color:#087c54;background:#e8f6ed}
+.password-toggle:focus-visible{outline:2px solid #efbd4f;outline-offset:2px}
