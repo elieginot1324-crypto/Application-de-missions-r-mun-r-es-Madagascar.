@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-label="MADAGASCAR EARN, olona miasa sy mahazo valisoa eto Madagasikara">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#b5f0d4"/><stop offset="1" stop-color="#f8e7b6"/></linearGradient>
+ <linearGradient id="hill" x2="1" y2="1"><stop stop-color="#3a9b69"/><stop offset="1" stop-color="#07563c"/></linearGradient>
+ <linearGradient id="shirt" x2="1" y2="1"><stop stop-color="#16b77a"/><stop offset="1" stop-color="#07583d"/></linearGradient>
+ <linearGradient id="gold" x2="1" y2="1"><stop stop-color="#fff0a4"/><stop offset="1" stop-color="#d89416"/></linearGradient>
+ <filter id="shadow"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1200" height="700" rx="36" fill="url(#sky)"/>
+<circle cx="1030" cy="110" r="64" fill="#fff4c5" opacity=".8"/>
+<path d="M0 430 Q180 250 370 405 T760 365 T1200 400 V700 H0Z" fill="#82c88c"/>
+<path d="M0 510 Q210 340 420 490 T850 445 T1200 480 V700 H0Z" fill="url(#hill)"/>
+<path d="M0 580 Q200 500 390 570 T800 540 T1200 570 V700 H0Z" fill="#064b36"/>
+<g fill="#4b3927"><path d="M190 400 Q210 280 200 180 L185 90 205 170 225 95 216 185 250 130 229 215 260 205 224 240 220 400Z"/><path d="M820 390 Q840 260 830 165 L815 80 840 160 865 105 850 185 890 155 860 220 895 210 850 245 850 390Z"/></g>
+<g fill="#286b43"><ellipse cx="198" cy="125" rx="100" ry="34"/><ellipse cx="850" cy="120" rx="120" ry="40"/></g>
+<g opacity=".25" fill="#fff"><circle cx="80" cy="90" r="5"/><circle cx="140" cy="160" r="8"/><circle cx="700" cy="80" r="6"/><circle cx="1100" cy="270" r="7"/></g>
+<g transform="translate(260 250)">
+ <ellipse cx="130" cy="390" rx="180" ry="28" fill="#063c2c" opacity=".3" filter="url(#shadow)"/>
+ <path d="M50 180 Q60 80 145 80 Q230 80 245 180 L275 390 H15Z" fill="url(#shirt)"/>
+ <path d="M80 105 Q140 145 205 105" fill="none" stroke="#d9fff0" stroke-width="12"/>
+ <rect x="100" y="210" width="100" height="52" rx="10" fill="#fff" opacity=".95"/>
+ <text x="150" y="233" text-anchor="middle" font-family="Arial" font-weight="900" font-size="22" fill="#087c54">MDG</text><text x="150" y="253" text-anchor="middle" font-family="Arial" font-weight="900" font-size="15" fill="#d99b1b">EARN</text>
+ <path d="M65 95 Q55 15 140 0 Q220 10 220 95 Q195 70 160 70 Q110 70 65 95Z" fill="#211b18"/>
+ <ellipse cx="145" cy="105" rx="70" ry="82" fill="#a96542"/>
+ <path d="M80 95 Q100 55 145 60 Q190 55 210 95 Q190 75 160 80 Q115 72 80 95" fill="#211b18"/>
+ <circle cx="120" cy="112" r="6" fill="#261a16"/><circle cx="170" cy="112" r="6" fill="#261a16"/>
+ <path d="M125 150 Q145 168 170 148" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+ <path d="M15 210 Q-30 180 -5 130 L35 95" fill="none" stroke="#a96542" stroke-width="34" stroke-linecap="round"/>
+ <path d="M250 215 Q300 180 290 120 L270 80" fill="none" stroke="#a96542" stroke-width="34" stroke-linecap="round"/>
+ <rect x="250" y="28" width="90" height="145" rx="18" fill="#172c26" transform="rotate(10 250 28)"/><rect x="260" y="42" width="70" height="116" rx="10" fill="#d7f7e6" transform="rotate(10 260 42)"/>
+ <circle cx="295" cy="95" r="22" fill="#18a66c"/><path d="M284 95 l8 8 16 -19" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+</g>
+<g transform="translate(690 275)">
+ <ellipse cx="120" cy="365" rx="170" ry="25" fill="#063c2c" opacity=".28" filter="url(#shadow)"/>
+ <path d="M20 165 Q40 85 120 85 Q210 85 225 165 L255 365 H-5Z" fill="#f8fffb"/>
+ <path d="M25 190 L5 365 M220 190 L245 365" stroke="#0b8158" stroke-width="10"/>
+ <path d="M55 105 Q120 140 190 105" fill="none" stroke="#087c54" stroke-width="10"/>
+ <rect x="78" y="215" width="90" height="48" rx="9" fill="#087c54"/>
+ <text x="123" y="236" text-anchor="middle" font-family="Arial" font-weight="900" font-size="18" fill="#fff">MDG</text><text x="123" y="254" text-anchor="middle" font-family="Arial" font-weight="900" font-size="13" fill="#ffdc76">EARN</text>
+ <path d="M48 95 Q35 0 125 0 Q220 5 205 115 L190 155 Q175 65 125 65 Q75 65 48 125Z" fill="#171513"/>
+ <ellipse cx="125" cy="105" rx="67" ry="80" fill="#bd7955"/>
+ <circle cx="100" cy="110" r="5" fill="#251a16"/><circle cx="150" cy="110" r="5" fill="#251a16"/>
+ <path d="M105 145 Q127 163 150 143" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+ <path d="M12 210 Q-25 170 -12 110" fill="none" stroke="#bd7955" stroke-width="28" stroke-linecap="round"/>
+ <path d="M225 215 Q275 175 270 120" fill="none" stroke="#bd7955" stroke-width="28" stroke-linecap="round"/>
+ <rect x="225" y="85" width="95" height="70" rx="12" fill="#1c2c26"/><rect x="233" y="92" width="79" height="54" rx="7" fill="#d9f6e5"/><path d="M260 119 l10 10 19 -23" fill="none" stroke="#0b9b62" stroke-width="6" stroke-linecap="round"/>
+</g>
+<g transform="translate(45 520)"><rect width="180" height="110" rx="18" fill="#064b36" opacity=".9"/><text x="90" y="45" text-anchor="middle" font-family="Arial" font-weight="900" font-size="28" fill="#fff">MDG EARN</text><text x="90" y="76" text-anchor="middle" font-family="Arial" font-size="17" fill="#ffe18b">ASA • VALISOA • FITIAVANA</text></g>
+<g transform="translate(950 490)"><rect width="210" height="65" rx="18" fill="#fff" opacity=".94"/><text x="105" y="27" text-anchor="middle" font-family="Arial" font-weight="900" font-size="20" fill="#087c54">Airtel Money</text><text x="105" y="50" text-anchor="middle" font-family="Arial" font-weight="900" font-size="19" fill="#d69a11">MVola</text></g>
+<g fill="url(#gold)" stroke="#b87c11" stroke-width="3"><circle cx="1050" cy="170" r="43"/><circle cx="1125" cy="245" r="31"/><circle cx="970" cy="275" r="24"/></g>
+<g fill="#8b5b08" font-family="Arial" font-weight="900" text-anchor="middle"><text x="1050" y="181" font-size="30">Ar</text><text x="1125" y="255" font-size="20">✓</text><text x="970" y="283" font-size="18">★</text></g>
+</svg>
