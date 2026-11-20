@@ -251,3 +251,19 @@ body {
  .showcase-scene{background-position:center;background-size:cover}
  .showcase-people{background:rgba(255,255,255,.82)}
 }
+
+
+/* Sary manokana manerana ny pejy fandraisana */
+.section-art{width:min(100%,820px);margin:0 auto 34px;overflow:hidden;border-radius:24px;background:#edf8f0;box-shadow:0 16px 38px rgba(7,66,44,.09);border:1px solid rgba(8,124,84,.10)}
+.section-art img{display:block;width:100%;height:auto;max-height:270px;object-fit:cover}
+.workflow-art{max-width:900px}
+.trust-art{max-width:760px}
+.mission-art{display:block;width:100%;height:142px;object-fit:contain;margin:0 auto 16px;border-radius:14px;background:linear-gradient(145deg,#f1faf4,#fff8e8)}
+#missions .feature-card{padding-top:16px}
+#missions .feature-icon{margin-top:2px}
+.cta-section{background-image:radial-gradient(circle at 12% 85%,rgba(255,255,255,.10),transparent 24%),radial-gradient(circle at 88% 12%,rgba(239,189,79,.24),transparent 26%),linear-gradient(120deg,#064b36,#087c54 75%,#0a9566)}
+@media(max-width:700px){
+ .section-art{margin-bottom:25px;border-radius:17px}
+ .section-art img{max-height:190px;object-fit:cover}
+ .mission-art{height:132px}
+}
