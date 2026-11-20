@@ -713,7 +713,7 @@
   <header class="site-header">
     <div class="container header-content">
       <a href="#accueil" class="logo">
-        <span class="logo-icon">M</span>
+        <span class="logo-icon"><img class="brand-mark" src="/assets/icon.svg" alt=""></span>
         <span>MADAGASCAR EARN</span>
       </a>
 
@@ -864,7 +864,7 @@
 
         <div class="feature-grid">
           <article class="feature-card">
-            <div class="feature-icon">📱</div>
+            <div class="feature-icon"><svg class="me-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 18h4"/></svg></div>
             <h3 data-mg="Asa amin'ny finday" data-fr="Travaux sur téléphone">Asa amin'ny finday</h3>
             <p data-mg="Asa tsotra azo tanterahina amin'ny finday."
                data-fr="Des tâches simples réalisables sur téléphone.">
@@ -873,7 +873,7 @@
           </article>
 
           <article class="feature-card">
-            <div class="feature-icon">🎨</div>
+            <div class="feature-icon"><svg class="me-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 1.5-3.3 1.8 1.8 0 0 1 1.4-3h1.4A3.5 3.5 0 0 0 21 11.2C21 6.7 17 3 12 3Z"/><circle cx="7.5" cy="10" r="1"/><circle cx="11" cy="7" r="1"/><circle cx="16" cy="8.5" r="1"/></svg></div>
             <h3 data-mg="Famolavolana sary" data-fr="Création graphique">Famolavolana sary</h3>
             <p data-mg="Asa mifandraika amin'ny logo sy fanamboarana sary."
                data-fr="Missions liées aux logos et à la retouche photo.">
@@ -882,7 +882,7 @@
           </article>
 
           <article class="feature-card">
-            <div class="feature-icon">✍️</div>
+            <div class="feature-icon"><svg class="me-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 4 6 6M4 20l4.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20Z"/><path d="M13 6 18 11"/></svg></div>
             <h3 data-mg="Fanoratana" data-fr="Rédaction">Fanoratana</h3>
             <p data-mg="Fanoratana sy fanitsiana lahatsoratra."
                data-fr="Rédaction et correction de textes.">
@@ -891,7 +891,7 @@
           </article>
 
           <article class="feature-card">
-            <div class="feature-icon">🤝</div>
+            <div class="feature-icon"><svg class="me-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 12 2.2 2.2a2 2 0 0 0 2.8 0l4-4"/><path d="m3 9 4-4 4 2 2-1 5 2 3 3-7 8a2 2 0 0 1-2.8 0L9 17l-2 1-4-4Z"/><path d="m7 5 2 2m8 1 2-1"/></svg></div>
             <h3 data-mg="Asa hafa" data-fr="Autres missions">Asa hafa</h3>
             <p data-mg="Mety hisy karazana asa hafa arakaraka ny filan'ny mpanjifa."
                data-fr="D'autres missions peuvent être proposées selon les besoins des clients.">
@@ -969,7 +969,7 @@
       <div class="footer-content">
         <div class="footer-brand">
           <a href="#accueil" class="logo">
-            <span class="logo-icon">M</span>
+            <span class="logo-icon"><img class="brand-mark" src="/assets/icon.svg" alt=""></span>
             <span>MADAGASCAR EARN</span>
           </a>
           <p data-mg="Sehatra mampifandray ny mpanjifa sy ny mpiasa eto Madagasikara."
@@ -1162,8 +1162,12 @@
 
   function updateAuthenticationUI() {
     const loggedIn = Boolean(authenticatedUser);
-    [loginButton, registerButton, heroRegisterButton, ctaRegisterButton]
-      .forEach(button => { if (button) button.hidden = loggedIn; });
+
+    // Ny bokotra fisoratana anarana dia mijanona ho hita foana.
+    // Ny bokotra fidirana ihany no afenina rehefa efa tafiditra.
+    if (loginButton) loginButton.hidden = loggedIn;
+    [registerButton, heroRegisterButton, ctaRegisterButton]
+      .forEach(button => { if (button) button.hidden = false; });
     if (logoutButton) logoutButton.hidden = !loggedIn;
   }
 
