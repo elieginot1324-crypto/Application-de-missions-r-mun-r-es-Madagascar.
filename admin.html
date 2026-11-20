@@ -76,7 +76,36 @@
       background: #fff8df;
       border-radius: 10px;
       color: #725b16;
-    }
+    }.statistics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #e0e9e4;
+}
+
+.stat-card h3 {
+  margin: 0 0 10px;
+  color: #60736a;
+  font-size: 14px;
+}
+
+.stat-card strong {
+  font-size: 25px;
+  color: #087c54;
+}
+
+.stat-status {
+  margin-bottom: 16px;
+  color: #60736a;
+  font-size: 14px;
+}
   </style>
 </head>
 <body>
@@ -90,7 +119,44 @@
       <h2>Tongasoa eto amin'ny fitantanana</h2>
       <p>Sehatra fitantanana ny MADAGASCAR EARN V2.</p>
     </section>
+<section class="welcome">
+  <h2>Antontan'isa ankapobeny</h2>
+  <p id="statsStatus" class="stat-status">
+    Miandry ny angona...
+  </p>
 
+  <div class="statistics">
+    <article class="stat-card">
+      <h3>Mpikambana rehetra</h3>
+      <strong id="totalUsers">—</strong>
+    </article>
+
+    <article class="stat-card">
+      <h3>Mpiasa</h3>
+      <strong id="totalWorkers">—</strong>
+    </article>
+
+    <article class="stat-card">
+      <h3>Mpanjifa</h3>
+      <strong id="totalClients">—</strong>
+    </article>
+
+    <article class="stat-card">
+      <h3>Asa sy iraka</h3>
+      <strong id="totalMissions">—</strong>
+    </article>
+
+    <article class="stat-card">
+      <h3>Fisintonana miandry</h3>
+      <strong id="pendingWithdrawals">—</strong>
+    </article>
+
+    <article class="stat-card">
+      <h3>Vola ao anaty kitapom-bola</h3>
+      <strong id="totalBalance">—</strong>
+    </article>
+  </div>
+</section>
     <section class="menu">
       <article class="item">
         <h2>Famintinana</h2>
@@ -127,5 +193,62 @@
       Ity dia endrika fototra aloha. Hampifandraisina amin'ny angona sy ny API voaaro amin'ny kaonty administrateur ireo fizarana.
     </div>
   </main>
-</body>
+<script>
+async function loadStatistics() {
+  const status = document.getElementById("statsStatus");
+
+  try {
+    const response = await fetch("/api/admin/stats", {
+      method: "GET",
+      credentials: "same-origin",
+      cache: "no-store"
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      if (response.status === 401 || response.status === 403) {
+        status.textContent =
+          "Tsy nahazo alalana hijery ireo antontan'isa.";
+      } else {
+        status.textContent =
+          "Nisy olana tamin'ny fakana ny angona.";
+      }
+      return;
+    }
+
+    const stats = result.statistics;
+
+    const number = value =>
+      Number(value || 0).toLocaleString("fr-FR");
+
+    document.getElementById("totalUsers").textContent =
+      number(stats.users.total);
+
+    document.getElementById("totalWorkers").textContent =
+      number(stats.users.workers);
+
+    document.getElementById("totalClients").textContent =
+      number(stats.users.clients);
+
+    document.getElementById("totalMissions").textContent =
+      number(stats.missions.total);
+
+    document.getElementById("pendingWithdrawals").textContent =
+      number(stats.withdrawals.pending);
+
+    document.getElementById("totalBalance").textContent =
+      number(stats.wallets.total_balance) + " Ar";
+
+    status.textContent =
+      "Tafiditra soa aman-tsara ny antontan'isa.";
+
+  } catch (error) {
+    status.textContent =
+      "Tsy afaka mifandray amin'ny mpizara.";
+  }
+}
+
+loadStatistics();
+</script></body>
 </html>
