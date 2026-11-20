@@ -1079,11 +1079,19 @@
           <label for="authPassword" data-mg="Teny miafina" data-fr="Mot de passe">
             Teny miafina
           </label>
-          <input type="password" id="authPassword" name="password"
-            autocomplete="new-password"
-            data-placeholder-mg="Mamoròna teny miafina"
-            data-placeholder-fr="Créez un mot de passe"
-            placeholder="Mamoròna teny miafina">
+          <div class="password-control">
+            <input type="password" id="authPassword" name="password"
+              autocomplete="new-password"
+              data-placeholder-mg="Mamoròna teny miafina"
+              data-placeholder-fr="Créez un mot de passe"
+              placeholder="Mamoròna teny miafina">
+            <button type="button" class="password-toggle" data-password-target="authPassword"
+              aria-label="Asehoy ny teny miafina" aria-pressed="false"
+              data-show-mg="Asehoy ny teny miafina" data-show-fr="Afficher le mot de passe"
+              data-hide-mg="Afeno ny teny miafina" data-hide-fr="Masquer le mot de passe">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
 
         <div class="auth-field" id="confirmPasswordField">
@@ -1092,11 +1100,19 @@
             data-fr="Confirmez le mot de passe">
             Avereno ny teny miafina
           </label>
-          <input type="password" id="authConfirmPassword" name="confirmPassword"
-            autocomplete="new-password"
-            data-placeholder-mg="Avereno soratana ny teny miafina"
-            data-placeholder-fr="Saisissez à nouveau le mot de passe"
-            placeholder="Avereno soratana ny teny miafina">
+          <div class="password-control">
+            <input type="password" id="authConfirmPassword" name="confirmPassword"
+              autocomplete="new-password"
+              data-placeholder-mg="Avereno soratana ny teny miafina"
+              data-placeholder-fr="Saisissez à nouveau le mot de passe"
+              placeholder="Avereno soratana ny teny miafina">
+            <button type="button" class="password-toggle" data-password-target="authConfirmPassword"
+              aria-label="Asehoy ny teny miafina" aria-pressed="false"
+              data-show-mg="Asehoy ny teny miafina" data-show-fr="Afficher le mot de passe"
+              data-hide-mg="Afeno ny teny miafina" data-hide-fr="Masquer le mot de passe">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
 
         <div class="auth-message" id="authMessage" role="status" aria-live="polite"></div>
@@ -1631,6 +1647,22 @@
   });
 
   /* 11. BOKOTRA */
+
+  document.querySelectorAll(".password-toggle").forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const target = document.getElementById(toggle.dataset.passwordTarget);
+      if (!target) return;
+      const isVisible = target.type === "text";
+      target.type = isVisible ? "password" : "text";
+      toggle.setAttribute("aria-pressed", String(!isVisible));
+      const label = currentLanguage === "fr"
+        ? (isVisible ? toggle.dataset.showFr : toggle.dataset.hideFr)
+        : (isVisible ? toggle.dataset.showMg : toggle.dataset.hideMg);
+      toggle.setAttribute("aria-label", label);
+      toggle.title = label;
+      toggle.classList.toggle("is-visible", !isVisible);
+    });
+  });
 
   langButton.addEventListener("click", changeLanguage);
   logoutButton.addEventListener("click", logoutAccount);
