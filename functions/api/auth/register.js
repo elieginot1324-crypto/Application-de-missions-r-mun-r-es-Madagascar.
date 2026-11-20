@@ -128,8 +128,7 @@ export async function onRequestPost({ request, env }) {
 
     return Response.json({
       success: false,
-      message: "Nisy olana teo am-pisoratana anarana.",
-      debug: message
+      message: "Nisy olana teo am-pisoratana anarana."
     }, { status: 500 });
   }
 }
