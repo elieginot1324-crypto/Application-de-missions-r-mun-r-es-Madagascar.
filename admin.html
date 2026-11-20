@@ -157,6 +157,12 @@
     </article>
   </div>
 </section>
+    <section class="welcome">
+      <h2>Iraka miandry fanamarinana</h2>
+      <p>Jereo aloha ny antsipiriany. Avoahy ihany ny iraka rehefa voamarina ivelan'ny rafitra fa voaray ny famatsiam-bola.</p>
+      <p id="pendingMissionStatus" class="stat-status">Miandry ny angona...</p>
+      <div id="pendingMissionList" class="menu"></div>
+    </section>
     <section class="menu">
       <article class="item">
         <h2>Famintinana</h2>
@@ -250,5 +256,65 @@ async function loadStatistics() {
 }
 
 loadStatistics();
+
+async function loadPendingMissions() {
+  const status = document.getElementById("pendingMissionStatus");
+  const list = document.getElementById("pendingMissionList");
+  try {
+    const response = await fetch("/api/admin/missions", { credentials:"same-origin", cache:"no-store" });
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      status.textContent = response.status === 401 || response.status === 403
+        ? "Tsy nahazo alalana hijery ireo iraka. Kaonty Administrateur ihany."
+        : (result.message || "Tsy afaka naka ireo iraka.");
+      return;
+    }
+    status.textContent = result.missions.length + " iraka miandry.";
+    list.innerHTML = result.missions.length ? result.missions.map(m => `
+      <article class="item">
+        <h2>${escapeText(m.title)}</h2>
+        <p>${escapeText(m.description)}</p>
+        <p><strong>Mpanjifa:</strong> ${escapeText(m.client_name)}<br>
+        <strong>Tetibola:</strong> ${Number(m.budget_ariary).toLocaleString("fr-FR")} Ar<br>
+        <strong>Mpiasa:</strong> ${Number(m.workers_needed)}</p>
+        <label for="mission-note-${Number(m.id)}">Fanamarihana / porofo fanamarinana</label>
+        <input id="mission-note-${Number(m.id)}" maxlength="1000" placeholder="Lazao izay fanamarinana natao">
+        <button type="button" onclick="reviewMission(${Number(m.id)}, 'publish')">Havoaka</button>
+        <button type="button" style="background:#a63a35" onclick="reviewMission(${Number(m.id)}, 'reject')">Lavina</button>
+      </article>`).join("") : "<p>Tsy misy iraka miandry fanamarinana.</p>";
+  } catch (error) {
+    status.textContent = "Tsy afaka mifandray amin'ny mpizara.";
+  }
+}
+function escapeText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[ch]));
+}
+async function reviewMission(id, action) {
+  const note = document.getElementById("mission-note-" + id)?.value.trim() || "";
+  if (action === "publish" && note.length < 8) {
+    alert("Ampidiro fanamarihana mazava momba ny fanamarinana ny famatsiam-bola.");
+    return;
+  }
+  const promptText = action === "publish"
+    ? "Manamafy ve ianao fa voaray sy voamarina ny famatsiam-bola, ka azo avoaka ity iraka ity?"
+    : "Azonao antoka ve fa handà ity iraka ity?";
+  if (!confirm(promptText)) return;
+  try {
+    const response = await fetch("/api/admin/missions", {
+      method:"POST", credentials:"same-origin", cache:"no-store",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({mission_id:id, action, funding_confirmed:action==="publish", note})
+    });
+    const result = await response.json();
+    alert(result.message || "Vita.");
+    if (response.ok && result.success) loadPendingMissions();
+  } catch (error) {
+    alert("Tsy afaka mifandray amin'ny mpizara.");
+  }
+}
+loadPendingMissions();
+
 </script></body>
 </html>
