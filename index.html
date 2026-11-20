@@ -797,7 +797,7 @@
             </div>
           </div>
           <div class="showcase-actions">
-            <button type="button" id="heroRegisterButton" class="btn btn-primary" data-mg="Hisoratra anarana maimaim-poana" data-fr="Inscription gratuite">Hisoratra anarana maimaim-poana</button>
+            <button type="button" id="showcaseRegisterButton" class="btn btn-primary" data-mg="Hisoratra anarana maimaim-poana" data-fr="Inscription gratuite">Hisoratra anarana maimaim-poana</button>
             <button type="button" id="showcaseLoginButton" class="btn btn-outline" data-mg="Efa manana kaonty? Hiditra" data-fr="Déjà inscrit ? Connexion">Efa manana kaonty? Hiditra</button>
           </div>
           <div class="showcase-trust"><span>✓ <b data-mg="Asa voamarina" data-fr="Missions vérifiées">Asa voamarina</b></span><span>◆ <b data-mg="Ariary (Ar)" data-fr="Ariary (Ar)">Ariary (Ar)</b></span><span>♧ <b data-mg="Airtel Money • MVola" data-fr="Airtel Money • MVola">Airtel Money • MVola</b></span></div>
@@ -1132,6 +1132,8 @@
   const registerButton = document.getElementById("registerButton");
   const logoutButton = document.getElementById("logoutButton");
   const heroRegisterButton = document.getElementById("heroRegisterButton");
+  const showcaseRegisterButton = document.getElementById("showcaseRegisterButton");
+  const showcaseLoginButton = document.getElementById("showcaseLoginButton");
   const ctaRegisterButton = document.getElementById("ctaRegisterButton");
 
   const authModal = document.getElementById("authModal");
@@ -1644,6 +1646,9 @@
   heroRegisterButton.addEventListener("click", () => {
     openAuthModal("register");
   });
+
+  if (showcaseRegisterButton) showcaseRegisterButton.addEventListener("click", () => openAuthModal("register"));
+  if (showcaseLoginButton) showcaseLoginButton.addEventListener("click", () => openAuthModal("login"));
 
   ctaRegisterButton.addEventListener("click", () => {
     openAuthModal("register");
