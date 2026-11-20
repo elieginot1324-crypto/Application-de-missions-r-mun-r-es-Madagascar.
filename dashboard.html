@@ -35,6 +35,7 @@ main{width:min(1050px,92%);margin:30px auto}.welcome{margin-bottom:22px}.welcome
 <article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
 <article class="card"><h2>Iraka sy asa</h2><p>Jereo ny iraka misokatra na mamoròna iraka vaovao arakaraka ny karazana kaontinao.</p><p style="margin-top:12px"><a href="/missions.html" style="display:inline-block;background:#087c54;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny iraka</a></p></article>
 <article class="card"><h2>Fandefasana asa</h2><p>Ho hita eto ny asa nalefanao sy ny valin'ny fanamarinana azy.</p></article>
+<article class="card" style="grid-column:1/-1"><h2>Fampandrenesana</h2><p id="notificationStatus" class="muted">Eo am-pakana...</p><ul id="notificationList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul></article>
 <article class="card"><h2>Fanampiana</h2><p>Raha misy olana amin'ny kaontinao dia ampiasao ny pejy fifandraisana.</p></article>
 </div>
 <div class="status">Efa misy ny fijerena iraka, famoronana iraka miandry fanamarinana, fandefasana asa ary fangatahana fanitsiana. Mbola eo am-panamboarana ny famatsiam-bola sy ny fandoavana valisoa.</div>
@@ -54,7 +55,34 @@ async function loadDashboard(){
   document.getElementById("email").textContent="Email: "+(u.email||"Tsy napetraka");
   document.getElementById("phone").textContent="Finday: "+(u.phone||"Tsy napetraka");
   loading.hidden=true;content.hidden=false;
+  loadNotifications();
  }catch(e){loading.hidden=true;error.textContent=e.message||"Nisy olana. Avereno andramana.";}
+}
+async function loadNotifications(){
+ const status=document.getElementById("notificationStatus");
+ const list=document.getElementById("notificationList");
+ try{
+  const response=await fetch("/api/notifications",{credentials:"same-origin",cache:"no-store"});
+  const data=await response.json();
+  if(!response.ok||!data.success) throw new Error(data.message||"Tsy afaka naka fampandrenesana.");
+  const items=data.notifications||[];
+  status.textContent=items.length ? items.length+" fampandrenesana farany" : "Tsy mbola misy fampandrenesana.";
+  list.replaceChildren();
+  for(const item of items){
+   const li=document.createElement("li");
+   const title=document.createElement("strong");
+   title.textContent=(Number(item.is_read)===1?"":"● ")+(item.title||"Fampandrenesana");
+   const message=document.createElement("div");
+   message.textContent=item.message||"";
+   message.style.color="#687970";
+   const date=document.createElement("small");
+   date.textContent=item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"";
+   date.style.color="#87958d";
+   li.append(title,message,date);
+   li.style.marginBottom="12px";
+   list.append(li);
+  }
+ }catch(e){status.textContent=e.message||"Tsy afaka naka fampandrenesana.";}
 }
 document.getElementById("logout").addEventListener("click",async()=>{
  const b=document.getElementById("logout");b.disabled=true;
