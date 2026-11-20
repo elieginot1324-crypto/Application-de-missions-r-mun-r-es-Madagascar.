@@ -20,7 +20,7 @@ function json(data, status = 200) {
 
 export async function onRequestGet({ request, env }) {
   const cookie = request.headers.get("Cookie") || "";
-  const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
 
   if (!match) {
     return json({ success: false, message: "Mila miditra amin'ny kaontinao aloha." }, 401);
