@@ -38,8 +38,8 @@ export async function onRequestGet({ request, env }) {
        LIMIT 1`
     ).bind(tokenHash, new Date().toISOString()).first();
 
-    if (!user || user.status !== "active") {
-      return json({ success: false, message: "Tsy mavitrika ny kaonty." }, 401);
+    if (!user || !["active", "pending"].includes(user.status)) {
+      return json({ success: false, message: "Tsy mavitrika na tsy mahazo miditra ny kaonty." }, 401);
     }
 
     return json({
@@ -49,7 +49,8 @@ export async function onRequestGet({ request, env }) {
         full_name: user.full_name,
         email: user.email,
         phone: user.phone,
-        role: user.role
+        role: user.role,
+        status: user.status
       }
     });
   } catch (error) {

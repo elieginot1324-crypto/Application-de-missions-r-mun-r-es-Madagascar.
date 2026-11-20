@@ -110,10 +110,10 @@ if (!passwordValid) {
   }, { status: 401 });
 }
 
-if (user.status !== "active") {
+if (!["active", "pending"].includes(user.status)) {
       return Response.json({
         success: false,
-        message: "Mbola tsy nekena na tsy afaka miditra ny kaontinao."
+        message: "Tsy mbola mahazo miditra ity kaonty ity."
       }, { status: 403 });
     }
 
@@ -151,7 +151,8 @@ if (user.status !== "active") {
       user: {
         id: user.id,
         full_name: user.full_name,
-        role: user.role
+        role: user.role,
+        status: user.status
       }
     }, {
       headers: {

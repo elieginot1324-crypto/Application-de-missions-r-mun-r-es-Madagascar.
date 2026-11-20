@@ -1643,17 +1643,16 @@
         }
       );
 
-      showAuthMessage(
-        result.message ||
-        translated(
-          "Vita soa aman-tsara ny fisoratana anarana.",
-          "Inscription effectuée avec succès."
-        ),
-        "info"
-      );
-
       authPassword.value = "";
       authConfirmPassword.value = "";
+
+      if (!result.user || !result.user.id) {
+        throw new Error("Vita ny fisoratana anarana fa tsy tafapetraka ny fidirana automatique. Andramo miditra amin'ny kaontinao.");
+      }
+
+      setAuthenticatedUser(result.user);
+      showAuthMessage(result.message || "Vita ny fisoratana anarana.", "info");
+      window.location.assign("/dashboard.html");
 
     } catch (error) {
       showAuthMessage(

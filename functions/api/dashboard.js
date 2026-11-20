@@ -39,8 +39,8 @@ export async function onRequestGet({ request, env }) {
       LIMIT 1
     `).bind(tokenHash, new Date().toISOString()).first();
 
-    if (!user || user.status !== "active") {
-      return json({ success: false, message: "Tsy mavitrika na tsy voamarina ny kaontinao." }, 403);
+    if (!user || !["active", "pending"].includes(user.status)) {
+      return json({ success: false, message: "Tsy mahazo miditra amin'ity kaonty ity ianao." }, 403);
     }
 
     return json({

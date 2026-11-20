@@ -29,7 +29,13 @@ main{width:min(1050px,92%);margin:30px auto}.welcome{margin-bottom:22px}.welcome
 <div id="loading" class="loading">Eo am-pakana ny mombamomba anao...</div>
 <p id="error" role="alert"></p>
 <section id="content" hidden>
-<div class="grid">
+<section id="pendingContent" class="status" hidden>
+  <h2 style="margin-top:0">Voaray ny fisoratana anaranao</h2>
+  <p id="pendingMessage">Efa tafiditra ao amin'ny kaontinao ianao. Mbola miandry fanamarinana ny kaontinao.</p>
+  <p>Hampandre anao ny rafitra rehefa voamarina ny kaontinao. Mandritra izany dia tsy mbola afaka manao iraka, mandefa asa na mahazo valisoa ianao.</p>
+  <p>Afaka mivoaka ianao ary miditra indray rehefa ilaina. Tsy mila misoratra anarana fanindroany.</p>
+</section>
+<div class="grid" id="dashboardGrid">
 <article class="card balance"><div class="label">Vola ao amin'ny kitapom-bolanao</div><div class="amount" id="balance">0 Ar</div><p>Ny vola aseho eto dia ny vola voarakitra ao amin'ny kaontinao.</p></article>
 <article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty voamarina</span></article>
 <article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
@@ -39,7 +45,7 @@ main{width:min(1050px,92%);margin:30px auto}.welcome{margin-bottom:22px}.welcome
 <article class="card"><h2>Fanampiana</h2><p>Raha misy olana amin'ny kaontinao dia ampiasao ny pejy fifandraisana.</p></article>
 <article class="card" id="adminAccess" hidden><h2>Fitantanana lehibe</h2><p>Midira amin'ny toerana manokana hitantanana ny MADAGASCAR EARN.</p><p style="margin-top:12px"><a href="/admin.html" style="display:inline-block;background:#07583d;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny fitantanana</a></p></article>
 </div>
-<div class="status">Efa misy ny fijerena iraka, famoronana iraka miandry fanamarinana, fandefasana asa ary fangatahana fanitsiana. Mbola eo am-panamboarana ny famatsiam-bola sy ny fandoavana valisoa.</div>
+<div class="status" id="dashboardStatus">Efa misy ny fijerena iraka, famoronana iraka miandry fanamarinana, fandefasana asa ary fangatahana fanitsiana. Mbola eo am-panamboarana ny famatsiam-bola sy ny fandoavana valisoa.</div>
 </section>
 </main>
 <script>
@@ -51,6 +57,15 @@ async function loadDashboard(){
   if(!response.ok||!data.success){if(response.status===401||response.status===403){location.replace("/?connexion=requise");return;}throw new Error(data.message||"Tsy afaka naka ny mombamomba anao.");}
   const u=data.user;
   document.getElementById("welcome").textContent="Tongasoa, "+u.full_name;
+
+  if(u.status==="pending"){
+   document.getElementById("dashboardGrid").hidden=true;
+   document.getElementById("dashboardStatus").hidden=true;
+   document.getElementById("pendingContent").hidden=false;
+   loading.hidden=true;
+   content.hidden=false;
+   return;
+  }
   document.getElementById("balance").textContent=Number(data.wallet.balance_ariary||0).toLocaleString("fr-FR")+" Ar";
   document.getElementById("role").textContent=u.role==="worker"?"Mpiasa":u.role==="client"?"Mpanjifa":"Administrateur";
   document.getElementById("adminAccess").hidden = u.role !== "admin";

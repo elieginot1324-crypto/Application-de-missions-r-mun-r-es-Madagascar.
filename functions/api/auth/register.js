@@ -25,7 +25,12 @@ async function hashPassword(password) {
   const toBase64 = (bytes) =>
     btoa(String.fromCharCode(...new Uint8Array(bytes)));
 
-  return `pbkdf2$100000$${toBase64(salt)}$${toBase64(bits)}`;
+  return `pbkdf2$100000${toBase64(salt)}${toBase64(bits)}`;
+}
+
+async function hashToken(token) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return Array.from(new Uint8Array(digest)).map(byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
 export async function onRequestPost({ request, env }) {
@@ -96,8 +101,8 @@ export async function onRequestPost({ request, env }) {
     await env.DB.batch([
       env.DB.prepare(
         `INSERT INTO users
-        (full_name, email, phone, password_hash, role)
-        VALUES (?, ?, ?, ?, ?)`
+        (full_name, email, phone, password_hash, role, status)
+        VALUES (?, ?, ?, ?, ?, 'pending')`
       ).bind(fullName, email, phone, passwordHash, role),
 
       env.DB.prepare(
@@ -109,10 +114,47 @@ export async function onRequestPost({ request, env }) {
       ).bind(email, email, phone, phone)
     ]);
 
+    const user = await env.DB.prepare(
+      `SELECT id, full_name, email, phone, role, status
+       FROM users
+       WHERE (? IS NOT NULL AND email = ?)
+          OR (? IS NOT NULL AND phone = ?)
+       ORDER BY id DESC LIMIT 1`
+    ).bind(email, email, phone, phone).first();
+
+    if (!user) {
+      throw new Error("Tsy hita ny kaonty vao noforonina.");
+    }
+
+    const tokenBytes = crypto.getRandomValues(new Uint8Array(32));
+    const token = Array.from(tokenBytes).map(byte => byte.toString(16).padStart(2, "0")).join("");
+    const tokenHash = await hashToken(token);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    await env.DB.prepare(
+      `INSERT INTO sessions (user_id, token_hash, expires_at)
+       VALUES (?, ?, ?)`
+    ).bind(user.id, tokenHash, expiresAt).run();
+
     return Response.json({
       success: true,
-      message: "Vita soa aman-tsara ny fisoratana anarana. Miandry fanamarinana ny kaontinao."
-    }, { status: 201 });
+      message: "Vita soa aman-tsara ny fisoratana anarana. Tafiditra ianao; miandry fanamarinana ny kaontinao.",
+      user: {
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        status: user.status
+      }
+    }, {
+      status: 201,
+      headers: {
+        "Set-Cookie": `me_session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=604800`,
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff"
+      }
+    });
 
   } catch (error) {
     console.error("REGISTER_ERROR:", error);
