@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#087c54">
+<title>Ny kaontiko - MADAGASCAR EARN</title>
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<style>
+:root{--g:#087c54;--gd:#07583d;--gold:#e6b94c;--ink:#18352b;--muted:#687970;--line:#e1eae4;--bg:#f3f8f5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,sans-serif}
+header{background:linear-gradient(115deg,var(--gd),var(--g));color:#fff;padding:22px 4%;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-weight:900;letter-spacing:.3px}.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+a,.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;text-decoration:none;cursor:pointer}
+.back{background:#ffffff20;color:#fff;border:1px solid #ffffff55}.logout{background:#fff;color:var(--gd)}
+main{width:min(1050px,92%);margin:30px auto}.welcome{margin-bottom:22px}.welcome h1{margin:0 0 6px;font-size:clamp(25px,4vw,34px)}.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:21px;box-shadow:0 8px 25px #1748320a}
+.balance{grid-column:span 2;background:linear-gradient(135deg,#07583d,#0b9162);color:#fff}.label{font-size:13px;opacity:.82}.amount{font-size:clamp(30px,5vw,42px);font-weight:900;margin:8px 0}.role{display:inline-block;background:#e7f6ed;color:var(--gd);padding:7px 12px;border-radius:20px;font-size:12px;font-weight:800}
+.card h2{font-size:17px;margin:0 0 8px}.card p{color:var(--muted);font-size:13px;line-height:1.55;margin:0}.balance p{color:#e2fff0}
+.status{padding:14px 17px;background:#fff8e5;border:1px solid #f1dfa8;border-radius:13px;margin:18px 0;color:#745313;font-size:13px}
+#error{color:#a93226}.loading{padding:24px;text-align:center;color:var(--muted)}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.balance{grid-column:auto}main{margin:22px auto}.card{padding:18px}}
+</style>
+</head>
+<body>
+<header><div class="brand">✦ MADAGASCAR EARN</div><div class="header-actions"><a class="back" href="/">Fandraisana</a><button class="logout" id="logout">Hivoaka</button></div></header>
+<main>
+<section class="welcome"><h1 id="welcome">Tongasoa eto amin'ny kaontinao</h1><p class="muted">Ity no toerana hijerenao ny mombamomba anao sy ny fivoaran'ny kaontinao.</p></section>
+<div id="loading" class="loading">Eo am-pakana ny mombamomba anao...</div>
+<p id="error" role="alert"></p>
+<section id="content" hidden>
+<div class="grid">
+<article class="card balance"><div class="label">Vola ao amin'ny kitapom-bolanao</div><div class="amount" id="balance">0 Ar</div><p>Ny vola aseho eto dia ny vola voarakitra ao amin'ny kaontinao.</p></article>
+<article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty voamarina</span></article>
+<article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
+<article class="card"><h2>Iraka sy asa</h2><p>Hiseho eto ny iraka mifanaraka amin'ny karazana kaontinao rehefa vita ny fampidirana sy ny fitantanana iraka.</p></article>
+<article class="card"><h2>Fandefasana asa</h2><p>Ho hita eto ny asa nalefanao sy ny valin'ny fanamarinana azy.</p></article>
+<article class="card"><h2>Fanampiana</h2><p>Raha misy olana amin'ny kaontinao dia ampiasao ny pejy fifandraisana.</p></article>
+</div>
+<div class="status">Fanamarihana: mbola eo am-panamboarana ny fizarana iraka, fandefasana asa ary fisintonam-bola. Tsy mbola azo raisina ho rafitra miasa ireo fizarana ireo.</div>
+</section>
+</main>
+<script>
+const loading=document.getElementById("loading"),content=document.getElementById("content"),error=document.getElementById("error");
+async function loadDashboard(){
+ try{
+  const response=await fetch("/api/dashboard",{credentials:"same-origin",cache:"no-store"});
+  const data=await response.json();
+  if(!response.ok||!data.success){if(response.status===401||response.status===403){location.replace("/?connexion=requise");return;}throw new Error(data.message||"Tsy afaka naka ny mombamomba anao.");}
+  const u=data.user;
+  document.getElementById("welcome").textContent="Tongasoa, "+u.full_name;
+  document.getElementById("balance").textContent=Number(data.wallet.balance_ariary||0).toLocaleString("fr-FR")+" Ar";
+  document.getElementById("role").textContent=u.role==="worker"?"Mpiasa":u.role==="client"?"Mpanjifa":"Administrateur";
+  document.getElementById("email").textContent="Email: "+(u.email||"Tsy napetraka");
+  document.getElementById("phone").textContent="Finday: "+(u.phone||"Tsy napetraka");
+  loading.hidden=true;content.hidden=false;
+ }catch(e){loading.hidden=true;error.textContent=e.message||"Nisy olana. Avereno andramana.";}
+}
+document.getElementById("logout").addEventListener("click",async()=>{
+ const b=document.getElementById("logout");b.disabled=true;
+ try{const r=await fetch("/api/auth/logout",{method:"POST",credentials:"same-origin",cache:"no-store"});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.message||"Tsy afaka nivoaka.");location.replace("/");}
+ catch(e){error.textContent=e.message;b.disabled=false;}
+});
+loadDashboard();
+</script>
+</body>
+</html>
