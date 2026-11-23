@@ -37,6 +37,7 @@ button:disabled{opacity:.55;cursor:wait}
 <form id="missionForm">
 <label for="title">Lohatenin'ny iraka</label><input id="title" required minlength="5" maxlength="120" placeholder="Ohatra: Fanoratana lahatsoratra">
 <label for="category">Sokajy</label><input id="category" maxlength="60" placeholder="Ohatra: Asa an-tserasera">
+<label for="requiredQualification">Fepetra takiana amin’ny mpiasa</label><select id="requiredQualification"><option value="none">Tsy mila diplaoma na taratasy manokana</option><option value="diploma">Mila diplaoma</option><option value="certificate">Mila mari-pahaizana</option><option value="portfolio">Mila portfolio</option></select>
 <label for="description">Fanazavana sy toromarika</label><textarea id="description" required minlength="20" maxlength="5000" placeholder="Hazavao mazava ny asa tokony hatao..."></textarea>
 <div class="grid"><div><label for="budget">Tetibola manontolo (Ar)</label><input id="budget" type="number" min="1000" step="1" required placeholder="Ohatra: 50000"></div><div><label for="workers">Isan'ny Mpiasa</label><input id="workers" type="number" min="1" max="1000" step="1" value="1" required></div></div>
 <button type="submit">Alefa hojerena</button>
@@ -88,7 +89,7 @@ $("missionForm").addEventListener("submit",async event=>{
  try {
   const result=await api("/api/missions",{method:"POST",body:JSON.stringify({
    title:$("title").value,category:$("category").value,description:$("description").value,
-   budget_ariary:Number($("budget").value),workers_needed:Number($("workers").value)
+   budget_ariary:Number($("budget").value),workers_needed:Number($("workers").value),required_qualification:$("requiredQualification").value
   })});
   $("createStatus").textContent=result.message; $("missionForm").reset();
   $("workers").value="1";
