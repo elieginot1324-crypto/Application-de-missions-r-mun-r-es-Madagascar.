@@ -111,7 +111,17 @@ export async function onRequestPost({ request, env }) {
         WHERE (? IS NOT NULL AND email = ?)
            OR (? IS NOT NULL AND phone = ?)
         ORDER BY id DESC LIMIT 1`
-      ).bind(email, email, phone, phone)
+      ).bind(email, email, phone, phone),
+
+      env.DB.prepare(
+        `INSERT INTO notifications (user_id, title, message)
+         SELECT id, ?, ?
+         FROM users
+         WHERE role = 'admin' AND status = 'active'`
+      ).bind(
+        "Fisoratana anarana vaovao",
+        `Nisy ${role === "worker" ? "Mpiasa" : "Mpanjifa"} vaovao nisoratra anarana: ${fullName}. Miandry fanamarinana ny kaontiny.`
+      )
     ]);
 
     const user = await env.DB.prepare(
