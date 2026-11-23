@@ -1434,8 +1434,10 @@
     loginIdentifierField.hidden = isRegister;
 
     authName.required = isRegister;
-    authEmail.required = isRegister;
-    authPhone.required = isRegister;
+    // Email na finday: iray amin'izy roa farafahakeliny no ilaina.
+    // Avela tsy hofenoina ny iray hafa.
+    authEmail.required = false;
+    authPhone.required = false;
     authRole.required = isRegister;
     authConfirmPassword.required = isRegister;
     authIdentifier.required = !isRegister;
@@ -1491,11 +1493,11 @@
     const password = authPassword.value;
     const confirmation = authConfirmPassword.value;
 
-    if (!name || !email || !phone || !password || !confirmation) {
+    if (!name || (!email && !phone) || !password || !confirmation) {
       showAuthMessage(
         translated(
-          "Fenoy avokoa azafady ny saha rehetra.",
-          "Veuillez remplir tous les champs."
+          "Fenoy ny anarana sy ny tenimiafina, ary ampidiro email na laharana finday iray farafahakeliny.",
+          "Indiquez le nom, le mot de passe et au moins un e-mail ou un numéro de téléphone."
         ),
         "error"
       );
@@ -1504,7 +1506,7 @@
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailPattern.test(email)) {
+    if (email && !emailPattern.test(email)) {
       showAuthMessage(
         translated(
           "Tsy mety ny adiresy mailaka.",
@@ -1515,7 +1517,7 @@
       return false;
     }
 
-    if (phone.replace(/\D/g, "").length < 8) {
+    if (phone && phone.replace(/\D/g, "").length < 8) {
       showAuthMessage(
         translated(
           "Jereo tsara ny laharana finday.",
@@ -1636,8 +1638,8 @@
         "/api/auth/register",
         {
           full_name: authName.value.trim(),
-          email: authEmail.value.trim(),
-          phone: authPhone.value.trim(),
+          email: authEmail.value.trim() || null,
+          phone: authPhone.value.trim() || null,
           password: authPassword.value,
           role: authRole.value
         }
