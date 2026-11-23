@@ -71,12 +71,16 @@ export async function onRequestPost({ request, env }) {
       const result = await env.DB.prepare(`
         INSERT INTO submissions (mission_id, worker_id, details, proof_url, status, submitted_at)
         SELECT ?, ?, ?, ?, 'submitted', ?
-        WHERE EXISTS (SELECT 1 FROM missions WHERE id = ? AND status = 'open')
+        WHERE EXISTS (SELECT 1 FROM missions m WHERE m.id = ? AND m.status = 'open'
+            AND (m.required_qualification = 'none' OR EXISTS (
+              SELECT 1 FROM worker_qualifications q
+              WHERE q.worker_id = ? AND q.document_type = m.required_qualification AND q.status = 'approved'
+            )))
           AND (SELECT COUNT(*) FROM submissions
                WHERE mission_id = ? AND status IN ('submitted','revision','approved'))
               < (SELECT workers_needed FROM missions WHERE id = ?)
           AND NOT EXISTS (SELECT 1 FROM submissions WHERE mission_id = ? AND worker_id = ?)
-      `).bind(missionId,user.id,details || null,proofUrl || null,new Date().toISOString(),missionId,missionId,missionId,missionId,user.id).run();
+      `).bind(missionId,user.id,details || null,proofUrl || null,new Date().toISOString(),missionId,user.id,missionId,missionId,missionId,user.id).run();
       if (!result.meta?.changes) return json({success:false,message:"Tsy misy toerana intsony na tsy misokatra ilay iraka."},409);
       return json({success:true,message:"Voaray ny asa nalefanao. Miandry ny fanamarinana ataon'ny Mpanjifa."},201);
     }
