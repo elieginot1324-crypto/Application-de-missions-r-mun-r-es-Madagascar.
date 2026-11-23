@@ -1,7 +1,7 @@
 function json(data,status=200){return Response.json(data,{status,headers:{"Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}});}
 async function hashToken(token){const d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(token));return Array.from(new Uint8Array(d)).map(b=>b.toString(16).padStart(2,"0")).join("");}
 async function getAdmin(request,env){
- const m=(request.headers.get("Cookie")||"").match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);if(!m)return null;
+ const m=(request.headers.get("Cookie")||"").match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);if(!m)return null;
  const u=await env.DB.prepare(`SELECT u.id,u.role,u.status FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>? LIMIT 1`).bind(await hashToken(m[1]),new Date().toISOString()).first();
  return u&&u.role==="admin"&&u.status==="active"?u:null;
 }
