@@ -327,7 +327,7 @@ async function loadPendingMissions() {
         <p>${escapeText(m.description)}</p>
         <p><strong>Mpanjifa:</strong> ${escapeText(m.client_name)}<br>
         <strong>Tetibola:</strong> ${Number(m.budget_ariary).toLocaleString("fr-FR")} Ar<br>
-        <strong>Mpiasa:</strong> ${Number(m.workers_needed)}</p>
+        <strong>Mpiasa:</strong> ${Number(m.workers_needed)}<br><strong>Fepetra:</strong> ${escapeText(({none:"Tsy mila diplaoma",diploma:"Diplaoma",certificate:"Mari-pahaizana",portfolio:"Portfolio"})[m.required_qualification] || "Tsy voalaza")}</p>
         <label for="mission-note-${Number(m.id)}">Fanamarihana / porofo fanamarinana</label>
         <input id="mission-note-${Number(m.id)}" maxlength="1000" placeholder="Lazao izay fanamarinana natao">
         <button type="button" onclick="reviewMission(${Number(m.id)}, 'publish')">Havoaka</button>
