@@ -25,7 +25,7 @@ export async function onRequestGet({ request, env }) {
     if (!admin) return json({ success:false, message:"Tsy nahazo alalana. Administrateur ihany." }, 403);
     const result = await env.DB.prepare(`
       SELECT m.id, m.client_id, m.title, m.description, m.category,
-             m.budget_ariary, m.workers_needed, m.status, m.created_at,
+             m.budget_ariary, m.workers_needed, m.required_qualification, m.status, m.created_at,
              u.full_name AS client_name
       FROM missions m JOIN users u ON u.id = m.client_id
       WHERE m.status = 'pending'
