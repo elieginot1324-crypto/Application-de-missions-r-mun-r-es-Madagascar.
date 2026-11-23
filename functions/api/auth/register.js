@@ -102,7 +102,7 @@ export async function onRequestPost({ request, env }) {
       env.DB.prepare(
         `INSERT INTO users
         (full_name, email, phone, password_hash, role, status)
-        VALUES (?, ?, ?, ?, ?, 'pending')`
+        VALUES (?, ?, ?, ?, ?, 'active')`
       ).bind(fullName, email, phone, passwordHash, role),
 
       env.DB.prepare(
@@ -120,7 +120,7 @@ export async function onRequestPost({ request, env }) {
          WHERE role = 'admin' AND status = 'active'`
       ).bind(
         "Fisoratana anarana vaovao",
-        `Nisy ${role === "worker" ? "Mpiasa" : "Mpanjifa"} vaovao nisoratra anarana: ${fullName}. Miandry fanamarinana ny kaontiny.`
+        `Nisy ${role === "worker" ? "Mpiasa" : "Mpanjifa"} vaovao nisoratra anarana: ${fullName}. Afaka miditra avy hatrany izy; ny antontan-taratasy takian'ny iraka no mbola mila fanamarinana.`
       )
     ]);
 
@@ -148,7 +148,7 @@ export async function onRequestPost({ request, env }) {
 
     return Response.json({
       success: true,
-      message: "Vita soa aman-tsara ny fisoratana anarana. Tafiditra ianao; miandry fanamarinana ny kaontinao.",
+      message: "Vita soa aman-tsara ny fisoratana anarana. Afaka miditra sy mampiasa ny kaontinao ianao.",
       user: {
         id: user.id,
         full_name: user.full_name,
