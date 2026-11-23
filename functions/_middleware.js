@@ -22,7 +22,7 @@ export async function onRequest(context) {
   const { request, env, next } = context;
   const url = new URL(request.url);
 
-  const isAdminPage = url.pathname === "/admin.html";
+  const isAdminPage = url.pathname === "/admin.html" || url.pathname === "/admin-qualifications.html";
   const isAdminApi = url.pathname.startsWith("/api/admin/");
 
   if (!isAdminPage && !isAdminApi) {
