@@ -102,7 +102,7 @@ async function loadMissions(){
   $("missionList").innerHTML=result.missions.length?result.missions.map(m=>`
    <article class="card"><span class="tag">${esc(m.category||"Iraka")}</span><h3>${esc(m.title)}</h3>
    <p class="muted">${esc(m.description)}</p><p class="money">${money(m.reward_per_worker)} / Mpiasa</p>
-   <p class="muted">Mpanjifa: ${esc(m.client_name)} · Mpiasa ilaina: ${esc(m.workers_needed)}</p>
+   <p class="muted">Mpanjifa: ${esc(m.client_name)} · Mpiasa ilaina: ${esc(m.workers_needed)}</p><p class="muted">Fepetra: ${esc(({none:"Tsy mila diplaoma",diploma:"Diplaoma nekena",certificate:"Mari-pahaizana nekena",portfolio:"Portfolio nekena"})[m.required_qualification]||"Tsy voalaza")}</p>
    <button onclick="showSubmit(${Number(m.id)},'${esc(m.title).replace(/'/g,"&#39;")}')">Handefa asa</button></article>`).join(""):"<p class='muted'>Tsy mbola misy iraka misokatra amin'izao.</p>";
  }catch(error){$("missionList").textContent=error.message;}
 }
