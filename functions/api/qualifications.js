@@ -61,7 +61,7 @@ export async function onRequestPost({request,env}) {
     if(!valid) return json({success:false,message:"Tsy mifanaraka amin'ny tena votoatin'ilay rakitra ny endriny."},400);
     key="qualifications/"+user.id+"/"+crypto.randomUUID()+"."+ext;
     await env.QUALIFICATION_FILES.put(key,bytes,{httpMetadata:{contentType:file.type,cacheControl:"private, no-store"}});
-    const name=String(file.name||("antontan-taratasy."+ext)).replace(/[\/\r\n\0]/g,"_").slice(0,180);
+    const name=String(file.name||("antontan-taratasy."+ext)).replaceAll(String.fromCharCode(92),"_").replace(/[\/\r\n\0]/g,"_").slice(0,180);
     await env.DB.prepare(`INSERT INTO worker_qualifications
       (worker_id,document_type,file_key,file_name,mime_type,file_size,status)
       VALUES(?,?,?,?,?,?,'pending')`).bind(user.id,type,key,name,file.type,file.size).run();
