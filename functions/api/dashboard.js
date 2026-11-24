@@ -30,7 +30,7 @@ export async function onRequestGet({ request, env }) {
     const tokenHash = await hashToken(match[1]);
     const user = await env.DB.prepare(`
       SELECT users.id, users.full_name, users.email, users.phone,
-             users.role, users.status, wallets.balance_ariary
+             users.role, users.status, users.security_status, wallets.balance_ariary
       FROM sessions
       JOIN users ON users.id = sessions.user_id
       LEFT JOIN wallets ON wallets.user_id = users.id
@@ -39,8 +39,8 @@ export async function onRequestGet({ request, env }) {
       LIMIT 1
     `).bind(tokenHash, new Date().toISOString()).first();
 
-    if (!user || !["active", "pending"].includes(user.status)) {
-      return json({ success: false, message: "Tsy mahazo miditra amin'ity kaonty ity ianao." }, 403);
+    if (!user || user.status !== "active" || user.security_status !== "clear") {
+      return json({ success: false, message: "Tsy mavitrika na tsy voamarina ny kaontinao." }, 403);
     }
 
     return json({
