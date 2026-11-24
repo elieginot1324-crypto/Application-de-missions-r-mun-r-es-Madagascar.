@@ -19,6 +19,7 @@
     }
 
     header {
+      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
       background: #087c54;
       color: white;
       padding: 22px;
@@ -106,12 +107,20 @@
   color: #60736a;
   font-size: 14px;
 }
+
+    .me-spinner{display:inline-block;width:16px;height:16px;flex:0 0 16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:me-spin .75s linear infinite;vertical-align:middle}
+    .me-loading{display:inline-flex;align-items:center;gap:9px}
+    @keyframes me-spin{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){.me-spinner{animation-duration:1.8s}}
+    .back{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 15px;border:1px solid #ffffff65;border-radius:11px;background:#ffffff20;color:#fff;text-decoration:none;font-weight:700;transition:background .2s,transform .2s}.back:hover{background:#ffffff30;transform:translateY(-1px)}
+    @media(max-width:560px){header{padding:18px 16px}header h1{font-size:20px}}
   </style>
 </head>
 <body>
   <header>
     <h1>MADAGASCAR EARN</h1>
-    <p>Tonton'ny fitantanana lehibe</p>
+    <div><p>Tonton'ny fitantanana lehibe</p></div>
+    <a class="back" href="/dashboard.html">← Ny kaontiko</a>
   </header>
 
   <main>
@@ -122,7 +131,7 @@
 <section class="welcome">
   <h2>Antontan'isa ankapobeny</h2>
   <p id="statsStatus" class="stat-status">
-    Miandry ny angona...
+    <span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span>
   </p>
 
   <div class="statistics">
@@ -159,7 +168,7 @@
 </section>
     <section class="welcome">
       <h2>Asa nalefa sy valiny</h2>
-      <p id="submissionStatus" class="stat-status">Miandry ny angona...</p>
+      <p id="submissionStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div class="statistics">
         <article class="stat-card"><h3>Asa miandry fanamarinana</h3><strong id="submittedCount">—</strong></article>
         <article class="stat-card"><h3>Asa neken'ny Mpanjifa</h3><strong id="approvedCount">—</strong></article>
@@ -170,19 +179,19 @@
     </section>
     <section class="welcome">
       <h2>Fampandrenesana ho an'ny Administrateur</h2>
-      <p id="adminNotificationStatus" class="stat-status">Miandry ny angona...</p>
+      <p id="adminNotificationStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <ul id="adminNotificationList" style="padding-left:22px;line-height:1.6"></ul>
     </section>
     <section class="welcome">
       <h2>Iraka miandry fanamarinana</h2>
       <p>Jereo aloha ny antsipiriany. Avoahy ihany ny iraka rehefa voamarina ivelan'ny rafitra fa voaray ny famatsiam-bola.</p>
-      <p id="pendingMissionStatus" class="stat-status">Miandry ny angona...</p>
+      <p id="pendingMissionStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div id="pendingMissionList" class="menu"></div>
     </section>
 
     <section class="welcome">
       <h2>Mpikambana miandry fanamarinana</h2>
-      <p id="pendingMembersStatus" class="stat-status">Miandry ny angona...</p>
+      <p id="pendingMembersStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div id="pendingMembersList" class="menu"></div>
     </section>
     <section class="menu">
