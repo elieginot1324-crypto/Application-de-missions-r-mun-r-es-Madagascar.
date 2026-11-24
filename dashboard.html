@@ -50,7 +50,8 @@ async function loadDashboard(){
   const data=await response.json();
   if(!response.ok||!data.success){if(response.status===401||response.status===403){location.replace("/?connexion=requise");return;}throw new Error(data.message||"Tsy afaka naka ny mombamomba anao.");}
   const u=data.user;
-  document.getElementById("welcome").textContent="Tongasoa, "+u.full_name;
+  const displayName = String(u.full_name || "").trim().replace(/\s+/g, " ").replace(/(^|\s)\p{L}/gu, character => character.toUpperCase());
+  document.getElementById("welcome").textContent = displayName ? `Tongasoa, ${displayName} !` : "Tongasoa eto amin’ny kaontinao !";
   document.getElementById("balance").textContent=Number(data.wallet.balance_ariary||0).toLocaleString("fr-FR")+" Ar";
   document.getElementById("role").textContent=u.role==="worker"?"Mpiasa":u.role==="client"?"Mpanjifa":"Administrateur";
   document.getElementById("adminAccess").hidden = u.role !== "admin";
