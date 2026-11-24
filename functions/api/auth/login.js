@@ -85,7 +85,7 @@ export async function onRequestPost({ request, env }) {
 
     const user = await env.DB.prepare(
       `SELECT id, full_name, email, phone,
-              password_hash, role, status
+              password_hash, role, status, security_status
        FROM users
        WHERE email = ? OR phone = ?
        LIMIT 1`
@@ -110,10 +110,10 @@ if (!passwordValid) {
   }, { status: 401 });
 }
 
-if (!["active", "pending"].includes(user.status)) {
+if (user.status !== "active" || user.security_status !== "clear") {
       return Response.json({
         success: false,
-        message: "Tsy mbola mahazo miditra ity kaonty ity."
+        message: "Mbola tsy nekena na tsy afaka miditra ny kaontinao."
       }, { status: 403 });
     }
 
@@ -151,8 +151,7 @@ if (!["active", "pending"].includes(user.status)) {
       user: {
         id: user.id,
         full_name: user.full_name,
-        role: user.role,
-        status: user.status
+        role: user.role
       }
     }, {
       headers: {
