@@ -409,9 +409,16 @@ async function loadPendingMembers() {
       const phone = document.createElement("p");
       phone.textContent = "Finday: " + (member.phone || "Tsy misy");
       const state = document.createElement("p");
-      state.textContent = "Sata: Miandry fanamarinana";
+      state.textContent = member.security_status === "review"
+        ? "Fiarovana: Mila fanadihadiana ataon'ny Administrateur"
+        : member.security_status === "rejected"
+          ? "Fiarovana: Nolavina"
+          : "Fiarovana: Tsy nahitana famantarana mampiahiahy";
 
-      card.append(heading, role, email, phone, state);
+      const accountState = document.createElement("p");
+      accountState.textContent = "Satan'ny kaonty: " + (member.status === "pending" ? "Miandry" : member.status);
+
+      card.append(heading, role, email, phone, state, accountState);
       list.append(card);
     }
   } catch (error) {
