@@ -12,21 +12,27 @@
 header{background:linear-gradient(115deg,var(--gd),var(--g));color:#fff;padding:22px 4%;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .brand{font-weight:900;letter-spacing:.3px}.header-actions{display:flex;gap:8px;flex-wrap:wrap}
 a,.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;text-decoration:none;cursor:pointer}
-.back{background:#ffffff20;color:#fff;border:1px solid #ffffff55}.logout{background:#fff;color:var(--gd)}
+.back{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:10px 15px;background:#ffffff20;color:#fff;border:1px solid #ffffff65;border-radius:11px;transition:background .2s,transform .2s}.back:hover{background:#ffffff30;transform:translateY(-1px)}.logout{background:#fff;color:var(--gd)}
 main{width:min(1050px,92%);margin:30px auto}.welcome{margin-bottom:22px}.welcome h1{margin:0 0 6px;font-size:clamp(25px,4vw,34px)}.muted{color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:21px;box-shadow:0 8px 25px #1748320a}
 .balance{grid-column:span 2;background:linear-gradient(135deg,#07583d,#0b9162);color:#fff}.label{font-size:13px;opacity:.82}.amount{font-size:clamp(30px,5vw,42px);font-weight:900;margin:8px 0}.role{display:inline-block;background:#e7f6ed;color:var(--gd);padding:7px 12px;border-radius:20px;font-size:12px;font-weight:800}
 .card h2{font-size:17px;margin:0 0 8px}.card p{color:var(--muted);font-size:13px;line-height:1.55;margin:0}.balance p{color:#e2fff0}
 .status{padding:14px 17px;background:#fff8e5;border:1px solid #f1dfa8;border-radius:13px;margin:18px 0;color:#745313;font-size:13px}
 #error{color:#a93226}.loading{padding:24px;text-align:center;color:var(--muted)}
+.me-spinner{display:inline-block;width:16px;height:16px;flex:0 0 16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:me-spin .75s linear infinite}
+.me-loading{display:inline-flex;align-items:center;gap:9px}
+button.is-loading{cursor:wait;opacity:.88}
+button.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:me-spin .75s linear infinite}
+@keyframes me-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.me-spinner,button.is-loading::before{animation-duration:1.8s}}
 @media(max-width:720px){.grid{grid-template-columns:1fr}.balance{grid-column:auto}main{margin:22px auto}.card{padding:18px}}
 </style>
 </head>
 <body>
-<header><div class="brand">✦ MADAGASCAR EARN</div><div class="header-actions"><a class="back" href="/">Fandraisana</a><button class="logout" id="logout">Hivoaka</button></div></header>
+<header><div class="brand">✦ MADAGASCAR EARN</div><div class="header-actions"><a class="back" href="/">← Fandraisana</a><button class="logout" id="logout">Hivoaka</button></div></header>
 <main>
 <section class="welcome"><h1 id="welcome">Tongasoa eto amin'ny kaontinao</h1><p class="muted">Ity no toerana hijerenao ny mombamomba anao sy ny fivoaran'ny kaontinao.</p></section>
-<div id="loading" class="loading">Eo am-pakana ny mombamomba anao...</div>
+<div id="loading" class="loading"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Eo am-pakana ny mombamomba anao...</span></div>
 <p id="error" role="alert"></p>
 <section id="content" hidden>
 <div class="grid">
@@ -88,9 +94,9 @@ async function loadNotifications(){
  }catch(e){status.textContent=e.message||"Tsy afaka naka fampandrenesana.";}
 }
 document.getElementById("logout").addEventListener("click",async()=>{
- const b=document.getElementById("logout");b.disabled=true;
+ const b=document.getElementById("logout");b.disabled=true;b.classList.add("is-loading");b.textContent="Mivoaka...";
  try{const r=await fetch("/api/auth/logout",{method:"POST",credentials:"same-origin",cache:"no-store"});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.message||"Tsy afaka nivoaka.");location.replace("/");}
- catch(e){error.textContent=e.message;b.disabled=false;}
+ catch(e){error.textContent=e.message;b.disabled=false;b.classList.remove("is-loading");b.textContent="Hivoaka";}
 });
 loadDashboard();
 </script>
