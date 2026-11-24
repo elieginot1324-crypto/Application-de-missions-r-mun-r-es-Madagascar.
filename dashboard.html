@@ -57,7 +57,7 @@ async function loadDashboard(){
   if(!response.ok||!data.success){if(response.status===401||response.status===403){location.replace("/?connexion=requise");return;}throw new Error(data.message||"Tsy afaka naka ny mombamomba anao.");}
   const u=data.user;
   const displayName = String(u.full_name || "").trim().replace(/\s+/g, " ").replace(/(^|\s)\p{L}/gu, character => character.toUpperCase());
-  document.getElementById("welcome").textContent = displayName ? `Bienvenue, ${displayName} !` : "Bienvenue dans votre compte !";
+  document.getElementById("welcome").textContent = displayName ? `Tongasoa, ${displayName} !` : "Tongasoa eto amin’ny kaontinao !";
 
   if(u.status==="pending"){
    document.getElementById("dashboardGrid").hidden=true;
