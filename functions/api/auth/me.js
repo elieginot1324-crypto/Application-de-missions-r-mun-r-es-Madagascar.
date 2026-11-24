@@ -30,7 +30,7 @@ export async function onRequestGet({ request, env }) {
   try {
     const tokenHash = await hashToken(match[1]);
     const user = await env.DB.prepare(
-      `SELECT users.id, users.full_name, users.email, users.phone, users.role, users.status
+      `SELECT users.id, users.full_name, users.email, users.phone, users.role, users.status, users.security_status
        FROM sessions
        JOIN users ON users.id = sessions.user_id
        WHERE sessions.token_hash = ?
@@ -38,8 +38,8 @@ export async function onRequestGet({ request, env }) {
        LIMIT 1`
     ).bind(tokenHash, new Date().toISOString()).first();
 
-    if (!user || !["active", "pending"].includes(user.status)) {
-      return json({ success: false, message: "Tsy mavitrika na tsy mahazo miditra ny kaonty." }, 401);
+    if (!user || user.status !== "active" || user.security_status !== "clear") {
+      return json({ success: false, message: "Tsy mavitrika ny kaonty." }, 401);
     }
 
     return json({
@@ -49,8 +49,7 @@ export async function onRequestGet({ request, env }) {
         full_name: user.full_name,
         email: user.email,
         phone: user.phone,
-        role: user.role,
-        status: user.status
+        role: user.role
       }
     });
   } catch (error) {
