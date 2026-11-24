@@ -62,6 +62,7 @@
     <div class="score" id="finalScore">0 / 5</div>
     <p class="muted" id="resultMessage"></p>
     <div class="actions" style="justify-content:center;margin-top:22px"><button class="primary" id="retryButton">Hilalao indray</button><a class="back" href="/games.html">Hiverina amin'ny lalao</a></div>
+    <p class="notice">Afaka milalao in-3 isan'andro ianao. Isaina ho lalao iray ny fihodinana natomboka, na tsy vita aza. Tsy misy sazy ara-bola amin'ny valiny diso.</p>
     <p class="notice">Tsy mbola misy valisoa Ariary amin'ity dingana ity. Hampandrenesina eto rehefa vonona sy voamarina ny rafitra valisoa.</p>
   </section>
   <section class="card" id="error" hidden><h1>Tsy afaka milalao</h1><p class="muted" id="errorText">Midira amin'ny kaontinao aloha.</p><div class="actions" style="margin-top:20px"><a class="back" href="/">Hiverina any amin'ny fandraisana</a></div></section>
@@ -69,66 +70,67 @@
 <script>
 (() => {
   "use strict";
-  const questions = [
-    {q:"Inona no renivohitr'i Madagasikara?",a:["Toamasina","Antananarivo","Mahajanga","Fianarantsoa"],c:1},
-    {q:"Inona no vola ampiasaina eto Madagasikara?",a:["Euro","Dolara","Ariary","Rand"],c:2},
-    {q:"Iza amin'ireto no biby mampiavaka an'i Madagasikara?",a:["Kangoroa","Lémurien","Orsa polar","Tigre"],c:1},
-    {q:"Inona no ranomasimbe manamorona ny ilany atsinanan'i Madagasikara?",a:["Ranomasimbe Indiana","Ranomasimbe Atlantika","Ranomasimbe Arktika","Ranomasimbe Pasifika"],c:0},
-    {q:"Firy ny andro ao anatin'ny herinandro?",a:["Dimy","Enina","Fito","Valo"],c:2},
-    {q:"Inona no lokon'ny ravin'ny ankamaroan'ny zavamaniry salama?",a:["Manga","Maitso","Volomparasy","Mainty"],c:1},
-    {q:"Iza amin'ireto no fitaovana ampiasaina hiantsoana olona lavitra?",a:["Finday","Sotro","Seza","Vilany"],c:0},
-    {q:"Inona no tokony hatao raha mahazo hafatra mangataka tenimiafina?",a:["Alefa avy hatrany","Aparitaka","Tsy omena ary hamarinina ny mpandefa","Omena ny olona rehetra"],c:2},
-    {q:"Inona no ilaina rehefa manao asa an-tserasera?",a:["Manaraka toromarika sy fe-potoana","Mizara tenimiafina","Mandainga momba ny asa","Tsy mamaky ny fangatahana"],c:0},
-    {q:"Inona no tokony hatao alohan'ny handefasana asa vita amin'ny mpanjifa?",a:["Tsy jerena intsony","Hamarino fa feno sy mifanaraka amin'ny toromarika","Fafao ny asa","Alefaso tsy misy porofo raha ilaina"],c:1}
-  ];
-  const $ = id => document.getElementById(id);
-  const views = ["loading","quiz","result","error"];
-  let round = [], index = 0, score = 0, locked = false;
-  function show(id){views.forEach(v => $(v).hidden = v !== id);}
-  function shuffle(items){const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  const $=id=>document.getElementById(id);
+  const views=["loading","quiz","result","error"];
+  let roundId=null,questions=[],choices=[],index=0,selected=null;
+  function show(id){views.forEach(v=>$(v).hidden=v!==id);}
+  function fail(message){show("error");$("errorText").textContent=message;}
   async function init(){
-    try {
-      const response = await fetch("/api/auth/me",{credentials:"same-origin",cache:"no-store",headers:{"Accept":"application/json"}});
-      const data = await response.json();
-      if(!response.ok || !data.success || !data.user){show("error");$("errorText").textContent="Mila miditra amin'ny kaonty mavitrika ianao vao afaka milalao.";return;}
-      startRound();
-    } catch(e) {
-      show("error");$("errorText").textContent="Tsy afaka nanamarina ny kaonty. Jereo ny fifandraisana ary andramo indray.";
-    }
+    try{
+      const auth=await fetch("/api/auth/me",{credentials:"same-origin",cache:"no-store",headers:{"Accept":"application/json"}});
+      const authData=await auth.json();
+      if(!auth.ok||!authData.success||!authData.user){fail("Mila miditra amin'ny kaonty mavitrika ianao vao afaka milalao.");return;}
+      const response=await fetch("/api/games/quiz/start",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Accept":"application/json"}});
+      const data=await response.json();
+      if(!response.ok||!data.success){fail(data.message||"Tsy afaka manomboka ny Quiz.");return;}
+      roundId=data.round_id;questions=data.questions;choices=Array(questions.length).fill(null);
+      $("scoreLabel").textContent="Lalao androany: "+data.round_number+" / 3";
+      show("quiz");render();
+    }catch(error){fail("Tsy afaka nifandray tamin'ny serveur. Andramo indray rehefa mandeha ny Internet.");}
   }
-  function startRound(){
-    round=shuffle(questions).slice(0,5);index=0;score=0;locked=false;
-    $("scoreLabel").textContent="Isa: 0";show("quiz");renderQuestion();
-  }
-  function renderQuestion(){
-    locked=false;const item=round[index];
-    $("counter").textContent="Fanontaniana "+(index+1)+" / "+round.length;
-    $("progressBar").style.width=(index/round.length*100)+"%";
-    $("questionText").textContent=item.q;$("feedback").textContent="";$("nextButton").disabled=true;
-    $("nextButton").textContent=index===round.length-1?"Hijery ny vokatra":"Manaraka";
+  function render(){
+    selected=null;const item=questions[index];
+    $("counter").textContent="Fanontaniana "+(index+1)+" / "+questions.length;
+    $("progressBar").style.width=(index/questions.length*100)+"%";
+    $("questionText").textContent=item.question;$("feedback").textContent="Safidio ny valinteninao.";
+    $("feedback").style.color="";$("nextButton").disabled=true;
+    $("nextButton").textContent=index===questions.length-1?"Hanamarina valiny":"Manaraka";
     const box=$("answers");box.replaceChildren();
-    item.a.forEach((answer,i)=>{
+    item.answers.forEach((answer,i)=>{
       const button=document.createElement("button");button.type="button";button.className="answer";
       button.textContent=String.fromCharCode(65+i)+". "+answer;
-      button.addEventListener("click",()=>choose(i));box.appendChild(button);
+      button.addEventListener("click",()=>{
+        selected=i;[...box.children].forEach((b,n)=>b.classList.toggle("correct",n===i));
+        $("feedback").textContent="Voafidy: "+String.fromCharCode(65+i);
+        $("nextButton").disabled=false;
+      });
+      box.appendChild(button);
     });
   }
-  function choose(choice){
-    if(locked)return;locked=true;const item=round[index];const buttons=[...$("answers").children];
-    buttons.forEach((button,i)=>{button.disabled=true;if(i===item.c)button.classList.add("correct");if(i===choice&&choice!==item.c)button.classList.add("wrong");});
-    if(choice===item.c){score++;$("feedback").textContent="Marina ny valintenina!";$("feedback").style.color="#16834f";}
-    else{$("feedback").textContent="Mbola misy azo ianarana. Ny valiny marina dia: "+item.a[item.c];$("feedback").style.color="#a4473f";}
-    $("scoreLabel").textContent="Isa: "+score;$("nextButton").disabled=false;
-  }
-  function next(){
-    if(!locked)return;
-    if(index<round.length-1){index++;renderQuestion();return;}
-    $("progressBar").style.width="100%";$("finalScore").textContent=score+" / "+round.length;
-    $("resultMessage").textContent=score===5?"Tonga lafatra!":score>=3?"Tsara izany, tohizo hatrany!":"Aza kivy fa afaka manandrana indray ianao.";
-    show("result");
+  async function next(){
+    if(selected===null)return;
+    choices[index]=selected;
+    if(index<questions.length-1){index++;render();return;}
+    $("nextButton").disabled=true;$("nextButton").textContent="Eo am-panamarinana…";
+    try{
+      const response=await fetch("/api/games/quiz/submit",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({round_id:roundId,choices})});
+      const data=await response.json();
+      if(!response.ok||!data.success){fail(data.message||"Tsy voamarina ny valiny. Aza averina alefa ity lalao ity.");return;}
+      $("progressBar").style.width="100%";$("finalScore").textContent=data.score+" / "+data.total;
+      $("resultMessage").textContent=data.score===5?"Tonga lafatra!":data.score>=3?"Tsara izany, tohizo hatrany!":"Aza kivy fa afaka manatsara ny fahalalana ianao.";
+      const review=document.createElement("div");review.style.cssText="text-align:left;margin-top:22px;display:grid;gap:12px";
+      data.review.forEach((item,i)=>{
+        const card=document.createElement("div");card.style.cssText="padding:12px;border:1px solid #dce9e1;border-radius:12px;background:#fbfdfb";
+        const q=document.createElement("strong");q.textContent=(i+1)+". "+item.question;
+        const answer=document.createElement("p");answer.style.marginTop="6px";answer.textContent=(item.correct?"Marina: ":"Diso. Valiny marina: ")+item.correct_answer;
+        answer.style.color=item.correct?"#16834f":"#a4473f";card.append(q,answer);review.appendChild(card);
+      });
+      const old=$("reviewList");if(old)old.remove();review.id="reviewList";$("resultMessage").after(review);
+      show("result");
+    }catch(error){fail("Tsy afaka nifandray tamin'ny serveur. Mifandraisa amin'ny fanohanana raha toa ka efa nandefa valiny ianao.");}
   }
   $("nextButton").addEventListener("click",next);
-  $("retryButton").addEventListener("click",startRound);
+  $("retryButton").addEventListener("click",()=>{window.location.reload();});
   init();
 })();
 </script>
