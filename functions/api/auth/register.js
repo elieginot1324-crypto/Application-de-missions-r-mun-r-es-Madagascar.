@@ -25,7 +25,7 @@ async function hashPassword(password) {
   const toBase64 = (bytes) =>
     btoa(String.fromCharCode(...new Uint8Array(bytes)));
 
-  return `pbkdf2$100000${toBase64(salt)}${toBase64(bits)}`;
+  return `pbkdf2$100000$${toBase64(salt)}$${toBase64(bits)}`;
 }
 
 async function hashToken(token) {
