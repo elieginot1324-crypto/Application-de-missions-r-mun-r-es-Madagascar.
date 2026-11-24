@@ -1655,6 +1655,10 @@
       authPassword.value = "";
       authConfirmPassword.value = "";
 
+      if (!result.requires_review) {
+        await loadCurrentSession();
+      }
+
     } catch (error) {
       showAuthMessage(
         error.message ||
