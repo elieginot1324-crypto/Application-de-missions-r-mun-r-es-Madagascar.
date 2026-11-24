@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#087c54">
+  <meta name="description" content="Lalao Quiz ao amin'ny MADAGASCAR EARN V2.">
+  <title>Quiz — MADAGASCAR EARN V2</title>
+  <style>
+    :root{--green:#087c54;--dark:#075c40;--gold:#f2bd3e;--ink:#18352a;--muted:#63756c;--line:#dce9e1}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:linear-gradient(145deg,#eaf8f0,#fff8e8);min-height:100vh;line-height:1.5}
+    .wrap{width:min(760px,92%);margin:auto}
+    header{padding:16px 0;background:#ffffffeb;border-bottom:1px solid var(--line)}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{font-weight:900;color:var(--dark);font-size:17px}
+    a.back{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 15px;border-radius:11px;background:#fff;border:1px solid var(--line);color:var(--dark);font-weight:700;text-decoration:none;transition:background .2s,transform .2s}a.back:hover{background:#f2f8f4;transform:translateY(-1px)}
+    main{padding:34px 0 60px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(20px,5vw,34px);box-shadow:0 12px 35px #164b3012}
+    .eyebrow{color:#946400;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+    h1{font-size:clamp(27px,5vw,38px);color:var(--dark);margin:5px 0}
+    .muted{color:var(--muted)}
+    .progress{height:9px;background:#e8f0eb;border-radius:20px;overflow:hidden;margin:20px 0}
+    .bar{height:100%;width:0;background:linear-gradient(90deg,var(--green),#39aa76);transition:width .2s}
+    .meta{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted)}
+    .question{font-size:clamp(19px,3.5vw,24px);font-weight:800;margin:24px 0 18px}
+    .answers{display:grid;gap:11px}
+    .answer{width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:13px;background:#fff;text-align:left;font-size:16px;font-weight:700;color:var(--ink);cursor:pointer}
+    .answer:hover:not(:disabled){border-color:#73b99a;background:#f5fbf7}
+    .answer:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #e2ae32;outline-offset:3px}
+    .answer:disabled{cursor:default;opacity:1}
+    .answer.correct{border-color:#26945e;background:#eaf8f0}
+    .answer.wrong{border-color:#d45b52;background:#fff0ef}
+    .feedback{min-height:28px;margin:14px 0;font-weight:700}
+    .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+    button.primary{border:0;border-radius:12px;padding:13px 20px;background:var(--green);color:#fff;font-size:15px;font-weight:800;cursor:pointer}
+    button.primary:disabled{opacity:.45;cursor:not-allowed}
+    .notice{margin-top:18px;padding:13px 15px;border-radius:12px;background:#fff8e5;border:1px solid #f0dfad;color:#72571c;font-size:13px}
+    .center{text-align:center}
+    .score{font-size:46px;font-weight:900;color:var(--green);margin:12px 0}
+    [hidden]{display:none!important}
+    .me-spinner{display:inline-block;width:16px;height:16px;flex:0 0 16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:me-spin .75s linear infinite;vertical-align:middle}
+    .me-loading{display:inline-flex;align-items:center;gap:9px}
+    button.is-loading{cursor:wait;opacity:.88}
+    button.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:me-spin .75s linear infinite}
+    @keyframes me-spin{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){.me-spinner,button.is-loading::before{animation-duration:1.8s}}
+    @media(max-width:520px){.brand{font-size:14px}main{padding-top:22px}.meta{font-size:12px}}
+  </style>
+</head>
+<body>
+<header><div class="wrap top"><div class="brand">MADAGASCAR EARN V2</div><a class="back" href="/games.html">← Lalao sy Valisoa</a></div></header>
+<main class="wrap">
+  <section class="card" id="loading"><p class="eyebrow">Fanamarinana</p><h1>Quiz</h1><p class="muted"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry kely fa manamarina ny kaontinao…</span></p></section>
+  <section class="card" id="quiz" hidden>
+    <p class="eyebrow">Lalao fahalalana</p><h1>Quiz</h1>
+    <p class="muted">Valio tsara ireo fanontaniana 5. Tsy misy saram-pidirana.</p>
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+    <div class="meta"><span id="counter">Fanontaniana 1 / 5</span><span id="scoreLabel">Isa: 0</span></div>
+    <div class="question" id="questionText"></div>
+    <div class="answers" id="answers"></div>
+    <p class="feedback" id="feedback" aria-live="polite"></p>
+    <div class="actions"><button class="primary" id="nextButton" disabled>Manaraka</button></div>
+    <p class="notice">Fanazaran-tena sy fialamboly ity Quiz ity amin'izao. Tsy mbola misy valisoa Ariary aloa; mbola eo am-panamboarana ny rafitra fanamarinana sy famatsiam-bola.</p>
+  </section>
+  <section class="card center" id="result" hidden>
+    <p class="eyebrow">Vita ny Quiz</p><h1>Tsara ny ezaka!</h1>
+    <div class="score" id="finalScore">0 / 5</div>
+    <p class="muted" id="resultMessage"></p>
+    <div class="actions" style="justify-content:center;margin-top:22px"><button class="primary" id="retryButton">Hilalao indray</button><a class="back" href="/games.html">Hiverina amin'ny lalao</a></div>
+    <p class="notice">Afaka milalao in-3 isan'andro ianao. Isaina ho lalao iray ny fihodinana natomboka, na tsy vita aza. Tsy misy sazy ara-bola amin'ny valiny diso.</p>
+    <p class="notice">Tsy mbola misy valisoa Ariary amin'ity dingana ity. Hampandrenesina eto rehefa vonona sy voamarina ny rafitra valisoa.</p>
+  </section>
+  <section class="card" id="error" hidden><h1>Tsy afaka milalao</h1><p class="muted" id="errorText">Midira amin'ny kaontinao aloha.</p><div class="actions" style="margin-top:20px"><a class="back" href="/">Hiverina any amin'ny fandraisana</a></div></section>
+</main>
+<script>
+(() => {
+  "use strict";
+  const $=id=>document.getElementById(id);
+  const views=["loading","quiz","result","error"];
+  let roundId=null,questions=[],choices=[],index=0,selected=null;
+  function show(id){views.forEach(v=>$(v).hidden=v!==id);}
+  function fail(message){show("error");$("errorText").textContent=message;}
+  async function init(){
+    try{
+      const auth=await fetch("/api/auth/me",{credentials:"same-origin",cache:"no-store",headers:{"Accept":"application/json"}});
+      const authData=await auth.json();
+      if(!auth.ok||!authData.success||!authData.user){fail("Mila miditra amin'ny kaonty mavitrika ianao vao afaka milalao.");return;}
+      const response=await fetch("/api/games/quiz/start",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Accept":"application/json"}});
+      const data=await response.json();
+      if(!response.ok||!data.success){fail(data.message||"Tsy afaka manomboka ny Quiz.");return;}
+      roundId=data.round_id;questions=data.questions;choices=Array(questions.length).fill(null);
+      $("scoreLabel").textContent="Lalao androany: "+data.round_number+" / 3";
+      show("quiz");render();
+    }catch(error){fail("Tsy afaka nifandray tamin'ny serveur. Andramo indray rehefa mandeha ny Internet.");}
+  }
+  function render(){
+    selected=null;const item=questions[index];
+    $("counter").textContent="Fanontaniana "+(index+1)+" / "+questions.length;
+    $("progressBar").style.width=(index/questions.length*100)+"%";
+    $("questionText").textContent=item.question;$("feedback").textContent="Safidio ny valinteninao.";
+    $("feedback").style.color="";$("nextButton").disabled=true;
+    $("nextButton").textContent=index===questions.length-1?"Hanamarina valiny":"Manaraka";
+    const box=$("answers");box.replaceChildren();
+    item.answers.forEach((answer,i)=>{
+      const button=document.createElement("button");button.type="button";button.className="answer";
+      button.textContent=String.fromCharCode(65+i)+". "+answer;
+      button.addEventListener("click",()=>{
+        selected=i;[...box.children].forEach((b,n)=>b.classList.toggle("correct",n===i));
+        $("feedback").textContent="Voafidy: "+String.fromCharCode(65+i);
+        $("nextButton").disabled=false;
+      });
+      box.appendChild(button);
+    });
+  }
+  async function next(){
+    if(selected===null)return;
+    choices[index]=selected;
+    if(index<questions.length-1){index++;render();return;}
+    $("nextButton").disabled=true;$("nextButton").classList.add("is-loading");$("nextButton").textContent="Eo am-panamarinana…";
+    try{
+      const response=await fetch("/api/games/quiz/submit",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({round_id:roundId,choices})});
+      const data=await response.json();
+      if(!response.ok||!data.success){$("nextButton").classList.remove("is-loading");fail(data.message||"Tsy voamarina ny valiny. Aza averina alefa ity lalao ity.");return;}
+      $("progressBar").style.width="100%";$("finalScore").textContent=data.score+" / "+data.total;
+      $("resultMessage").textContent=data.score===5?"Tonga lafatra!":data.score>=3?"Tsara izany, tohizo hatrany!":"Aza kivy fa afaka manatsara ny fahalalana ianao.";
+      const review=document.createElement("div");review.style.cssText="text-align:left;margin-top:22px;display:grid;gap:12px";
+      data.review.forEach((item,i)=>{
+        const card=document.createElement("div");card.style.cssText="padding:12px;border:1px solid #dce9e1;border-radius:12px;background:#fbfdfb";
+        const q=document.createElement("strong");q.textContent=(i+1)+". "+item.question;
+        const answer=document.createElement("p");answer.style.marginTop="6px";answer.textContent=(item.correct?"Marina: ":"Diso. Valiny marina: ")+item.correct_answer;
+        answer.style.color=item.correct?"#16834f":"#a4473f";card.append(q,answer);review.appendChild(card);
+      });
+      const old=$("reviewList");if(old)old.remove();review.id="reviewList";$("resultMessage").after(review);
+      show("result");
+    }catch(error){$("nextButton").classList.remove("is-loading");fail("Tsy afaka nifandray tamin'ny serveur. Mifandraisa amin'ny fanohanana raha toa ka efa nandefa valiny ianao.");}
+  }
+  $("nextButton").addEventListener("click",next);
+  $("retryButton").addEventListener("click",()=>{window.location.reload();});
+  init();
+})();
+</script>
+</body>
+</html>
