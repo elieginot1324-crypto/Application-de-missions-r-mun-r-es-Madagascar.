@@ -1657,6 +1657,9 @@
 
       if (!result.requires_review) {
         await loadCurrentSession();
+        if (authenticatedUser) {
+          window.location.assign("/dashboard.html");
+        }
       }
 
     } catch (error) {
@@ -1715,6 +1718,9 @@
 
       authPassword.value = "";
       setAuthenticatedUser(result.user);
+
+      // Rehefa tafiditra dia alefa mivantana any amin'ny dashboard.
+      window.location.assign("/dashboard.html");
 
     } catch (error) {
       showAuthMessage(
