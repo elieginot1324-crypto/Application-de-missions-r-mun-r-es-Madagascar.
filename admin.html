@@ -179,6 +179,12 @@
       <p id="pendingMissionStatus" class="stat-status">Miandry ny angona...</p>
       <div id="pendingMissionList" class="menu"></div>
     </section>
+
+    <section class="welcome">
+      <h2>Mpikambana miandry fanamarinana</h2>
+      <p id="pendingMembersStatus" class="stat-status">Miandry ny angona...</p>
+      <div id="pendingMembersList" class="menu"></div>
+    </section>
     <section class="menu">
       <article class="item">
         <h2>Famintinana</h2>
@@ -366,5 +372,53 @@ async function reviewMission(id, action) {
 }
 loadPendingMissions();
 
-</script></body>
+
+async function loadPendingMembers() {
+  const status = document.getElementById("pendingMembersStatus");
+  const list = document.getElementById("pendingMembersList");
+  try {
+    const response = await fetch("/api/admin/members", {
+      method: "GET",
+      credentials: "same-origin",
+      cache: "no-store"
+    });
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      status.textContent = response.status === 401 || response.status === 403
+        ? "Tsy nahazo alalana hijery ireo mpikambana."
+        : (result.message || "Tsy afaka naka ny lisitry ny mpikambana.");
+      return;
+    }
+
+    const members = result.members || [];
+    status.textContent = members.length
+      ? members.length + " kaonty miandry fanamarinana."
+      : "Tsy misy kaonty miandry fanamarinana.";
+    list.replaceChildren();
+
+    for (const member of members) {
+      const card = document.createElement("article");
+      card.className = "item";
+
+      const heading = document.createElement("h2");
+      heading.textContent = member.full_name || "Mpikambana";
+      const role = document.createElement("p");
+      role.textContent = member.role === "worker" ? "Karazana kaonty: Mpiasa" : "Karazana kaonty: Mpanjifa";
+      const email = document.createElement("p");
+      email.textContent = "Email: " + (member.email || "Tsy misy");
+      const phone = document.createElement("p");
+      phone.textContent = "Finday: " + (member.phone || "Tsy misy");
+      const state = document.createElement("p");
+      state.textContent = "Sata: Miandry fanamarinana";
+
+      card.append(heading, role, email, phone, state);
+      list.append(card);
+    }
+  } catch (error) {
+    status.textContent = "Tsy afaka mifandray amin'ny mpizara.";
+  }
+}
+
+loadPendingMembers();
+\n</script></body>
 </html>
