@@ -42,7 +42,7 @@ export async function onRequestGet({ request, env }) {
     }
 
     const result = await env.DB.prepare(`
-      SELECT id, full_name, email, phone, role, status
+      SELECT id, full_name, email, phone, role, status, security_status
       FROM users
       WHERE status = 'pending'
         AND role IN ('worker', 'client')
