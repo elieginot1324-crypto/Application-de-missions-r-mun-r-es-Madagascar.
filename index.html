@@ -796,6 +796,82 @@
       .withdraw-highlight-copy { flex-basis: 100%; font-size: 17px; }
       .withdraw-method { flex: 1 1 auto; }
     }
+
+    .games-entry {
+      display: block;
+      margin-top: 28px;
+      padding: 4px;
+      border-radius: 22px;
+      background: linear-gradient(120deg, #f5c542, #ff8a24, #087c54);
+      box-shadow: 0 14px 30px rgba(15,70,48,.18);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .games-entry:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px rgba(15,70,48,.23);
+    }
+    .games-entry-inner {
+      min-height: 104px;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #fff;
+      border-radius: 18px;
+      background: linear-gradient(115deg, #075c40, #087c54 55%, #0b9164);
+    }
+    .games-entry-icon {
+      width: 64px;
+      height: 64px;
+      flex: 0 0 64px;
+      display: grid;
+      place-items: center;
+      color: #754400;
+      border: 3px solid #ffe28a;
+      border-radius: 19px;
+      background: linear-gradient(145deg, #fff3b8, #f4bd35);
+      box-shadow: inset 0 2px 5px rgba(255,255,255,.75), 0 5px 12px rgba(0,0,0,.18);
+    }
+    .games-entry-icon svg { width: 39px; height: 39px; }
+    .games-entry-copy { flex: 1; min-width: 0; }
+    .games-entry-copy strong {
+      display: block;
+      font-size: clamp(18px, 2.5vw, 23px);
+      line-height: 1.2;
+    }
+    .games-entry-copy span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255,255,255,.88);
+      font-size: 13px;
+    }
+    .games-entry-arrow {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      color: #075c40;
+      border-radius: 50%;
+      background: #fff;
+      font-size: 25px;
+      font-weight: 900;
+    }
+    @media (max-width: 420px) {
+      .games-entry-inner { padding: 14px 12px; gap: 11px; }
+      .games-entry-icon { width: 54px; height: 54px; flex-basis: 54px; border-radius: 15px; }
+      .games-entry-icon svg { width: 32px; height: 32px; }
+      .games-entry-copy span { font-size: 11px; }
+      .games-entry-arrow { width: 35px; height: 35px; flex-basis: 35px; }
+    }
+
+
+    .me-spinner{display:inline-block;width:16px;height:16px;flex:0 0 16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:me-spin .75s linear infinite;vertical-align:middle}
+    button.is-loading{cursor:wait;opacity:.88}
+    button.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:me-spin .75s linear infinite}
+    @keyframes me-spin{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){.me-spinner,button.is-loading::before{animation-duration:1.8s}}
+
   </style>
   <link rel="stylesheet" href="/assets/visual.css">
 </head>
@@ -861,6 +937,25 @@
               Fantaro ny fomba fiasa
             </a>
           </div>
+
+          <a class="games-entry" href="/games.html" aria-label="Midira amin'ny lalao sy valisoa">
+            <span class="games-entry-inner">
+              <span class="games-entry-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 17h20a8 8 0 0 1 7.7 10.2l-2.2 8a4 4 0 0 1-6.7 1.7l-5-4.9h-7.6l-5 4.9a4 4 0 0 1-6.7-1.7l-2.2-8A8 8 0 0 1 14 17Z"/>
+                  <path d="M15 23v8m-4-4h8"/>
+                  <circle cx="32" cy="24" r="1.5" fill="currentColor"/>
+                  <circle cx="36" cy="29" r="1.5" fill="currentColor"/>
+                  <path d="M24 7v5m-2.5-2.5h5"/>
+                </svg>
+              </span>
+              <span class="games-entry-copy">
+                <strong data-mg="Lalao sy Valisoa" data-fr="Jeux et récompenses">Lalao sy Valisoa</strong>
+                <span data-mg="Midira hahita ireo lalao sy valisoa amin'ny Ariary (Ar)." data-fr="Découvrez les jeux et les récompenses en ariary (Ar).">Midira hahita ireo lalao sy valisoa amin'ny Ariary (Ar).</span>
+              </span>
+              <span class="games-entry-arrow" aria-hidden="true">›</span>
+            </span>
+          </a>
 
           <div class="withdraw-highlight" aria-label="Retrait direct par Mobile Money">
             <div class="withdraw-highlight-copy"
@@ -1312,6 +1407,7 @@
   async function logoutAccount() {
     if (!logoutButton) return;
     logoutButton.disabled = true;
+    logoutButton.classList.add("is-loading");
     try {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
@@ -1326,6 +1422,7 @@
       window.alert(error.message || translated("Tsy afaka nivoaka.", "Déconnexion impossible."));
     } finally {
       logoutButton.disabled = false;
+      logoutButton.classList.remove("is-loading");
     }
   }
 
@@ -1626,6 +1723,7 @@
     const originalText = authSubmit.textContent;
 
     authSubmit.disabled = true;
+    authSubmit.classList.add("is-loading");
     authSubmit.textContent = translated(
       "Andraso kely...",
       "Veuillez patienter..."
@@ -1643,16 +1741,24 @@
         }
       );
 
+      showAuthMessage(
+        result.message ||
+        translated(
+          "Vita soa aman-tsara ny fisoratana anarana.",
+          "Inscription effectuée avec succès."
+        ),
+        "info"
+      );
+
       authPassword.value = "";
       authConfirmPassword.value = "";
 
-      if (!result.user || !result.user.id) {
-        throw new Error("Vita ny fisoratana anarana fa tsy tafapetraka ny fidirana automatique. Andramo miditra amin'ny kaontinao.");
+      if (!result.requires_review) {
+        await loadCurrentSession();
+        if (authenticatedUser) {
+          window.location.assign("/dashboard.html");
+        }
       }
-
-      setAuthenticatedUser(result.user);
-      showAuthMessage(result.message || "Vita ny fisoratana anarana.", "info");
-      window.location.assign("/dashboard.html");
 
     } catch (error) {
       showAuthMessage(
@@ -1665,6 +1771,7 @@
       );
     } finally {
       authSubmit.disabled = false;
+      authSubmit.classList.remove("is-loading");
       authSubmit.textContent = originalText;
     }
   }
@@ -1677,6 +1784,7 @@
     const originalText = authSubmit.textContent;
 
     authSubmit.disabled = true;
+    authSubmit.classList.add("is-loading");
     authSubmit.textContent = translated(
       "Miditra...",
       "Connexion en cours..."
@@ -1711,6 +1819,9 @@
       authPassword.value = "";
       setAuthenticatedUser(result.user);
 
+      // Rehefa tafiditra dia alefa mivantana any amin'ny dashboard.
+      window.location.assign("/dashboard.html");
+
     } catch (error) {
       showAuthMessage(
         error.message ||
@@ -1722,6 +1833,7 @@
       );
     } finally {
       authSubmit.disabled = false;
+      authSubmit.classList.remove("is-loading");
       authSubmit.textContent = originalText;
     }
   }
