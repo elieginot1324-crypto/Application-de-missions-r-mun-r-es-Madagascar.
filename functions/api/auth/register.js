@@ -12,12 +12,20 @@ async function hashPassword(password) {
   return "pbkdf2$100000$" + toBase64(salt) + "$" + toBase64(bits);
 }
 
-function json(data, status = 200) {
+async function hashToken(token) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return Array.from(new Uint8Array(digest))
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function json(data, status = 200, headers = {}) {
   return Response.json(data, {
     status,
     headers: {
       "Cache-Control": "no-store",
-      "X-Content-Type-Options": "nosniff"
+      "X-Content-Type-Options": "nosniff",
+      ...headers
     }
   });
 }
@@ -92,11 +100,37 @@ export async function onRequestPost({ request, env }) {
       }, 201);
     }
 
+    const newUser = await env.DB.prepare(
+      "SELECT id FROM users WHERE (? IS NOT NULL AND email = ?) OR (? IS NOT NULL AND phone = ?) ORDER BY id DESC LIMIT 1"
+    ).bind(email, email, phone, phone).first();
+
+    if (!newUser) {
+      throw new Error("REGISTER_USER_LOOKUP_FAILED");
+    }
+
+    const tokenBytes = crypto.getRandomValues(new Uint8Array(32));
+    const token = Array.from(tokenBytes)
+      .map(byte => byte.toString(16).padStart(2, "0"))
+      .join("");
+    const tokenHash = await hashToken(token);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    await env.DB.batch([
+      env.DB.prepare(
+        "INSERT INTO sessions (user_id, token_hash, expires_at) VALUES (?, ?, ?)"
+      ).bind(newUser.id, tokenHash, expiresAt),
+      env.DB.prepare(
+        "INSERT INTO audit_logs (actor_user_id, action, target_type, target_id, details) VALUES (?, ?, ?, ?, ?)"
+      ).bind(newUser.id, "register_and_login", "user", newUser.id, "Fisoratana anarana sy fidirana nahomby")
+    ]);
+
     return json({
       success: true,
       requires_review: false,
-      message: "Vita soa aman-tsara ny fisoratana anarana. Afaka miditra avy hatrany ianao."
-    }, 201);
+      message: "Vita soa aman-tsara ny fisoratana anarana. Tafiditra avy hatrany ianao."
+    }, 201, {
+      "Set-Cookie": `me_session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=604800`
+    });
 
   } catch (error) {
     console.error("REGISTER_ERROR:", error);
