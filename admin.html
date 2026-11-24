@@ -344,8 +344,8 @@ async function loadPendingMissions() {
         <strong>Mpiasa:</strong> ${Number(m.workers_needed)}</p>
         <label for="mission-note-${Number(m.id)}">Fanamarihana / porofo fanamarinana</label>
         <input id="mission-note-${Number(m.id)}" maxlength="1000" placeholder="Lazao izay fanamarinana natao">
-        <button type="button" onclick="reviewMission(${Number(m.id)}, 'publish')">Havoaka</button>
-        <button type="button" style="background:#a63a35" onclick="reviewMission(${Number(m.id)}, 'reject')">Lavina</button>
+        <button type="button" onclick="reviewMission(${Number(m.id)}, 'publish', this)">Havoaka</button>
+        <button type="button" style="background:#a63a35" onclick="reviewMission(${Number(m.id)}, 'reject', this)">Lavina</button>
       </article>`).join("") : "<p>Tsy misy iraka miandry fanamarinana.</p>";
   } catch (error) {
     status.textContent = "Tsy afaka mifandray amin'ny mpizara.";
@@ -356,7 +356,7 @@ function escapeText(value) {
     "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
   }[ch]));
 }
-async function reviewMission(id, action) {
+async function reviewMission(id, action, button) {
   const note = document.getElementById("mission-note-" + id)?.value.trim() || "";
   if (action === "publish" && note.length < 8) {
     alert("Ampidiro fanamarihana mazava momba ny fanamarinana ny famatsiam-bola.");
@@ -366,6 +366,8 @@ async function reviewMission(id, action) {
     ? "Manamafy ve ianao fa voaray sy voamarina ny famatsiam-bola, ka azo avoaka ity iraka ity?"
     : "Azonao antoka ve fa handà ity iraka ity?";
   if (!confirm(promptText)) return;
+  const originalText = button ? button.textContent : "";
+  if (button) { button.disabled = true; button.classList.add("is-loading"); button.textContent = "Miandry..."; }
   try {
     const response = await fetch("/api/admin/missions", {
       method:"POST", credentials:"same-origin", cache:"no-store",
@@ -377,6 +379,8 @@ async function reviewMission(id, action) {
     if (response.ok && result.success) loadPendingMissions();
   } catch (error) {
     alert("Tsy afaka mifandray amin'ny mpizara.");
+  } finally {
+    if (button) { button.disabled = false; button.classList.remove("is-loading"); button.textContent = originalText; }
   }
 }
 loadPendingMissions();
