@@ -14,7 +14,7 @@
     header{padding:16px 0;background:#ffffffeb;border-bottom:1px solid var(--line)}
     .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .brand{font-weight:900;color:var(--dark);font-size:17px}
-    a.back{padding:9px 13px;border-radius:10px;background:#fff;border:1px solid var(--line);color:var(--dark);font-weight:700;text-decoration:none}
+    a.back{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 15px;border-radius:11px;background:#fff;border:1px solid var(--line);color:var(--dark);font-weight:700;text-decoration:none;transition:background .2s,transform .2s}a.back:hover{background:#f2f8f4;transform:translateY(-1px)}
     main{padding:34px 0 60px}
     .card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(20px,5vw,34px);box-shadow:0 12px 35px #164b3012}
     .eyebrow{color:#946400;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
@@ -39,13 +39,19 @@
     .center{text-align:center}
     .score{font-size:46px;font-weight:900;color:var(--green);margin:12px 0}
     [hidden]{display:none!important}
+    .me-spinner{display:inline-block;width:16px;height:16px;flex:0 0 16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:me-spin .75s linear infinite;vertical-align:middle}
+    .me-loading{display:inline-flex;align-items:center;gap:9px}
+    button.is-loading{cursor:wait;opacity:.88}
+    button.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:me-spin .75s linear infinite}
+    @keyframes me-spin{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){.me-spinner,button.is-loading::before{animation-duration:1.8s}}
     @media(max-width:520px){.brand{font-size:14px}main{padding-top:22px}.meta{font-size:12px}}
   </style>
 </head>
 <body>
 <header><div class="wrap top"><div class="brand">MADAGASCAR EARN V2</div><a class="back" href="/games.html">← Lalao sy Valisoa</a></div></header>
 <main class="wrap">
-  <section class="card" id="loading"><p class="eyebrow">Fanamarinana</p><h1>Quiz</h1><p class="muted">Miandry kely fa manamarina ny kaontinao…</p></section>
+  <section class="card" id="loading"><p class="eyebrow">Fanamarinana</p><h1>Quiz</h1><p class="muted"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry kely fa manamarina ny kaontinao…</span></p></section>
   <section class="card" id="quiz" hidden>
     <p class="eyebrow">Lalao fahalalana</p><h1>Quiz</h1>
     <p class="muted">Valio tsara ireo fanontaniana 5. Tsy misy saram-pidirana.</p>
@@ -111,11 +117,11 @@
     if(selected===null)return;
     choices[index]=selected;
     if(index<questions.length-1){index++;render();return;}
-    $("nextButton").disabled=true;$("nextButton").textContent="Eo am-panamarinana…";
+    $("nextButton").disabled=true;$("nextButton").classList.add("is-loading");$("nextButton").textContent="Eo am-panamarinana…";
     try{
       const response=await fetch("/api/games/quiz/submit",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({round_id:roundId,choices})});
       const data=await response.json();
-      if(!response.ok||!data.success){fail(data.message||"Tsy voamarina ny valiny. Aza averina alefa ity lalao ity.");return;}
+      if(!response.ok||!data.success){$("nextButton").classList.remove("is-loading");fail(data.message||"Tsy voamarina ny valiny. Aza averina alefa ity lalao ity.");return;}
       $("progressBar").style.width="100%";$("finalScore").textContent=data.score+" / "+data.total;
       $("resultMessage").textContent=data.score===5?"Tonga lafatra!":data.score>=3?"Tsara izany, tohizo hatrany!":"Aza kivy fa afaka manatsara ny fahalalana ianao.";
       const review=document.createElement("div");review.style.cssText="text-align:left;margin-top:22px;display:grid;gap:12px";
@@ -127,7 +133,7 @@
       });
       const old=$("reviewList");if(old)old.remove();review.id="reviewList";$("resultMessage").after(review);
       show("result");
-    }catch(error){fail("Tsy afaka nifandray tamin'ny serveur. Mifandraisa amin'ny fanohanana raha toa ka efa nandefa valiny ianao.");}
+    }catch(error){$("nextButton").classList.remove("is-loading");fail("Tsy afaka nifandray tamin'ny serveur. Mifandraisa amin'ny fanohanana raha toa ka efa nandefa valiny ianao.");}
   }
   $("nextButton").addEventListener("click",next);
   $("retryButton").addEventListener("click",()=>{window.location.reload();});
