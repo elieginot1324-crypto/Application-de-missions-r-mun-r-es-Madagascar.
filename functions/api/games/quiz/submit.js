@@ -7,7 +7,7 @@ function json(data,status=200) {
 }
 async function authenticatedUser(request,env) {
   const cookie=request.headers.get("Cookie")||"";
-  const match=cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match=cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
   if(!match)return null;
   const tokenHash=await hashToken(match[1]);
   return env.DB.prepare(`SELECT users.id FROM sessions JOIN users ON users.id=sessions.user_id
