@@ -865,6 +865,13 @@
       .games-entry-arrow { width: 35px; height: 35px; flex-basis: 35px; }
     }
 
+
+    .me-spinner{display:inline-block;width:16px;height:16px;flex:0 0 16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:me-spin .75s linear infinite;vertical-align:middle}
+    button.is-loading{cursor:wait;opacity:.88}
+    button.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:me-spin .75s linear infinite}
+    @keyframes me-spin{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){.me-spinner,button.is-loading::before{animation-duration:1.8s}}
+
   </style>
   <link rel="stylesheet" href="/assets/visual.css">
 </head>
@@ -1400,6 +1407,7 @@
   async function logoutAccount() {
     if (!logoutButton) return;
     logoutButton.disabled = true;
+    logoutButton.classList.add("is-loading");
     try {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
@@ -1414,6 +1422,7 @@
       window.alert(error.message || translated("Tsy afaka nivoaka.", "Déconnexion impossible."));
     } finally {
       logoutButton.disabled = false;
+      logoutButton.classList.remove("is-loading");
     }
   }
 
@@ -1714,6 +1723,7 @@
     const originalText = authSubmit.textContent;
 
     authSubmit.disabled = true;
+    authSubmit.classList.add("is-loading");
     authSubmit.textContent = translated(
       "Andraso kely...",
       "Veuillez patienter..."
@@ -1761,6 +1771,7 @@
       );
     } finally {
       authSubmit.disabled = false;
+      authSubmit.classList.remove("is-loading");
       authSubmit.textContent = originalText;
     }
   }
@@ -1773,6 +1784,7 @@
     const originalText = authSubmit.textContent;
 
     authSubmit.disabled = true;
+    authSubmit.classList.add("is-loading");
     authSubmit.textContent = translated(
       "Miditra...",
       "Connexion en cours..."
@@ -1821,6 +1833,7 @@
       );
     } finally {
       authSubmit.disabled = false;
+      authSubmit.classList.remove("is-loading");
       authSubmit.textContent = originalText;
     }
   }
