@@ -10,6 +10,9 @@
 header{background:linear-gradient(120deg,#066b49,#0b9565);color:#fff;padding:20px 16px}
 .top,main{max-width:1050px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 a{color:inherit}header a{font-weight:bold}main{padding:22px 15px 50px}
+.page-nav{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 13px;border:1px solid #ffffff70;border-radius:10px;background:#ffffff20;color:#fff;text-decoration:none;font-size:13px;font-weight:700;transition:background .2s,transform .2s}
+.back:hover{background:#ffffff32;transform:translateY(-1px)}
 h1{font-size:24px;margin:0}h2{font-size:20px;color:#087c54;margin-top:0}
 .panel{background:#fff;border:1px solid #e0eae4;border-radius:16px;padding:20px;margin:0 0 18px;box-shadow:0 5px 18px #153e2410}
 .muted{color:#687b71;line-height:1.55}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
@@ -23,14 +26,20 @@ button:disabled{opacity:.55;cursor:wait}
 .card h3{margin:0 0 8px;color:#087c54}.tag{display:inline-block;background:#e8f4ed;color:#176044;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
 .notice{padding:12px;border-radius:10px;background:#fff7df;color:#755a14;margin:12px 0}
 .status{margin:10px 0;color:#52685d;min-height:20px}
+.me-spinner{display:inline-block;width:16px;height:16px;flex:0 0 16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:me-spin .75s linear infinite;vertical-align:middle}
+.me-loading{display:inline-flex;align-items:center;gap:9px}
+button.is-loading{cursor:wait;opacity:.88}
+button.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:me-spin .75s linear infinite}
+@keyframes me-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.me-spinner,button.is-loading::before{animation-duration:1.8s}}
 .hidden{display:none!important}.money{font-size:18px;font-weight:bold;color:#087c54}
 @media(max-width:560px){.panel{padding:16px}h1{font-size:21px}}
 </style>
 </head>
 <body>
-<header><div class="top"><div><h1>MADAGASCAR EARN</h1><div>Asa sy iraka</div></div><nav><a href="/dashboard.html">Ny kaontiko</a> · <a href="/">Fandraisana</a></nav></div></header>
+<header><div class="top"><div><h1>MADAGASCAR EARN</h1><div>Asa sy iraka</div></div><nav class="page-nav"><a class="back" href="/dashboard.html">← Ny kaontiko</a><a class="back" href="/">← Fandraisana</a></nav></div></header>
 <main>
-<section class="panel"><h2 id="welcome">Tongasoa</h2><p class="muted" id="intro">Ampifandraisina amin'ny kaontinao ny asa sy iraka.</p><div class="status" id="pageStatus">Miandry ny angona...</div></section>
+<section class="panel"><h2 id="welcome">Tongasoa</h2><p class="muted" id="intro">Ampifandraisina amin'ny kaontinao ny asa sy iraka.</p><div class="status" id="pageStatus"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></div></section>
 <section id="clientCreate" class="panel hidden">
 <h2>Hamoaka iraka vaovao</h2>
 <p class="muted">Fenoy ny antsipiriany. Hojerena aloha ny iraka ary tsy haseho amin'ny Mpiasa raha tsy voamarina sy voalamina ny famatsiam-bola.</p>
@@ -83,7 +92,7 @@ async function load() {
  }
 }
 $("missionForm").addEventListener("submit",async event=>{
- event.preventDefault(); const button=event.submitter; button.disabled=true;
+ event.preventDefault(); const button=event.submitter; if(button.disabled)return; button.disabled=true; button.classList.add("is-loading"); button.textContent="Alefa...";
  $("createStatus").textContent="Alefa...";
  try {
   const result=await api("/api/missions",{method:"POST",body:JSON.stringify({
@@ -93,7 +102,7 @@ $("missionForm").addEventListener("submit",async event=>{
   $("createStatus").textContent=result.message; $("missionForm").reset();
   $("workers").value="1";
  } catch(error){$("createStatus").textContent=error.message;}
- finally{button.disabled=false;}
+ finally{button.disabled=false;button.classList.remove("is-loading");button.textContent="Alefa hojerena";}
 });
 async function loadMissions(){
  try{
