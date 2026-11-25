@@ -22,3 +22,20 @@ ON wallet_transactions(user_id, created_at DESC, id DESC);
 
 CREATE INDEX IF NOT EXISTS idx_wallet_transactions_reference
 ON wallet_transactions(reference_type, reference_id);
+
+-- Raketo ho "ambim-bola fanombohana" ny vola efa tao amin'ny Wallet,
+-- mba tsy ho very ny fifandraisan'ny balance taloha sy ny tantara vaovao.
+-- Azo averina alefa: idempotency_key no misakana ny doublon.
+INSERT OR IGNORE INTO wallet_transactions (
+  user_id, transaction_type, direction, amount_ariary,
+  balance_before_ariary, balance_after_ariary,
+  reference_type, reference_id, description, idempotency_key
+)
+SELECT
+  user_id, 'opening_balance', 'credit', balance_ariary,
+  0, balance_ariary,
+  'system', 'initial_balance',
+  'Ambim-bola efa nisy talohan’ny nanombohan’ny bokin’ny fifanakalozam-bola.',
+  'opening_balance:' || user_id
+FROM wallets
+WHERE balance_ariary > 0;
