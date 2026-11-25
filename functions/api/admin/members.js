@@ -29,6 +29,7 @@ async function requireAdmin(request, env) {
       AND sessions.expires_at > ?
       AND users.role = 'admin'
       AND users.status = 'active'
+      AND users.security_status = 'clear'
     LIMIT 1
   `).bind(tokenHash, new Date().toISOString()).first();
 
