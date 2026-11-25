@@ -38,11 +38,11 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <section id="content" hidden>
 <div class="grid">
 <article class="card balance"><div class="label">Vola ao amin'ny kitapom-bolanao</div><div class="amount" id="balance">0 Ar</div><p>Ny vola aseho eto dia ny vola voarakitra ao amin'ny kaontinao.</p></article>
-<article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty voamarina</span></article>
+<article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty mavitrika</span></article>
 <article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
 <article class="card"><h2>Iraka sy asa</h2><p>Jereo ny iraka misokatra na mamoròna iraka vaovao arakaraka ny karazana kaontinao.</p><p style="margin-top:12px"><a href="/missions.html" style="display:inline-block;background:#087c54;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny iraka</a></p></article>
 <article class="card" style="grid-column:1/-1"><h2>Tantaran'ny kitapom-bola</h2><p id="walletHistoryStatus" class="muted">Eo am-pakana...</p><ul id="walletHistoryList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul><button id="walletHistoryMore" type="button" hidden style="margin-top:12px;background:#087c54;color:#fff;padding:10px 14px;border:0;border-radius:9px;font-weight:700;cursor:pointer">Hijery taloha kokoa</button></article>
-<article class="card"><h2>Fandefasana asa</h2><p>Ho hita eto ny asa nalefanao sy ny valin'ny fanamarinana azy.</p></article>
+<article class="card" style="grid-column:1/-1"><h2>Asa nalefa sy fanamarinana</h2><p id="submissionStatus" class="muted">Eo am-pakana...</p><ul id="submissionList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul></article>
 <article class="card" style="grid-column:1/-1"><h2>Fampandrenesana</h2><p id="notificationStatus" class="muted">Eo am-pakana...</p><ul id="notificationList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul></article>
 <article class="card"><h2>Fanampiana</h2><p>Raha misy olana amin'ny kaontinao dia ampiasao ny pejy fifandraisana.</p></article>
 <article class="card" id="adminAccess" hidden><h2>Fitantanana lehibe</h2><p>Midira amin'ny toerana manokana hitantanana ny MADAGASCAR EARN.</p><p style="margin-top:12px"><a href="/admin.html" style="display:inline-block;background:#07583d;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny fitantanana</a></p></article>
@@ -67,6 +67,7 @@ async function loadDashboard(){
   document.getElementById("phone").textContent="Finday: "+(u.phone||"Tsy napetraka");
   loading.hidden=true;content.hidden=false;
   loadNotifications();
+  loadSubmissions();
   loadWalletTransactions();
  }catch(e){loading.hidden=true;error.textContent=e.message||"Nisy olana. Avereno andramana.";}
 }
@@ -111,6 +112,35 @@ async function loadWalletTransactions(append=false){
  }
 }
 document.getElementById("walletHistoryMore").addEventListener("click",()=>loadWalletTransactions(true));
+
+async function loadSubmissions(){
+ const status=document.getElementById("submissionStatus");
+ const list=document.getElementById("submissionList");
+ try{
+  const response=await fetch("/api/submissions",{credentials:"same-origin",cache:"no-store"});
+  const data=await response.json();
+  if(!response.ok||!data.success) throw new Error(data.message||"Tsy afaka naka ny asa nalefa.");
+  const items=data.submissions||[];
+  status.textContent=items.length ? items.length+" asa farany" : "Mbola tsy nandefa asa ianao.";
+  list.replaceChildren();
+  const labels={submitted:"Miandry fanamarinana",revision:"Mila fanitsiana",approved:"Nekena",rejected:"Nolavina"};
+  for(const item of items){
+   const li=document.createElement("li");
+   const title=document.createElement("strong");
+   title.textContent=item.mission_title||"Iraka";
+   const detail=document.createElement("div");
+   detail.textContent=(labels[item.status]||item.status||"Tsy fantatra")+
+    (item.worker_name?" · Mpiasa: "+item.worker_name:"")+
+    (item.submitted_at?" · "+new Date(item.submitted_at).toLocaleString("fr-FR"):"");
+   detail.style.color="#687970";
+   li.append(title,detail);
+   li.style.marginBottom="12px";
+   list.append(li);
+  }
+ }catch(e){
+  status.textContent="Tsy afaka naka ny lisitry ny asa nalefa amin'izao fotoana izao.";
+ }
+}
 
 async function loadNotifications(){
  const status=document.getElementById("notificationStatus");
