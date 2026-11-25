@@ -499,5 +499,31 @@ async function reviewMember(id, action, button) {
   }
 }
 
+
+document.getElementById("loadDatabaseSchema").addEventListener("click", async () => {
+  const button = document.getElementById("loadDatabaseSchema");
+  const status = document.getElementById("databaseSchemaStatus");
+  const output = document.getElementById("databaseSchemaOutput");
+  button.disabled = true;
+  button.textContent = "Eo am-pakana...";
+  status.textContent = "";
+  output.textContent = "";
+  try {
+    const response = await fetch("/api/admin/database-schema", {
+      credentials: "same-origin",
+      cache: "no-store"
+    });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || "Tsy afaka naka ny firafitry ny tahiry.");
+    output.textContent = JSON.stringify(result.schema, null, 2);
+    status.textContent = "Vita ny fijerena. Tsy nisy angona novaina.";
+  } catch (error) {
+    status.textContent = error.message || "Nisy olana tamin'ny fijerena ny tahiry.";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Hijery indray ny firafitry ny tahiry";
+  }
+});
+
 </script></body>
 </html>
