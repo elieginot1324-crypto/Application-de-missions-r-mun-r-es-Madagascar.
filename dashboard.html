@@ -41,6 +41,7 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty mavitrika</span></article>
 <article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
 <article class="card"><h2>Iraka sy asa</h2><p>Jereo ny iraka misokatra na mamoròna iraka vaovao arakaraka ny karazana kaontinao.</p><p style="margin-top:12px"><a href="/missions.html" style="display:inline-block;background:#087c54;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny iraka</a></p></article>
+<article class="card" style="grid-column:1/-1"><h2>Tantaran'ny kitapom-bola</h2><p id="walletHistoryStatus" class="muted">Eo am-pakana...</p><ul id="walletHistoryList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul><button id="walletHistoryMore" type="button" hidden style="margin-top:12px;background:#087c54;color:#fff;padding:10px 14px;border:0;border-radius:9px;font-weight:700;cursor:pointer">Hijery taloha kokoa</button></article>
 <article class="card" style="grid-column:1/-1"><h2>Asa nalefa sy fanamarinana</h2><p id="submissionStatus" class="muted">Eo am-pakana...</p><ul id="submissionList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul></article>
 <article class="card" style="grid-column:1/-1"><h2>Fampandrenesana</h2><p id="notificationStatus" class="muted">Eo am-pakana...</p><ul id="notificationList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul></article>
 <article class="card"><h2>Fanampiana</h2><p>Raha misy olana amin'ny kaontinao dia ampiasao ny pejy fifandraisana.</p></article>
@@ -67,8 +68,48 @@ async function loadDashboard(){
   loading.hidden=true;content.hidden=false;
   loadNotifications();
   loadSubmissions();
+  loadWalletTransactions();
  }catch(e){loading.hidden=true;error.textContent=e.message||"Nisy olana. Avereno andramana.";}
 }
+
+let walletHistoryBefore=null;
+let walletHistoryLoading=false;
+async function loadWalletTransactions(append=false){
+ const status=document.getElementById("walletHistoryStatus");
+ const list=document.getElementById("walletHistoryList");
+ const more=document.getElementById("walletHistoryMore");
+ if(walletHistoryLoading) return;
+ walletHistoryLoading=true;
+ if(more){more.disabled=true;more.textContent="Eo am-pakana...";}
+ try{
+  const endpoint="/api/wallet/transactions"+(append&&walletHistoryBefore?"?before="+encodeURIComponent(walletHistoryBefore):"");
+  const response=await fetch(endpoint,{credentials:"same-origin",cache:"no-store"});
+  const data=await response.json();
+  if(!response.ok||!data.success) throw new Error(data.message||"Tsy afaka naka ny tantaran'ny kitapom-bola.");
+  const items=data.transactions||[];
+  if(!append) list.replaceChildren();
+  status.textContent=items.length ? "Fifanakalozam-bola "+(list.children.length+items.length)+" naseho" : "Mbola tsy misy fifanakalozam-bola voarakitra.";
+  for(const item of items){
+   const li=document.createElement("li");
+   const title=document.createElement("strong");
+   const amount=Number(item.amount_ariary||0).toLocaleString("fr-FR")+" Ar";
+   title.textContent=(item.direction==="credit"?"+":"−")+amount+" — "+(item.description||item.transaction_type||"Fifanakalozam-bola");
+   const detail=document.createElement("div");
+   detail.textContent=(item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"")+
+    (item.balance_after_ariary===null||item.balance_after_ariary===undefined?"":" · Ambim-bola: "+Number(item.balance_after_ariary).toLocaleString("fr-FR")+" Ar");
+   detail.style.color="#687970";
+   li.append(title,detail);
+   li.style.marginBottom="12px";
+   list.append(li);
+  }
+  walletHistoryBefore=data.next_before||null;
+  if(more){more.hidden=!walletHistoryBefore;more.disabled=false;more.textContent="Hijery taloha kokoa";}
+ }catch(e){
+  status.textContent="Mbola tsy vonona ny tantaran'ny kitapom-bola. Hiseho eto izany rehefa apetraka sy alefa ny fanavaozana.";
+  if(more){more.hidden=true;more.disabled=false;more.textContent="Hijery taloha kokoa";}
+ }finally{walletHistoryLoading=false;}
+}
+document.getElementById("walletHistoryMore").addEventListener("click",()=>loadWalletTransactions(true));
 
 async function loadSubmissions(){
  const status=document.getElementById("submissionStatus");
