@@ -13,11 +13,11 @@ async function getAdmin(request, env) {
   const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
   if (!match) return null;
   const admin = await env.DB.prepare(`
-    SELECT users.id, users.role, users.status
+    SELECT users.id, users.role, users.status, users.security_status
     FROM sessions JOIN users ON users.id = sessions.user_id
     WHERE sessions.token_hash = ? AND sessions.expires_at > ? LIMIT 1
   `).bind(await hashToken(match[1]), new Date().toISOString()).first();
-  return admin && admin.role === "admin" && admin.status === "active" ? admin : null;
+  return admin && admin.role === "admin" && admin.status === "active" && admin.security_status === "clear" ? admin : null;
 }
 export async function onRequestGet({ request, env }) {
   try {
