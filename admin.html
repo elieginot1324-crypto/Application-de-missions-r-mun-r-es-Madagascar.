@@ -192,6 +192,7 @@
 
     <section class="welcome">
       <h2>Mpikambana miandry fanamarinana</h2>
+      <p>Fanamarinana fiarovana sy maha-ara-dalàna ny kaonty ihany no atao eto. Tsy midika ho fanamarinana diplaoma na fahaiza-manao izany.</p>
       <p id="pendingMembersStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div id="pendingMembersList" class="menu"></div>
     </section>
@@ -433,6 +434,23 @@ async function loadPendingMembers() {
       accountState.textContent = "Satan'ny kaonty: " + (member.status === "pending" ? "Miandry" : member.status);
 
       card.append(heading, role, email, phone, state, accountState);
+
+      if (member.security_status === "review" && member.status === "pending") {
+        const actions = document.createElement("div");
+        actions.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;margin-top:14px";
+        const approve = document.createElement("button");
+        approve.type = "button";
+        approve.textContent = "Ekena ny kaonty";
+        approve.style.cssText = "background:#087c54;color:#fff;border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer";
+        approve.addEventListener("click", () => reviewMember(member.id, "approve", approve));
+        const reject = document.createElement("button");
+        reject.type = "button";
+        reject.textContent = "Lavina";
+        reject.style.cssText = "background:#a63a35;color:#fff;border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer";
+        reject.addEventListener("click", () => reviewMember(member.id, "reject", reject));
+        actions.append(approve, reject);
+        card.append(actions);
+      }
       list.append(card);
     }
   } catch (error) {
@@ -441,6 +459,38 @@ async function loadPendingMembers() {
 }
 
 loadPendingMembers();
+
+
+async function reviewMember(id, action, button) {
+  const promptText = action === "approve"
+    ? "Efa nohamarininao ve fa azo ekena ity kaonty ity?"
+    : "Azonao antoka ve fa holavina sy haato ity kaonty ity?";
+  if (!confirm(promptText)) return;
+  const original = button.textContent;
+  button.disabled = true;
+  button.textContent = "Miandry...";
+  try {
+    const response = await fetch("/api/admin/members", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ member_id: id, action })
+    });
+    const result = await response.json();
+    alert(result.message || "Vita.");
+    if (response.ok && result.success) {
+      loadPendingMembers();
+      loadStatistics();
+      loadAdminNotifications();
+    }
+  } catch (error) {
+    alert("Tsy afaka nifandray tamin'ny mpizara.");
+  } finally {
+    button.disabled = false;
+    button.textContent = original;
+  }
+}
 
 </script></body>
 </html>
