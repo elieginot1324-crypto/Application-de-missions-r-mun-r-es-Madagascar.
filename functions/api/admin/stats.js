@@ -36,7 +36,7 @@ export async function onRequestGet({ request, env }) {
     const tokenHash = await hashToken(match[1]);
 
     const admin = await env.DB.prepare(`
-      SELECT users.id, users.role, users.status
+      SELECT users.id, users.role, users.status, users.security_status
       FROM sessions
       JOIN users ON users.id = sessions.user_id
       WHERE sessions.token_hash = ?
@@ -47,7 +47,8 @@ export async function onRequestGet({ request, env }) {
     if (
       !admin ||
       admin.role !== "admin" ||
-      admin.status !== "active"
+      admin.status !== "active" ||
+      admin.security_status !== "clear"
     ) {
       return jsonResponse({
         success: false,
