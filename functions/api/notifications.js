@@ -26,3 +26,35 @@ export async function onRequestGet({ request, env }) {
     return json({ success:false, message:"Tsy afaka naka ny fampandrenesana." }, 500);
   }
 }
+
+export async function onRequestPost({ request, env }) {
+  try {
+    const user = await getUser(request, env);
+    if (!user || user.status !== "active" || user.security_status !== "clear") {
+      return json({ success: false, message: "Midira amin'ny kaonty mavitrika aloha." }, 401);
+    }
+
+    const body = await request.json();
+    const id = Number(body.notification_id);
+    if (!Number.isSafeInteger(id) || id < 1) {
+      return json({ success: false, message: "Tsy mety ny laharan'ny fampandrenesana." }, 400);
+    }
+
+    const notification = await env.DB.prepare(
+      "SELECT id FROM notifications WHERE id = ? AND user_id = ? LIMIT 1"
+    ).bind(id, user.id).first();
+
+    if (!notification) {
+      return json({ success: false, message: "Tsy hita ilay fampandrenesana." }, 404);
+    }
+
+    await env.DB.prepare(
+      "UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?"
+    ).bind(id, user.id).run();
+
+    return json({ success: true, message: "Voamarika fa efa novakiana ilay fampandrenesana." });
+  } catch (error) {
+    console.error("NOTIFICATION_READ_ERROR:", error);
+    return json({ success: false, message: "Tsy tontosa ny fanamarihana fa efa novakiana." }, 500);
+  }
+}
