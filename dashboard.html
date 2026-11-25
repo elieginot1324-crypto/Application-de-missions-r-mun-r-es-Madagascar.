@@ -120,6 +120,27 @@ async function loadNotifications(){
    date.textContent=item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"";
    date.style.color="#87958d";
    li.append(title,message,date);
+   if(Number(item.is_read)!==1){
+    const readButton=document.createElement("button");
+    readButton.type="button";
+    readButton.textContent="Mariho fa novakiana";
+    readButton.style.cssText="margin-top:7px;background:#e7f6ed;color:#07583d;border:1px solid #b8ddc8;border-radius:8px;padding:7px 10px;font-weight:700;cursor:pointer";
+    readButton.addEventListener("click",async()=>{
+     readButton.disabled=true;
+     readButton.textContent="Eo am-panovana...";
+     try{
+      const r=await fetch("/api/notifications",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify({notification_id:item.id})});
+      const result=await r.json();
+      if(!r.ok||!result.success) throw new Error(result.message||"Tsy tontosa.");
+      await loadNotifications();
+     }catch(error){
+      readButton.disabled=false;
+      readButton.textContent="Avereno andramana";
+      status.textContent=error.message||"Tsy afaka nanamarika ilay fampandrenesana.";
+     }
+    });
+    li.append(readButton);
+   }
    li.style.marginBottom="12px";
    list.append(li);
   }
