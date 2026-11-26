@@ -133,17 +133,22 @@ if (user.status !== "active" || user.security_status !== "clear") {
        VALUES (?, ?, ?)`
     ).bind(user.id, tokenHash, expiresAt).run();
 
-    await env.DB.prepare(
-      `INSERT INTO audit_logs
-       (actor_user_id, action, target_type, target_id, details)
-       VALUES (?, ?, ?, ?, ?)`
-    ).bind(
-      user.id,
-      "login",
-      "user",
-      user.id,
-      "Fidirana nahomby"
-    ).run();
+    // Tsy avela hanakana ny fidirana ny tsy fahombiazan'ny audit log.
+    try {
+      await env.DB.prepare(
+        `INSERT INTO audit_logs
+         (actor_user_id, action, target_type, target_id, details)
+         VALUES (?, ?, ?, ?, ?)`
+      ).bind(
+        user.id,
+        "login",
+        "user",
+        user.id,
+        "Fidirana nahomby"
+      ).run();
+    } catch (auditError) {
+      console.error("LOGIN_AUDIT_ERROR:", auditError);
+    }
 
     return Response.json({
       success: true,
