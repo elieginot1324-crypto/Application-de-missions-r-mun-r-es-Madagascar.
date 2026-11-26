@@ -451,9 +451,87 @@
 
     .footer-content {
       display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 40px;
+      grid-template-columns: 1.5fr 1fr 1.35fr;
+      gap: 36px;
       padding-bottom: 30px;
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 11px;
+    }
+
+    .footer-contact h3 {
+      margin-bottom: 3px;
+      font-size: 15px;
+    }
+
+    .footer-contact a {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #d6e5dc;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .footer-contact a:hover { color: #ffffff; }
+    .footer-contact-icon {
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: #ffffff;
+      background: rgba(255,255,255,.12);
+      font-size: 15px;
+    }
+
+    .role-choice-section {
+      padding: 58px 0 68px;
+      background: rgba(255,255,255,.82);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .role-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .role-choice-card {
+      padding: 28px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .role-choice-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 17px;
+      border-radius: 16px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: 27px;
+    }
+
+    .role-choice-card h3 { margin-bottom: 8px; font-size: 21px; }
+    .role-choice-card p { min-height: 48px; margin-bottom: 20px; color: var(--muted); font-size: 14px; }
+    .role-choice-card .btn { width: 100%; }
+    @media (max-width: 700px) {
+      .footer-content { grid-template-columns: 1fr; gap: 28px; }
+      .role-choice-grid { grid-template-columns: 1fr; }
+      .role-choice-card { padding: 23px; }
     }
 
     .footer-brand p {
@@ -986,6 +1064,30 @@
       </div>
     </section>
 
+    <section class="role-choice-section" id="safidy-andraikitra">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-tag" data-mg="Safidio ny andraikitrao" data-fr="Choisissez votre rôle">Safidio ny andraikitrao</span>
+          <h2 data-mg="Inona no tianao hatao ao amin'ny MADAGASCAR EARN?" data-fr="Que souhaitez-vous faire sur MADAGASCAR EARN ?">Inona no tianao hatao ao amin'ny MADAGASCAR EARN?</h2>
+          <p data-mg="Safidio izay mifanaraka aminao. Afaka misoratra anarana avy hatrany ianao." data-fr="Choisissez le profil qui vous correspond et créez votre compte.">Safidio izay mifanaraka aminao. Afaka misoratra anarana avy hatrany ianao.</p>
+        </div>
+        <div class="role-choice-grid">
+          <article class="role-choice-card">
+            <div class="role-choice-icon" aria-hidden="true">👷</div>
+            <h3 data-mg="Mpiasa" data-fr="Travailleur">Mpiasa</h3>
+            <p data-mg="Mitadiava asa sy iraka, tanteraho ary araho ny fandrosoan'ny asa vitanao." data-fr="Trouvez des missions, réalisez-les et suivez l'avancement de votre travail.">Mitadiava asa sy iraka, tanteraho ary araho ny fandrosoan'ny asa vitanao.</p>
+            <button type="button" class="btn btn-primary" data-role-pick="worker" data-mg="Hisoratra ho mpiasa" data-fr="M'inscrire comme travailleur">Hisoratra ho mpiasa</button>
+          </article>
+          <article class="role-choice-card">
+            <div class="role-choice-icon" aria-hidden="true">💼</div>
+            <h3 data-mg="Mpanjifa" data-fr="Client">Mpanjifa</h3>
+            <p data-mg="Mamoaha iraka, farito ny asa ilaina ary tadiavo ireo mpiasa afaka manatanteraka izany." data-fr="Publiez des missions, décrivez vos besoins et trouvez des travailleurs.">Mamoaha iraka, farito ny asa ilaina ary tadiavo ireo mpiasa afaka manatanteraka izany.</p>
+            <button type="button" class="btn btn-outline" data-role-pick="client" data-mg="Hisoratra ho mpanjifa" data-fr="M'inscrire comme client">Hisoratra ho mpanjifa</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="fonctionnement">
       <div class="container">
         <div class="section-heading">
@@ -1179,6 +1281,22 @@
           <a href="#fonctionnement" data-mg="Fomba fiasa" data-fr="Fonctionnement">Fomba fiasa</a>
           <a href="#missions" data-mg="Asa misy" data-fr="Missions">Asa misy</a>
           <a href="#regles" data-mg="Fitsipika" data-fr="Règles">Fitsipika</a>
+        </div>
+
+        <div class="footer-contact">
+          <h3 data-mg="Mifandraisa aminay" data-fr="Contactez-nous">Mifandraisa aminay</h3>
+          <a href="mailto:elieginot1324@gmail.com">
+            <span class="footer-contact-icon" aria-hidden="true">✉</span>
+            <span>elieginot1324@gmail.com</span>
+          </a>
+          <a href="tel:+261334090717">
+            <span class="footer-contact-icon" aria-hidden="true">☎</span>
+            <span>+261 33 40 907 17</span>
+          </a>
+          <a href="https://wa.me/261334090717" target="_blank" rel="noopener noreferrer">
+            <span class="footer-contact-icon" aria-hidden="true">◉</span>
+            <span data-mg="Miresaha amin'ny WhatsApp" data-fr="Écrire sur WhatsApp">Miresaha amin'ny WhatsApp</span>
+          </a>
         </div>
       </div>
 
@@ -1889,6 +2007,14 @@
 
   ctaRegisterButton.addEventListener("click", () => {
     openAuthModal("register");
+  });
+
+  document.querySelectorAll("[data-role-pick]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (authRole) authRole.value = button.dataset.rolePick;
+      openAuthModal("register");
+      if (authRole) authRole.value = button.dataset.rolePick;
+    });
   });
 
   authClose.addEventListener("click", closeAuthModal);
