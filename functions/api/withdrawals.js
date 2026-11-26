@@ -79,6 +79,15 @@ export async function onRequestGet({ request, env }) {
 // Ny sarany 500 Ar dia esorina amin'ny vola angatahana; tsy misy fandoavana
 // Airtel Money na MVola mandeha ho azy eto.
 export async function onRequestPost({ request, env }) {
+  // Ajanona vonjimaika ny fangatahana tena izy mandra-pahavitan'ny
+  // rafitra fandavana sy famerenam-bola ary fanamarinana ny fandoavana.
+  // Tsy misy vola alaina amin'ny kaontin'ny mpiasa amin'ity valiny ity.
+  return json({
+    success: false,
+    withdrawals_disabled: true,
+    message: "Mbola eo am-panomanana ny fiarovana ny fisintonam-bola izahay. Tsy mbola azo alefa ny fangatahana. Tsy misy vola nesorina tamin'ny kitapom-bolanao."
+  }, 503);
+
   let requestBody = null;
   try {
     const origin = request.headers.get("Origin");
