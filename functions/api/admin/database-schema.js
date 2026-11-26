@@ -30,7 +30,7 @@ export async function onRequestGet({ request, env }) {
     const admin = await getAdmin(request, env);
     if (!admin) return json({ success: false, message: "Tsy nahazo alalana." }, 403);
 
-    const tableNames = ["wallets", "wallet_transactions", "withdrawals"];
+    const tableNames = ["wallets", "wallet_transactions", "withdrawals", "missions", "submissions", "referrals", "quiz_rounds"];
     const schema = {};
 
     for (const table of tableNames) {
