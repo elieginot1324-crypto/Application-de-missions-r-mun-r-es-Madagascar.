@@ -52,18 +52,16 @@ export async function onRequestGet({ request, env }) {
     const limit = 50;
     const result = before === null
       ? await env.DB.prepare(`
-          SELECT id, transaction_type, direction, amount_ariary,
-                 balance_before_ariary, balance_after_ariary,
-                 reference_type, reference_id, description, created_at
+          SELECT id, type AS transaction_type, direction, amount_ariary,
+                 description, created_at
           FROM wallet_transactions
           WHERE user_id = ?
           ORDER BY id DESC
           LIMIT ?
         `).bind(user.id, limit).all()
       : await env.DB.prepare(`
-          SELECT id, transaction_type, direction, amount_ariary,
-                 balance_before_ariary, balance_after_ariary,
-                 reference_type, reference_id, description, created_at
+          SELECT id, type AS transaction_type, direction, amount_ariary,
+                 description, created_at
           FROM wallet_transactions
           WHERE user_id = ? AND id < ?
           ORDER BY id DESC
@@ -81,7 +79,7 @@ export async function onRequestGet({ request, env }) {
     console.error("WALLET_TRANSACTIONS_ERROR:", error);
     return json({
       success: false,
-      message: "Tsy azo nalaina ny tantaran'ny kitapom-bola. Hamarino fa efa napetraka ny migration wallet."
+      message: "Tsy azo nalaina ny tantaran'ny kitapom-bola. Hamarino ny firafitry ny D1."
     }, 500);
   }
 }
