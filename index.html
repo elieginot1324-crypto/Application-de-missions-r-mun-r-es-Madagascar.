@@ -557,35 +557,48 @@
     .footer-contact {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 11px;
+      align-items: stretch;
+      gap: 13px;
+      padding: 22px 24px;
+      border: 1px solid rgba(255,255,255,.58);
+      border-radius: 19px;
+      color: #26324d;
+      background: #f5f4fa;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
     }
 
     .footer-contact h3 {
-      margin-bottom: 3px;
+      margin-bottom: 2px;
+      color: #26324d;
       font-size: 15px;
     }
 
     .footer-contact a {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 9px;
-      color: #d6e5dc;
-      font-size: 13px;
+      gap: 11px;
+      width: 100%;
+      color: #303b5d;
+      font-size: 14px;
       overflow-wrap: anywhere;
     }
 
-    .footer-contact a:hover { color: #ffffff; }
+    .footer-contact a + a {
+      padding-top: 12px;
+      border-top: 1px solid #e4e2ec;
+    }
+
+    .footer-contact a:hover { color: var(--green); }
     .footer-contact-icon {
-      width: 30px;
-      height: 30px;
-      flex: 0 0 30px;
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
       display: grid;
       place-items: center;
-      border-radius: 9px;
-      color: #ffffff;
-      background: rgba(255,255,255,.12);
-      font-size: 15px;
+      border-radius: 0;
+      color: #8587a8;
+      background: transparent;
+      font-size: 17px;
     }
 
     .role-choice-section {
@@ -1433,7 +1446,7 @@
         </div>
 
         <div class="footer-contact">
-          <h3 data-mg="Mifandraisa aminay" data-fr="Contactez-nous">Mifandraisa aminay</h3>
+          <h3 data-mg="Mifandraisa mivantana aminay" data-fr="Nous contacter directement">Mifandraisa mivantana aminay</h3>
           <a href="mailto:elieginot1324@gmail.com">
             <span class="footer-contact-icon" aria-hidden="true">✉</span>
             <span>elieginot1324@gmail.com</span>
