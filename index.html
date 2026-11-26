@@ -137,6 +137,43 @@
       color: var(--green);
     }
 
+    .header-contact {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 6px;
+      min-width: 0;
+      padding: 8px 12px;
+      border: 1px solid #d8e9df;
+      border-radius: 12px;
+      background: #f3faf6;
+    }
+
+    .header-contact a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .header-contact a:hover { color: var(--green); }
+    .header-contact-icon {
+      width: 23px;
+      height: 23px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 23px;
+      border-radius: 7px;
+      color: white;
+      background: var(--green);
+      font-size: 12px;
+    }
+
     .header-actions {
       display: flex;
       align-items: center;
@@ -720,6 +757,16 @@
         padding: 12px 0;
       }
 
+      .header-contact {
+        order: 2;
+        flex: 1 1 250px;
+      }
+
+      .header-contact a {
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
       .main-nav {
         order: 3;
         width: 100%;
@@ -776,6 +823,16 @@
       .logo-icon {
         width: 33px;
         height: 33px;
+      }
+
+      .header-contact {
+        order: 2;
+        flex: 1 1 100%;
+        width: 100%;
+      }
+
+      .header-contact a {
+        font-size: 11px;
       }
 
       .header-actions {
@@ -962,6 +1019,17 @@
         <span class="logo-icon"><img class="brand-mark" src="/assets/icon.svg" alt=""></span>
         <span>MADAGASCAR EARN</span>
       </a>
+
+      <div class="header-contact" aria-label="Fifandraisana haingana">
+        <a href="mailto:elieginot1324@gmail.com">
+          <span class="header-contact-icon" aria-hidden="true">✉</span>
+          <span>elieginot1324@gmail.com</span>
+        </a>
+        <a href="https://wa.me/261334090717" target="_blank" rel="noopener noreferrer">
+          <span class="header-contact-icon" aria-hidden="true">◉</span>
+          <span>WhatsApp : +261 33 40 907 17</span>
+        </a>
+      </div>
 
       <nav class="main-nav" aria-label="Navigation">
         <a href="#accueil" data-mg="Fandraisana" data-fr="Accueil">Fandraisana</a>
