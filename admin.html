@@ -353,7 +353,7 @@ async function loadPendingMissions() {
         <strong>Mpiasa:</strong> ${Number(m.workers_needed)}</p>
         <label for="mission-note-${Number(m.id)}">Fanamarihana / porofo fanamarinana</label>
         <input id="mission-note-${Number(m.id)}" maxlength="1000" placeholder="Lazao izay fanamarinana natao">
-        <button type="button" onclick="reviewMission(${Number(m.id)}, 'publish', this)">Havoaka</button>
+        <p class="muted" role="status">Tsy mbola azo avoaka: tsy mbola mifandray amin'ny Wallet ny fanamarinana sy fitazonana ny tetibola.</p>
         <button type="button" style="background:#a63a35" onclick="reviewMission(${Number(m.id)}, 'reject', this)">Lavina</button>
       </article>`).join("") : "<p>Tsy misy iraka miandry fanamarinana.</p>";
   } catch (error) {
