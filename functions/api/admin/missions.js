@@ -48,6 +48,12 @@ export async function onRequestPost({ request, env }) {
     if (!Number.isSafeInteger(id) || id < 1 || !["publish","reject"].includes(action)) {
       return json({ success:false, message:"Tsy mety ny fangatahana." }, 400);
     }
+    if (action === "publish") {
+      return json({
+        success:false,
+        message:"Tsy mbola azo avoaka ny iraka: mbola tsy misy rafitra escrow sy fanamarinana fidiram-bola mifandray amin'ny Wallet. Ajanona aloha ny famoahana mba hiarovana ny Mpanjifa sy ny Mpiasa."
+      }, 409);
+    }
     if (action === "publish" && (data.funding_confirmed !== true || note.length < 8)) {
       return json({ success:false, message:"Tsy maintsy hamafisina fa voaray sy voamarina ny famatsiam-bola, ary asiana fanamarihana." }, 400);
     }
