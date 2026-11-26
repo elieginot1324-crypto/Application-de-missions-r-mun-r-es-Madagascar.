@@ -206,9 +206,18 @@
     }
     .account-avatar {
       width: 31px; height: 31px; display: grid; place-items: center;
-      border-radius: 50%; color: #075c40; background: #fff;
+      border-radius: 50%; color: #fff;
       font-size: 11px; font-weight: 900;
+      transition: background-color .2s ease, color .2s ease;
     }
+    .account-avatar[data-color="0"] { background: #e64b62; }
+    .account-avatar[data-color="1"] { background: #2878c8; }
+    .account-avatar[data-color="2"] { background: #15966f; }
+    .account-avatar[data-color="3"] { background: #8757c5; }
+    .account-avatar[data-color="4"] { background: #e18a24; }
+    .account-avatar[data-color="5"] { background: #168f9e; }
+    .account-avatar[data-color="6"] { background: #c34c9b; }
+    .account-avatar[data-color="7"] { background: #64748b; }
     .account-chevron { font-size: 18px; line-height: 1; transition: transform .2s; }
     .account-menu-toggle[aria-expanded="true"] .account-chevron { transform: rotate(180deg); }
     .account-menu-panel {
@@ -1676,8 +1685,11 @@
       if (accountUserName) accountUserName.textContent = fullName;
       if (accountUserRole) accountUserRole.textContent = roleLabel;
       if (accountAvatar) {
-        const initials = fullName.split(/\\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("");
+        const nameParts = fullName.split(/\\s+/).filter(Boolean);
+        const initials = nameParts.slice(0, 2).map(part => part[0]).join("");
         accountAvatar.textContent = (initials || "ME").toUpperCase();
+        const firstLetter = (nameParts[0] || "M").codePointAt(0);
+        accountAvatar.dataset.color = String(firstLetter % 8);
       }
     } else {
       closeAccountMenu();
