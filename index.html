@@ -190,6 +190,48 @@
       gap: 8px;
     }
 
+    .account-menu { position: relative; z-index: 70; }
+    .account-menu-toggle {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 5px 13px 5px 7px;
+      border: 0;
+      border-radius: 28px;
+      color: #fff;
+      background: #075c40;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .account-avatar {
+      width: 31px; height: 31px; display: grid; place-items: center;
+      border-radius: 50%; color: #075c40; background: #fff;
+      font-size: 11px; font-weight: 900;
+    }
+    .account-chevron { font-size: 18px; line-height: 1; transition: transform .2s; }
+    .account-menu-toggle[aria-expanded="true"] .account-chevron { transform: rotate(180deg); }
+    .account-menu-panel {
+      position: absolute; top: calc(100% + 10px); right: 0;
+      width: min(280px, calc(100vw - 28px)); overflow: hidden;
+      border: 1px solid #e1eae4; border-radius: 16px;
+      background: #fff; color: #18352b;
+      box-shadow: 0 14px 35px rgba(20,45,35,.16);
+    }
+    .account-menu-user { padding: 15px 18px 12px; border-bottom: 1px solid #e1eae4; }
+    .account-menu-user strong, .account-menu-user span { display: block; }
+    .account-menu-user strong { font-size: 14px; }
+    .account-menu-user span { margin-top: 2px; color: #687970; font-size: 12px; }
+    .account-menu-item {
+      width: 100%; min-height: 47px; display: flex; align-items: center;
+      gap: 12px; padding: 10px 17px; border: 0; border-radius: 0;
+      color: #18352b; background: #fff; text-align: left;
+      font-size: 14px; font-weight: 500; cursor: pointer;
+    }
+    .account-menu-item:hover { background: #f2f8f4; color: #075c40; }
+    .account-menu-item > span:first-child { width: 19px; color: #668b79; text-align: center; font-size: 17px; }
+    .account-menu-logout { border-top: 1px solid #e1eae4; }
+
     .btn {
       min-height: 42px;
       padding: 10px 17px;
@@ -841,7 +883,11 @@
 
       .header-actions {
         width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
       }
+      .account-menu { margin-left: auto; }
+      .account-menu-panel { right: 0; }
 
       .header-actions .btn {
         flex: 1;
@@ -1051,9 +1097,29 @@
           data-mg="Hiditra" data-fr="Connexion">Hiditra</button>
         <button type="button" id="registerButton" class="btn btn-primary"
           data-mg="Hisoratra anarana" data-fr="S'inscrire">Hisoratra anarana</button>
-        <a href="/dashboard.html" id="dashboardButton" class="btn btn-primary" hidden data-mg="Ny kaontiko" data-fr="Mon espace">Ny kaontiko</a>
-        <button type="button" id="logoutButton" class="btn btn-outline" hidden
-          data-mg="Hivoaka" data-fr="Déconnexion">Hivoaka</button>
+        <div class="account-menu" id="accountMenu" hidden>
+          <button type="button" class="account-menu-toggle" id="accountMenuToggle"
+            aria-expanded="false" aria-controls="accountMenuPanel">
+            <span class="account-avatar" id="accountAvatar">ME</span>
+            <span data-mg="Ny kaontiko" data-fr="Mon compte">Ny kaontiko</span>
+            <span class="account-chevron" aria-hidden="true">⌄</span>
+          </button>
+          <div class="account-menu-panel" id="accountMenuPanel" hidden>
+            <div class="account-menu-user">
+              <strong id="accountUserName">Mpikambana</strong>
+              <span id="accountUserRole">Mpiasa</span>
+            </div>
+            <a href="/dashboard.html" id="dashboardButton" class="account-menu-item">
+              <span aria-hidden="true">▦</span><span data-mg="Takelaka fitantanana" data-fr="Mon tableau de bord">Takelaka fitantanana</span>
+            </a>
+            <a href="/dashboard.html#profile" class="account-menu-item">
+              <span aria-hidden="true">♙</span><span data-mg="Mombamomba ahy" data-fr="Mon profil">Mombamomba ahy</span>
+            </a>
+            <button type="button" id="logoutButton" class="account-menu-item account-menu-logout">
+              <span aria-hidden="true">↪</span><span data-mg="Hivoaka" data-fr="Se déconnecter">Hivoaka</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -1565,17 +1631,57 @@
   let currentLanguage = "mg";
   let modalMode = "register";
   let authenticatedUser = null;
+  const accountMenu = document.getElementById("accountMenu");
+  const accountMenuToggle = document.getElementById("accountMenuToggle");
+  const accountMenuPanel = document.getElementById("accountMenuPanel");
+  const accountUserName = document.getElementById("accountUserName");
+  const accountUserRole = document.getElementById("accountUserRole");
+  const accountAvatar = document.getElementById("accountAvatar");
+
+  function closeAccountMenu() {
+    if (!accountMenuToggle || !accountMenuPanel) return;
+    accountMenuPanel.hidden = true;
+    accountMenuToggle.setAttribute("aria-expanded", "false");
+  }
+
+  if (accountMenuToggle && accountMenuPanel) {
+    accountMenuToggle.addEventListener("click", () => {
+      const isOpen = accountMenuToggle.getAttribute("aria-expanded") === "true";
+      accountMenuPanel.hidden = isOpen;
+      accountMenuToggle.setAttribute("aria-expanded", String(!isOpen));
+    });
+    document.addEventListener("click", event => {
+      if (!accountMenu.contains(event.target)) closeAccountMenu();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeAccountMenu();
+    });
+    accountMenuPanel.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", closeAccountMenu);
+    });
+  }
 
   function updateAuthenticationUI() {
     const loggedIn = Boolean(authenticatedUser);
 
-    // Ny bokotra fisoratana anarana dia mijanona ho hita foana.
-    // Ny bokotra fidirana ihany no afenina rehefa efa tafiditra.
     if (loginButton) loginButton.hidden = loggedIn;
     [registerButton, heroRegisterButton, ctaRegisterButton]
       .forEach(button => { if (button) button.hidden = false; });
-    if (logoutButton) logoutButton.hidden = !loggedIn;
-    if (dashboardButton) dashboardButton.hidden = !loggedIn;
+    if (accountMenu) accountMenu.hidden = !loggedIn;
+
+    if (loggedIn) {
+      const fullName = String(authenticatedUser.full_name || authenticatedUser.name || "Mpikambana").trim();
+      const roleLabels = { worker: "Mpiasa", client: "Mpanjifa", admin: "Administrateur" };
+      const roleLabel = roleLabels[authenticatedUser.role] || "Mpikambana";
+      if (accountUserName) accountUserName.textContent = fullName;
+      if (accountUserRole) accountUserRole.textContent = roleLabel;
+      if (accountAvatar) {
+        const initials = fullName.split(/\\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("");
+        accountAvatar.textContent = (initials || "ME").toUpperCase();
+      }
+    } else {
+      closeAccountMenu();
+    }
   }
 
   function setAuthenticatedUser(user) {
@@ -1609,6 +1715,7 @@
       const result = await response.json();
       if (!response.ok || !result.success) throw new Error(result.message || "Fivoahana tsy tontosa.");
       setAuthenticatedUser(null);
+      closeAccountMenu();
       window.alert(translated("Nivoaka soa aman-tsara ianao.", "Vous êtes déconnecté."));
     } catch (error) {
       window.alert(error.message || translated("Tsy afaka nivoaka.", "Déconnexion impossible."));
