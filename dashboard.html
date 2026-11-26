@@ -15,7 +15,7 @@ a,.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;text-decora
 .back{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:10px 15px;background:#ffffff20;color:#fff;border:1px solid #ffffff65;border-radius:11px;transition:background .2s,transform .2s}.back:hover{background:#ffffff30;transform:translateY(-1px)}.logout{background:#fff;color:var(--gd)}
 main{width:min(1050px,92%);margin:30px auto}.welcome{margin-bottom:22px}.welcome h1{margin:0 0 6px;font-size:clamp(25px,4vw,34px)}.muted{color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:21px;box-shadow:0 8px 25px #1748320a}
-.balance{grid-column:span 2;background:linear-gradient(135deg,#07583d,#0b9162);color:#fff}.label{font-size:13px;opacity:.82}.amount{font-size:clamp(30px,5vw,42px);font-weight:900;margin:8px 0}.role{display:inline-block;background:#e7f6ed;color:var(--gd);padding:7px 12px;border-radius:20px;font-size:12px;font-weight:800}
+.balance{grid-column:span 2;background:linear-gradient(135deg,#07583d,#0b9162);color:#fff}.label{font-size:13px;opacity:.82}.amount{font-size:clamp(30px,5vw,42px);font-weight:900;margin:8px 0}.withdrawal-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px;align-items:end}.withdrawal-form>label{min-width:0}.withdrawal-form input,.withdrawal-form select{width:100%;min-width:0;min-height:48px}.withdrawal-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:4px}.withdrawal-actions p{font-size:15px}.withdrawal-actions button{min-height:48px;padding:12px 22px}.role{display:inline-block;background:#e7f6ed;color:var(--gd);padding:7px 12px;border-radius:20px;font-size:12px;font-weight:800}
 .card h2{font-size:17px;margin:0 0 8px}.card p{color:var(--muted);font-size:13px;line-height:1.55;margin:0}.balance p{color:#e2fff0}
 .status{padding:14px 17px;background:#fff8e5;border:1px solid #f1dfa8;border-radius:13px;margin:18px 0;color:#745313;font-size:13px}
 #error{color:#a93226}.loading{padding:24px;text-align:center;color:var(--muted)}
@@ -25,7 +25,7 @@ button.is-loading{cursor:wait;opacity:.88}
 button.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:me-spin .75s linear infinite}
 @keyframes me-spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.me-spinner,button.is-loading::before{animation-duration:1.8s}}
-@media(max-width:720px){.grid{grid-template-columns:1fr}.balance{grid-column:auto}main{margin:22px auto}.card{padding:18px}}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.balance{grid-column:auto}main{margin:22px auto}.card{padding:18px}.withdrawal-form{grid-template-columns:1fr;gap:13px}.withdrawal-actions{grid-column:auto;align-items:stretch;flex-direction:column}.withdrawal-actions button{width:100%}}
 </style>
   <link rel="stylesheet" href="/assets/navigation.css?v=2">
 </head>
@@ -44,7 +44,7 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <article class="card" id="withdrawalCard" style="grid-column:1/-1" hidden>
 <h2>Hisintona vola</h2>
 <p>Afaka mangataka fisintonana manomboka amin'ny 8 000 Ar ianao. Misy sarany 500 Ar, ka ny ambiny no halefa amin'ny kaontinao finday rehefa voamarina sy voaloan'ny Administrateur.</p>
-<form id="withdrawalForm" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:14px">
+<form id="withdrawalForm" class="withdrawal-form">
 <label style="display:grid;gap:6px;font-weight:700;font-size:13px">Vola angatahina (Ar)
 <input id="withdrawalAmount" type="number" min="8000" max="100000000" step="1" required inputmode="numeric" placeholder="8000" style="padding:12px;border:1px solid #cbd9d0;border-radius:9px;font:inherit">
 </label>
@@ -58,8 +58,8 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <label style="display:grid;gap:6px;font-weight:700;font-size:13px">Laharana finday handraisana
 <input id="withdrawalPhone" type="tel" required maxlength="15" autocomplete="tel" placeholder="034 00 000 00" style="padding:12px;border:1px solid #cbd9d0;border-radius:9px;font:inherit">
 </label>
-<div style="align-self:end">
-<p id="withdrawalEstimate" style="font-weight:700;color:#07583d;margin:0 0 9px">Ho raisina: 7 500 Ar</p>
+<div class="withdrawal-actions">
+<p id="withdrawalEstimate" style="font-weight:700;color:#07583d;margin:0">Ho raisina: 7 500 Ar</p>
 <button id="withdrawalSubmit" type="submit" style="background:#087c54;color:#fff;padding:12px 16px;border:0;border-radius:9px;font-weight:700;cursor:pointer">Alefa ny fangatahana</button>
 </div>
 </form>
