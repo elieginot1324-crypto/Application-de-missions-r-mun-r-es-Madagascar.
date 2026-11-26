@@ -137,17 +137,27 @@
       color: var(--green);
     }
 
-    .header-contact {
+    .brand-stack {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      gap: 6px;
+      flex: 0 1 auto;
+      min-width: 250px;
+      gap: 7px;
+    }
+
+    .header-contact {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 5px;
       min-width: 0;
-      padding: 8px 12px;
-      border: 1px solid #d8e9df;
-      border-radius: 12px;
-      background: #f3faf6;
+      padding: 0;
+      margin-left: 2px;
+      border: 0;
+      background: transparent;
     }
 
     .header-contact a {
@@ -757,11 +767,6 @@
         padding: 12px 0;
       }
 
-      .header-contact {
-        order: 2;
-        flex: 1 1 250px;
-      }
-
       .header-contact a {
         white-space: normal;
         overflow-wrap: anywhere;
@@ -825,9 +830,8 @@
         height: 33px;
       }
 
-      .header-contact {
-        order: 2;
-        flex: 1 1 100%;
+      .brand-stack {
+        min-width: 0;
         width: 100%;
       }
 
@@ -1015,12 +1019,13 @@
 
   <header class="site-header">
     <div class="container header-content">
-      <a href="#accueil" class="logo">
-        <span class="logo-icon"><img class="brand-mark" src="/assets/icon.svg" alt=""></span>
-        <span>MADAGASCAR EARN</span>
-      </a>
+      <div class="brand-stack">
+        <a href="#accueil" class="logo">
+          <span class="logo-icon"><img class="brand-mark" src="/assets/icon.svg" alt=""></span>
+          <span>MADAGASCAR EARN</span>
+        </a>
 
-      <div class="header-contact" aria-label="Fifandraisana haingana">
+        <div class="header-contact" aria-label="Fifandraisana haingana">
         <a href="mailto:elieginot1324@gmail.com">
           <span class="header-contact-icon" aria-hidden="true">✉</span>
           <span>elieginot1324@gmail.com</span>
@@ -1029,6 +1034,7 @@
           <span class="header-contact-icon" aria-hidden="true">◉</span>
           <span>WhatsApp : +261 33 40 907 17</span>
         </a>
+        </div>
       </div>
 
       <nav class="main-nav" aria-label="Navigation">
