@@ -79,6 +79,7 @@ export async function onRequestGet({ request, env }) {
 // Ny sarany 500 Ar dia esorina amin'ny vola angatahana; tsy misy fandoavana
 // Airtel Money na MVola mandeha ho azy eto.
 export async function onRequestPost({ request, env }) {
+  let requestBody = null;
   try {
     const origin = request.headers.get("Origin");
     if (origin && origin !== new URL(request.url).origin) {
@@ -100,6 +101,7 @@ export async function onRequestPost({ request, env }) {
       return json({ success: false, message: "Tsy mety ny angona nalefa." }, 400);
     }
 
+    requestBody = body;
     const amount = Number(body.amount_ariary);
     const method = String(body.method || "");
     const phone = String(body.phone_number || "").replace(/[\s-]/g, "");
@@ -149,7 +151,12 @@ export async function onRequestPost({ request, env }) {
         UPDATE wallets
         SET balance_ariary = balance_ariary - ?, updated_at = CURRENT_TIMESTAMP
         WHERE user_id = ? AND balance_ariary >= ?
-      `).bind(amount, user.id, amount),
+          AND EXISTS (
+            SELECT 1 FROM users
+            WHERE users.id = ? AND users.role = 'worker'
+              AND users.status = 'active' AND users.security_status = 'clear'
+          )
+      `).bind(amount, user.id, amount, user.id),
 
       env.DB.prepare(`
         INSERT INTO withdrawals
@@ -215,8 +222,8 @@ export async function onRequestPost({ request, env }) {
           WHERE sessions.token_hash = ? AND sessions.expires_at > ?
           LIMIT 1
         `).bind(await hashToken(match[1]), new Date().toISOString()).first();
-        const body = await request.clone().json();
-        if (user && validOperationKey(body.operation_key)) {
+        const body = requestBody;
+        if (user && body && validOperationKey(body.operation_key)) {
           const existing = await env.DB.prepare(`
             SELECT id, amount_ariary, fee_ariary, method, phone_number, status, requested_at
             FROM withdrawals WHERE user_id = ? AND operation_key = ? LIMIT 1
