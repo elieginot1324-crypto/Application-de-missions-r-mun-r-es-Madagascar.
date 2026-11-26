@@ -17,7 +17,7 @@ async function hashToken(token) {
 
 async function getWorker(request, env) {
   const cookie = request.headers.get("Cookie") || "";
-  const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
   if (!match) return null;
 
   return env.DB.prepare(`
@@ -102,7 +102,7 @@ export async function onRequestPost({ request, env }) {
 
     const amount = Number(body.amount_ariary);
     const method = String(body.method || "");
-    const phone = String(body.phone_number || "").replace(/[\\s-]/g, "");
+    const phone = String(body.phone_number || "").replace(/[\s-]/g, "");
     const operationKey = body.operation_key;
 
     if (!Number.isSafeInteger(amount) || amount < 8000 || amount > 100000000) {
@@ -111,7 +111,7 @@ export async function onRequestPost({ request, env }) {
     if (!["Airtel Money", "MVola"].includes(method)) {
       return json({ success: false, message: "Safidio ny Airtel Money na MVola." }, 400);
     }
-    if (!/^(?:\\+261|0)3[2348]\\d{7}$/.test(phone)) {
+    if (!/^(?:\+261|0)3[2348]\d{7}$/.test(phone)) {
       return json({ success: false, message: "Ampidiro ny laharana finday Malagasy manan-kery." }, 400);
     }
     if (!validOperationKey(operationKey)) {
@@ -207,7 +207,7 @@ export async function onRequestPost({ request, env }) {
     // fangatahana efa voatahiry fa tsy averina alaina fanindroany ny vola.
     try {
       const cookie = request.headers.get("Cookie") || "";
-      const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+      const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
       if (match) {
         const user = await env.DB.prepare(`
           SELECT users.id FROM sessions
@@ -221,7 +221,7 @@ export async function onRequestPost({ request, env }) {
             SELECT id, amount_ariary, fee_ariary, method, phone_number, status, requested_at
             FROM withdrawals WHERE user_id = ? AND operation_key = ? LIMIT 1
           `).bind(user.id, body.operation_key).first();
-          if (existing && sameRequest(existing, Number(body.amount_ariary), String(body.method || ""), String(body.phone_number || "").replace(/[\\s-]/g, ""))) {
+          if (existing && sameRequest(existing, Number(body.amount_ariary), String(body.method || ""), String(body.phone_number || "").replace(/[\s-]/g, ""))) {
             return json({
               success: true,
               duplicate: true,
