@@ -1,29 +1,18 @@
 async function hashToken(token) {
-  const digest = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(token)
-  );
-  return Array.from(new Uint8Array(digest))
-    .map(byte => byte.toString(16).padStart(2, "0"))
-    .join("");
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return Array.from(new Uint8Array(digest)).map(byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
 function json(data, status = 200) {
-  return Response.json(data, {
-    status,
-    headers: {
-      "Cache-Control": "no-store",
-      "X-Content-Type-Options": "nosniff"
-    }
-  });
+  return Response.json(data, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
 }
 
 async function requireAdmin(request, env) {
   const cookie = request.headers.get("Cookie") || "";
-  const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
   if (!match) return null;
 
-  const admin = await env.DB.prepare(`
+  return await env.DB.prepare(`
     SELECT users.id
     FROM sessions
     JOIN users ON users.id = sessions.user_id
@@ -34,16 +23,12 @@ async function requireAdmin(request, env) {
       AND users.security_status = 'clear'
     LIMIT 1
   `).bind(await hashToken(match[1]), new Date().toISOString()).first();
-
-  return admin || null;
 }
 
 // Fijerena fotsiny: tsy manova sata na solde ity API ity.
 export async function onRequestGet({ request, env }) {
   try {
-    if (!await requireAdmin(request, env)) {
-      return json({ success: false, message: "Tsy nahazo alalana." }, 403);
-    }
+    if (!await requireAdmin(request, env)) return json({ success: false, message: "Tsy nahazo alalana." }, 403);
 
     const result = await env.DB.prepare(`
       SELECT
@@ -80,9 +65,6 @@ export async function onRequestGet({ request, env }) {
     return json({ success: true, withdrawals });
   } catch (error) {
     console.error("ADMIN_WITHDRAWALS_READ_ERROR:", error);
-    return json({
-      success: false,
-      message: "Tsy afaka naka ny fangatahana fisintonam-bola."
-    }, 500);
+    return json({ success: false, message: "Tsy afaka naka ny fangatahana fisintonam-bola." }, 500);
   }
 }
