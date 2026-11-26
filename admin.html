@@ -196,6 +196,13 @@
       <p id="pendingMembersStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div id="pendingMembersList" class="menu"></div>
     </section>
+    <section class="welcome">
+      <h2>Fangatahana fisintonam-bola</h2>
+      <p id="withdrawalsStatus" class="stat-status">Miandry ny angona...</p>
+      <div id="withdrawalsList" class="menu"></div>
+      <button id="refreshWithdrawals" type="button" style="margin-top:14px;background:#087c54;color:#fff;border:0;border-radius:9px;padding:11px 15px;font-weight:700;cursor:pointer">Havaozy ny lisitra</button>
+      <p class="stat-status">Fijerena fotsiny ity lisitra ity. Tsy mbola misy fanekena, fandavana na fanamarihana fa voaloa eto.</p>
+    </section>
     <section class="menu">
       <article class="item">
         <h2>Famintinana</h2>
@@ -300,6 +307,48 @@ async function loadStatistics() {
       "Tsy afaka mifandray amin'ny mpizara.";
   }
 }
+
+async function loadAdminWithdrawals() {
+  const status = document.getElementById("withdrawalsStatus");
+  const list = document.getElementById("withdrawalsList");
+  status.textContent = "Eo am-pakana ny fangatahana...";
+  try {
+    const response = await fetch("/api/admin/withdrawals", {
+      credentials: "same-origin",
+      cache: "no-store"
+    });
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Tsy afaka naka ny fangatahana.");
+    }
+    const items = result.withdrawals || [];
+    status.textContent = items.length
+      ? items.length + " fangatahana farany"
+      : "Mbola tsy misy fangatahana fisintonam-bola.";
+    list.replaceChildren();
+    const labels = { pending: "Miandry", approved: "Ekena fa mbola tsy voaloa", paid: "Voaloa", rejected: "Nolavina" };
+    for (const item of items) {
+      const card = document.createElement("article");
+      card.className = "item";
+      const title = document.createElement("h2");
+      title.textContent = (item.full_name || "Mpikambana") + " — " + Number(item.amount_ariary).toLocaleString("fr-FR") + " Ar";
+      const details = document.createElement("p");
+      details.textContent =
+        "Raisin'ny Mpiasa: " + Number(item.payout_ariary).toLocaleString("fr-FR") + " Ar" +
+        " · Sarany: " + Number(item.fee_ariary).toLocaleString("fr-FR") + " Ar" +
+        " · " + (item.method || "") +
+        " · Finday handraisana: " + (item.phone_number || "") +
+        " · Satan'ny fangatahana: " + (labels[item.status] || item.status || "Tsy fantatra") +
+        " · Daty: " + (item.requested_at ? new Date(item.requested_at).toLocaleString("fr-FR") : "");
+      card.append(title, details);
+      list.append(card);
+    }
+  } catch (error) {
+    status.textContent = error.message || "Tsy afaka naka ny fangatahana fisintonam-bola.";
+  }
+}
+document.getElementById("refreshWithdrawals").addEventListener("click", loadAdminWithdrawals);
+loadAdminWithdrawals();
 
 loadStatistics();
 
