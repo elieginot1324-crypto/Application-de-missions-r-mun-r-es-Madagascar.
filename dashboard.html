@@ -48,9 +48,11 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <label style="display:grid;gap:6px;font-weight:700;font-size:13px">Vola angatahina (Ar)
 <input id="withdrawalAmount" type="number" min="8000" max="100000000" step="1" required inputmode="numeric" placeholder="8000" style="padding:12px;border:1px solid #cbd9d0;border-radius:9px;font:inherit">
 </label>
-<label style="display:grid;gap:6px;font-weight:700;font-size:13px">Fomba handraisana
+<label style="display:grid;gap:6px;font-weight:700;font-size:13px">Fomba handraisana vola
 <select id="withdrawalMethod" required style="padding:12px;border:1px solid #cbd9d0;border-radius:9px;font:inherit;background:#fff">
-<option value="Airtel Money">Airtel Money</option><option value="MVola">MVola</option>
+<option value="" selected disabled>Safidio: Airtel Money na MVola</option>
+<option value="Airtel Money">Airtel Money</option>
+<option value="MVola">MVola</option>
 </select>
 </label>
 <label style="display:grid;gap:6px;font-weight:700;font-size:13px">Laharana finday handraisana
