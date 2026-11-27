@@ -267,3 +267,42 @@ body {
  .section-art img{max-height:190px;object-fit:cover}
  .mission-art{height:132px}
 }
+
+/* Fanamafisana ny header amin'ny finday — tsy manova desktop */
+@media (max-width: 700px) {
+  .header-content {
+    gap: 8px;
+    padding: 7px 0;
+  }
+  .brand-stack { gap: 3px; }
+  .header-contact { gap: 3px; }
+  .header-contact-icon { width: 19px; height: 19px; flex-basis: 19px; }
+  .header-contact a { font-size: 10px; }
+  .header-actions {
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .header-actions .btn {
+    min-height: 36px;
+    padding: 6px 9px;
+    font-size: 12px;
+  }
+  .account-menu-toggle {
+    min-height: 36px;
+    gap: 6px;
+    padding: 3px 9px 3px 5px;
+    font-size: 12px;
+  }
+  .account-avatar { width: 25px; height: 25px; }
+  .main-nav { gap: 10px; line-height: 1.25; }
+}
+@media (max-width: 420px) {
+  .header-content { gap: 6px; padding: 5px 0; }
+  .header-actions { gap: 5px; }
+  .header-actions .btn { min-height: 34px; padding: 5px 6px; font-size: 11px; }
+  .account-menu-toggle { min-height: 34px; padding: 2px 7px 2px 4px; font-size: 11px; }
+  .account-avatar { width: 23px; height: 23px; }
+  .main-nav { gap: 8px; font-size: 11px; }
+}
+
