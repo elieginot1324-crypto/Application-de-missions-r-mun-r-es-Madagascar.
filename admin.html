@@ -192,6 +192,11 @@
     </section>
 
     <section class="welcome">
+      <h2>Fangatahana asa avy amin'ny Mpanjifa</h2>
+      <p id="jobRequestStatus" class="stat-status">Miandry ny fangatahana...</p>
+      <div id="jobRequestList" class="menu"></div>
+    </section>
+    <section class="welcome">
       <h2>Mpikambana miandry fanamarinana</h2>
       <p id="pendingMembersStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div id="pendingMembersList" class="menu"></div>
@@ -442,6 +447,48 @@ async function loadPendingMembers() {
 }
 
 loadPendingMembers();
+
+
+async function loadJobRequests(){
+ const status=document.getElementById("jobRequestStatus"),list=document.getElementById("jobRequestList");
+ try{
+  const response=await fetch("/api/admin/requests",{credentials:"same-origin",cache:"no-store"});
+  const result=await response.json();
+  if(!response.ok||!result.success)throw new Error(result.message||"Tsy afaka naka fangatahana.");
+  const requests=result.requests||[];
+  status.textContent=requests.length?requests.length+" fangatahana hita.":"Tsy mbola misy fangatahana.";
+  list.innerHTML=requests.length?requests.map(r=>{
+   const safe=v=>String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+   const budget=r.proposed_budget_ariary?Number(r.proposed_budget_ariary).toLocaleString("fr-FR")+" Ar":"Tsy voafaritra";
+   return '<article class="item"><h2>'+safe(r.title)+'</h2>'+
+    '<p><strong>Mpanjifa:</strong> '+safe(r.client_name)+' · '+safe(r.client_email||r.client_phone||"")+'</p>'+
+    '<p><strong>Antsipiriany:</strong> '+safe(r.description)+'</p>'+
+    '<p><strong>Sokajy:</strong> '+safe(r.category||"Tsy voafaritra")+' · <strong>Tetibola:</strong> '+budget+'</p>'+
+    '<p><strong>Daty irina:</strong> '+safe(r.deadline_date||"Tsy voafaritra")+'</p>'+
+    '<label for="request-status-'+Number(r.id)+'">Sata</label><select id="request-status-'+Number(r.id)+'">'+
+    ['received','in_discussion','proposal_sent','accepted','declined'].map(v=>'<option value="'+v+'" '+(r.status===v?'selected':'')+'>'+({received:"Voaray",in_discussion:"Eo am-piresahana",proposal_sent:"Nalefa ny tolotra",accepted:"Nekena",declined:"Tsy nekena"}[v])+'</option>').join("")+
+    '</select><label for="request-budget-'+Number(r.id)+'">Tetibola nifanarahana (Ar)</label><input id="request-budget-'+Number(r.id)+'" type="number" min="1000" value="'+(r.agreed_budget_ariary||"")+'" placeholder="Ohatra: 50000">'+
+    '<label for="request-note-'+Number(r.id)+'">Fanamarihana / tolotra ho an'ny Mpanjifa</label><textarea id="request-note-'+Number(r.id)+'" rows="3" maxlength="3000">'+safe(r.admin_note||"")+'</textarea>'+
+    '<button type="button" onclick="saveJobRequest('+Number(r.id)+',this)">Tehirizo ny fanovana</button></article>';
+  }).join(""):"<p>Tsy mbola misy fangatahana asa.</p>";
+ }catch(error){status.textContent=error.message;}
+}
+async function saveJobRequest(id,button){
+ const status=document.getElementById("jobRequestStatus"),old=button.textContent;
+ button.disabled=true;button.textContent="Tehirizina...";
+ try{
+  const response=await fetch("/api/admin/requests",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+   request_id:id,status:document.getElementById("request-status-"+id).value,
+   agreed_budget_ariary:document.getElementById("request-budget-"+id).value?Number(document.getElementById("request-budget-"+id).value):null,
+   admin_note:document.getElementById("request-note-"+id).value
+  })});
+  const result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||"Tsy voatahiry.");
+  status.textContent=result.message;await loadJobRequests();
+ }catch(error){status.textContent=error.message;}
+ finally{button.disabled=false;button.textContent=old;}
+}
+loadJobRequests();
+
 
 </script></body>
 </html>
