@@ -72,10 +72,10 @@ export async function onRequestPost({ request, env }) {
           AND NOT EXISTS (SELECT 1 FROM submissions WHERE mission_id = ? AND worker_id = ?)
       `).bind(missionId,user.id,details || null,proofUrl || null,new Date().toISOString(),missionId,missionId,missionId,missionId,user.id).run();
       if (!result.meta?.changes) return json({success:false,message:"Tsy misy toerana intsony na tsy misokatra ilay iraka."},409);
-      return json({success:true,message:"Voaray ny asa nalefanao. Miandry ny fanamarinana ataon'ny Mpanjifa."},201);
+      return json({success:true,message:"Voaray ny asa nalefanao. Miandry ny fanamarinana ataon'ny Administrateur."},201);
     }
     if (action === "review") {
-      if (user.role !== "admin") return json({success:false,message:"Ny Mpanjifa tompon'ny iraka ihany no afaka mijery ny asa."},403);
+      if (user.role !== "admin") return json({success:false,message:"Ny Administrateur ihany no afaka manamarina ny asa nalefan'ny Mpiasa."},403);
       const submissionId = Number(data.submission_id);
       const decision = String(data.decision || "");
       if (!Number.isSafeInteger(submissionId) || submissionId < 1 || !["revision","rejected","approved"].includes(decision)) {
