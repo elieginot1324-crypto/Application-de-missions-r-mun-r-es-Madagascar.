@@ -1706,7 +1706,9 @@
 
     if (!response.ok || !result.success) {
       throw new Error(
-        result.message ||
+        [result.message, result.debug ? "Antony ara-teknika: " + result.debug : ""]
+          .filter(Boolean)
+          .join(" — ") ||
         translated(
           "Nisy olana. Avereno andramana azafady.",
           "Une erreur est survenue. Veuillez réessayer."
