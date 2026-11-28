@@ -30,7 +30,7 @@ export async function onRequestGet({ request, env }) {
   try {
     const tokenHash = await hashToken(match[1]);
     const user = await env.DB.prepare(
-      `SELECT users.id, users.full_name, users.email, users.phone, users.role, users.status, users.security_status
+      `SELECT users.id, users.full_name, users.email, users.phone, users.role, users.status
        FROM sessions
        JOIN users ON users.id = sessions.user_id
        WHERE sessions.token_hash = ?
@@ -38,7 +38,7 @@ export async function onRequestGet({ request, env }) {
        LIMIT 1`
     ).bind(tokenHash, new Date().toISOString()).first();
 
-    if (!user || user.status !== "active" || user.security_status !== "clear") {
+    if (!user || user.status !== "active") {
       return json({ success: false, message: "Tsy mavitrika ny kaonty." }, 401);
     }
 

@@ -82,19 +82,20 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <main>
 <section class="panel"><h2 id="welcome">Tongasoa</h2><p class="muted" id="intro">Ampifandraisina amin'ny kaontinao ny asa sy iraka.</p><div class="status" id="pageStatus"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></div></section>
 <section id="clientCreate" class="panel hidden">
-<h2>Hamoaka iraka vaovao</h2>
-<p class="muted">Fenoy ny antsipiriany. Hojerena aloha ny iraka ary tsy haseho amin'ny Mpiasa raha tsy voamarina sy voalamina ny famatsiam-bola.</p>
-<form id="missionForm">
-<label for="title">Lohatenin'ny iraka</label><input id="title" required minlength="5" maxlength="120" placeholder="Ohatra: Fanoratana lahatsoratra">
+<h2>Hanolotra asa</h2>
+<p class="muted">Manana asa na tetikasa hotanterahina ve ianao? Atolory eto amin'ny MADAGASCAR EARN izany. Ny Administrateur no hiresaka aminao, hanomana tolotra sy fifanarahana, ary handamina ny Mpiasa. Tsy mifandray mivantana amin'ny Mpiasa ianao.</p>
+<form id="requestForm">
+<label for="title">Lohatenin'ny asa</label><input id="title" required minlength="5" maxlength="120" placeholder="Ohatra: Fanoratana lahatsoratra">
 <label for="category">Sokajy</label><input id="category" maxlength="60" placeholder="Ohatra: Asa an-tserasera">
 <label for="description">Fanazavana sy toromarika</label><textarea id="description" required minlength="20" maxlength="5000" placeholder="Hazavao mazava ny asa tokony hatao..."></textarea>
-<div class="grid"><div><label for="budget">Tetibola manontolo (Ar)</label><input id="budget" type="number" min="1000" step="1" required placeholder="Ohatra: 50000"></div><div><label for="workers">Isan'ny Mpiasa</label><input id="workers" type="number" min="1" max="1000" step="1" value="1" required></div></div>
-<button type="submit">Alefa hojerena</button>
+<div class="grid"><div><label for="proposedBudget">Tetibola vinavinaina (Ar, tsy voatery)</label><input id="proposedBudget" type="number" min="1000" step="1" placeholder="Ohatra: 50000"></div><div><label for="deadline">Daty farany irina (tsy voatery)</label><input id="deadline" type="date"></div></div>
+<button type="submit">Alefaso amin'ny Administrateur</button>
 </form><div id="createStatus" class="status"></div>
 </section>
+<section id="clientRequests" class="panel hidden"><h2>Ny asa natolotro</h2><p class="muted">Hita eto ny satan'ny asa natolotrao sy ny valin'ny Administrateur.</p><div id="clientRequestList" class="grid"></div></section>
 <section id="workerMissions" class="panel hidden"><h2>Iraka misokatra</h2><div id="missionList" class="grid"></div></section>
 <section id="mySubmissions" class="panel hidden"><h2>Asa nalefako</h2><div id="mySubmissionList" class="grid"></div></section>
-<section id="clientSubmissions" class="panel hidden"><h2>Asa nalefan'ny Mpiasa</h2><p class="muted">Azonao ekena ny asa vita, averina amin'ny Mpiasa hanitsiany, na lavina. Tsy hafindra ny valisoa raha tsy voamarina ny famatsiam-bola. Ny fankatoavana sy ny famindrana vola dia hatao rehefa vita ny rafitra fiarovana ny famatsiam-bola.</p><div id="clientSubmissionList" class="grid"></div></section>
+
 <section class="notice">Fanamarihana: mbola tsy mandeha eto ny famatsiam-bola, ny fankatoavana farany ary ny fandoavana valisoa. Tsy tokony hisy vola tena izy hafindra raha tsy vita ny fanamarinana sy ny fiarovana azy.</section>
 </main>
 <script>
@@ -114,10 +115,10 @@ async function load() {
   currentUser = profile.user;
   $("welcome").textContent = "Tongasoa, "+currentUser.full_name;
   if(currentUser.role==="client") {
-   $("intro").textContent="Afaka mamorona iraka ianao ary mijery ny asa nalefan'ny Mpiasa.";
+   $("intro").textContent="Manana asa hotanterahina ve ianao? Atolory eto amin'ny MADAGASCAR EARN izany. Ny Administrateur no hikarakara ny fifanarahana sy ny Mpiasa.";
    $("clientCreate").classList.remove("hidden");
-   $("clientSubmissions").classList.remove("hidden");
-   await loadClientSubmissions();
+   $("clientRequests").classList.remove("hidden");
+   await loadClientRequests();
   } else if(currentUser.role==="worker") {
    $("intro").textContent="Jereo ny iraka misokatra, fidio izay mifanaraka aminao, ary alefaso ny asa vita.";
    $("workerMissions").classList.remove("hidden");
@@ -132,19 +133,33 @@ async function load() {
   if(error.message.toLowerCase().includes("midira")) setTimeout(()=>location.href="/",1200);
  }
 }
-$("missionForm").addEventListener("submit",async event=>{
+$("requestForm").addEventListener("submit",async event=>{
  event.preventDefault(); const button=event.submitter; if(button.disabled)return; button.disabled=true; button.classList.add("is-loading"); button.textContent="Alefa...";
  $("createStatus").textContent="Alefa...";
  try {
-  const result=await api("/api/missions",{method:"POST",body:JSON.stringify({
+  const result=await api("/api/client/requests",{method:"POST",body:JSON.stringify({
    title:$("title").value,category:$("category").value,description:$("description").value,
-   budget_ariary:Number($("budget").value),workers_needed:Number($("workers").value)
+   proposed_budget_ariary:$("proposedBudget").value?Number($("proposedBudget").value):null,
+   deadline_date:$("deadline").value||null
   })});
-  $("createStatus").textContent=result.message; $("missionForm").reset();
-  $("workers").value="1";
+  $("createStatus").textContent=result.message; $("requestForm").reset(); await loadClientRequests();
  } catch(error){$("createStatus").textContent=error.message;}
- finally{button.disabled=false;button.classList.remove("is-loading");button.textContent="Alefa hojerena";}
+ finally{button.disabled=false;button.classList.remove("is-loading");button.textContent="Alefaso amin'ny Administrateur";}
 });
+async function loadClientRequests(){
+ try{
+  const result=await api("/api/client/requests");
+  const labels={received:"Voaray",in_discussion:"Eo am-piresahana",proposal_sent:"Nalefa ny tolotra",accepted:"Nekena",declined:"Tsy nekena",converted:"Efa nalamina ho iraka"};
+  $("clientRequestList").innerHTML=result.requests.length?result.requests.map(r=>
+   '<article class="card"><span class="tag">'+esc(labels[r.status]||r.status)+'</span><h3>'+esc(r.title)+'</h3>'+
+   '<p class="muted">'+esc(r.description)+'</p><p class="muted">Tetibola natolotra: '+(r.proposed_budget_ariary?money(r.proposed_budget_ariary):"Tsy mbola voafaritra")+'</p>'+
+   '<p class="muted">Daty irina: '+esc(r.deadline_date||"Tsy voafaritra")+'</p>'+
+   (r.agreed_budget_ariary?'<p class="money">Tolotra nifanarahana: '+money(r.agreed_budget_ariary)+'</p>':"")+
+   (r.admin_note?'<p><strong>Hafatra avy amin’ny Administrateur:</strong> '+esc(r.admin_note)+'</p>':"")+
+   '<small class="muted">Nalefa: '+esc(r.created_at||"")+'</small></article>'
+  ).join(""):"<p class='muted'>Mbola tsy nanolotra asa ianao.</p>";
+ }catch(error){$("clientRequestList").textContent=error.message;}
+}
 async function loadMissions(){
  try{
   const result=await api("/api/missions");
@@ -164,16 +179,6 @@ async function loadMySubmissions(){
    ${s.status==="revision"?'<button onclick="showSubmit('+Number(s.mission_id)+',\''+esc(s.mission_title).replace(/'/g,"&#39;")+'\')">Hanitsy sy handefa indray</button>':""}</article>`).join(""):"<p class='muted'>Tsy mbola nandefa asa ianao.</p>";
  }catch(error){$("mySubmissionList").textContent=error.message;}
 }
-async function loadClientSubmissions(){
- try{
-  const result=await api("/api/submissions");
-  $("clientSubmissionList").innerHTML=result.submissions.length?result.submissions.map(s=>`
-   <article class="card"><h3>${esc(s.mission_title)}</h3><p class="muted">Mpiasa: ${esc(s.worker_name)}</p>
-   <span class="tag">${esc(s.status)}</span><p>${esc(s.details||"")}</p>
-   ${s.proof_url?'<p><a target="_blank" rel="noopener noreferrer" href="'+esc(s.proof_url)+'">Hijery porofo</a></p>':""}
-   ${s.status==="submitted"?'<button onclick="review('+Number(s.id)+',\'approved\')">Ekena ny asa</button><button class="secondary" onclick="review('+Number(s.id)+',\'revision\')">Angataho ny fanitsiana</button><button class="danger" onclick="review('+Number(s.id)+',\'rejected\')">Lavina</button>':""}</article>`).join(""):"<p class='muted'>Tsy mbola misy asa nalefan'ny Mpiasa.</p>";
- }catch(error){$("clientSubmissionList").textContent=error.message;}
-}
 function showSubmit(id,title){
  const details=prompt("Soraty eto ny fanazavana momba ny asa vita: "+title);
  if(details===null)return;
@@ -182,12 +187,6 @@ function showSubmit(id,title){
 }
 async function sendSubmission(id,details,proof){
  try{const result=await api("/api/submissions",{method:"POST",body:JSON.stringify({action:"submit",mission_id:id,details,proof_url:proof})});alert(result.message);await loadMySubmissions();await loadMissions();}
- catch(error){alert(error.message);}
-}
-async function review(id,decision){
- const label=decision==="revision"?"hangataka fanitsiana":"handà";
- if(!confirm("Azonao antoka ve fa "+label+" ity asa ity?"))return;
- try{const result=await api("/api/submissions",{method:"POST",body:JSON.stringify({action:"review",submission_id:id,decision})});alert(result.message);await loadClientSubmissions();}
  catch(error){alert(error.message);}
 }
 load();

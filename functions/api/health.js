@@ -1,4 +1,8 @@
-export async function onRequestGet({ env }) {
+export async function onRequestGet({ request, env }) {
+  const host = new URL(request.url).hostname;
+  const isFeaturePreview = host.endsWith(".application-de-missions-r-mun-r-es-madagascar.pages.dev") &&
+    host !== "application-de-missions-r-mun-r-es-madagascar.pages.dev";
+
   try {
     await env.DB.prepare("SELECT 1 AS ok").first();
 
@@ -16,11 +20,20 @@ export async function onRequestGet({ env }) {
     );
   } catch (error) {
     console.error("HEALTH_CHECK_ERROR:", error);
+    const previewDiagnostics = isFeaturePreview
+      ? {
+          debug: String(error?.message || error || "Unknown error").slice(0, 300),
+          hasDBBinding: Boolean(env?.DB),
+          dbHasPrepare: typeof env?.DB?.prepare === "function",
+          availableBindingNames: Object.keys(env || {}).filter(key => /^[A-Z0-9_]+$/.test(key)).slice(0, 30)
+        }
+      : {};
 
     return Response.json(
       {
         success: false,
-        message: "Tsy tafita ny fifandraisana amin'ny D1."
+        message: "Tsy tafita ny fifandraisana amin'ny D1.",
+        ...previewDiagnostics
       },
       {
         status: 500,

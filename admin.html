@@ -173,7 +173,7 @@
       <p id="submissionStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div class="statistics">
         <article class="stat-card"><h3>Asa miandry fanamarinana</h3><strong id="submittedCount">—</strong></article>
-        <article class="stat-card"><h3>Asa neken'ny Mpanjifa</h3><strong id="approvedCount">—</strong></article>
+        <article class="stat-card"><h3>Asa neken'ny Administrateur</h3><strong id="approvedCount">—</strong></article>
         <article class="stat-card"><h3>Fanitsiana angatahina</h3><strong id="revisionCount">—</strong></article>
         <article class="stat-card"><h3>Fangatahana fisintonana (Ar)</h3><strong id="pendingWithdrawalAmount">—</strong></article>
         <article class="stat-card"><h3>Fisoratana referral miandry</h3><strong id="pendingReferralCount">—</strong></article>
@@ -191,6 +191,16 @@
       <div id="pendingMissionList" class="menu"></div>
     </section>
 
+    <section class="welcome">
+      <h2>Fangatahana asa avy amin'ny Mpanjifa</h2>
+      <p id="jobRequestStatus" class="stat-status">Miandry ny fangatahana...</p>
+      <div id="jobRequestList" class="menu"></div>
+    </section>
+    <section class="welcome">
+      <h2>Asa nalefan'ny Mpiasa — fanamarinana ataon'ny Administrateur</h2>
+      <p id="adminSubmissionsStatus" class="stat-status">Miandry ny asa nalefa...</p>
+      <div id="adminSubmissionsList" class="menu"></div>
+    </section>
     <section class="welcome">
       <h2>Mpikambana miandry fanamarinana</h2>
       <p id="pendingMembersStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
@@ -442,6 +452,79 @@ async function loadPendingMembers() {
 }
 
 loadPendingMembers();
+
+
+async function loadAdminSubmissions(){
+ const status=document.getElementById("adminSubmissionsStatus"),list=document.getElementById("adminSubmissionsList");
+ try{
+  const response=await fetch("/api/admin/submissions",{credentials:"same-origin",cache:"no-store"});
+  const result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||"Tsy afaka naka ny asa nalefa.");
+  const items=result.submissions||[];status.textContent=items.length?items.length+" asa mila jerena na misy fanitsiana.":"Tsy misy asa miandry fanamarinana.";
+  const safe=v=>String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  list.innerHTML=items.map(s=>'<article class="item"><h2>'+safe(s.mission_title)+'</h2><p><strong>Mpiasa:</strong> '+safe(s.worker_name)+'</p><p>'+safe(s.details||"")+'</p>'+
+   (s.proof_url?'<p><a href="'+safe(s.proof_url)+'" target="_blank" rel="noopener noreferrer">Hijery porofo</a></p>':"")+
+   '<label for="submission-note-'+Number(s.id)+'">Antony / fanamarihana (takiana raha misy fanitsiana na fandavana)</label><textarea id="submission-note-'+Number(s.id)+'" rows="2"></textarea>'+
+   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+',&quot;approved&quot;,this)">Ekena</button>'+
+   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+',&quot;revision&quot;,this)">Angataho fanitsiana</button>'+
+   '<button type="button" style="background:#a63a35" onclick="reviewAdminSubmission('+Number(s.id)+',&quot;rejected&quot;,this)">Lavina</button></article>').join("");
+ }catch(error){status.textContent=error.message;}
+}
+async function reviewAdminSubmission(id,decision,button){
+ const note=document.getElementById("submission-note-"+id).value.trim();
+ if((decision==="revision"||decision==="rejected")&&note.length<5){alert("Lazao mazava ny antony na ny fanitsiana ilaina.");return;}
+ if(!confirm("Hanamarina ity asa ity ve ianao?"))return;
+ const old=button.textContent;button.disabled=true;button.textContent="Miandry...";
+ try{
+  const response=await fetch("/api/admin/submissions",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify({submission_id:id,decision,note})});
+  const result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||"Tsy tontosa.");
+  document.getElementById("adminSubmissionsStatus").textContent=result.message;await loadAdminSubmissions();
+ }catch(error){document.getElementById("adminSubmissionsStatus").textContent=error.message;}
+ finally{button.disabled=false;button.textContent=old;}
+}
+loadAdminSubmissions();
+
+
+
+async function loadJobRequests(){
+ const status=document.getElementById("jobRequestStatus"),list=document.getElementById("jobRequestList");
+ try{
+  const response=await fetch("/api/admin/requests",{credentials:"same-origin",cache:"no-store"});
+  const result=await response.json();
+  if(!response.ok||!result.success)throw new Error(result.message||"Tsy afaka naka fangatahana.");
+  const requests=result.requests||[];
+  status.textContent=requests.length?requests.length+" fangatahana hita.":"Tsy mbola misy fangatahana.";
+  list.innerHTML=requests.length?requests.map(r=>{
+   const safe=v=>String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+   const budget=r.proposed_budget_ariary?Number(r.proposed_budget_ariary).toLocaleString("fr-FR")+" Ar":"Tsy voafaritra";
+   return '<article class="item"><h2>'+safe(r.title)+'</h2>'+
+    '<p><strong>Mpanjifa:</strong> '+safe(r.client_name)+' · '+safe(r.client_email||r.client_phone||"")+'</p>'+
+    '<p><strong>Antsipiriany:</strong> '+safe(r.description)+'</p>'+
+    '<p><strong>Sokajy:</strong> '+safe(r.category||"Tsy voafaritra")+' · <strong>Tetibola:</strong> '+budget+'</p>'+
+    '<p><strong>Daty irina:</strong> '+safe(r.deadline_date||"Tsy voafaritra")+'</p>'+
+    '<label for="request-status-'+Number(r.id)+'">Sata</label><select id="request-status-'+Number(r.id)+'">'+
+    ['received','in_discussion','proposal_sent','accepted','declined'].map(v=>'<option value="'+v+'" '+(r.status===v?'selected':'')+'>'+({received:"Voaray",in_discussion:"Eo am-piresahana",proposal_sent:"Nalefa ny tolotra",accepted:"Nekena",declined:"Tsy nekena"}[v])+'</option>').join("")+
+    '</select><label for="request-budget-'+Number(r.id)+'">Tetibola nifanarahana (Ar)</label><input id="request-budget-'+Number(r.id)+'" type="number" min="1000" value="'+(r.agreed_budget_ariary||"")+'" placeholder="Ohatra: 50000">'+
+    '<label for="request-note-'+Number(r.id)+'">Fanamarihana / tolotra ho an'ny Mpanjifa</label><textarea id="request-note-'+Number(r.id)+'" rows="3" maxlength="3000">'+safe(r.admin_note||"")+'</textarea>'+
+    '<button type="button" onclick="saveJobRequest('+Number(r.id)+',this)">Tehirizo ny fanovana</button></article>';
+  }).join(""):"<p>Tsy mbola misy fangatahana asa.</p>";
+ }catch(error){status.textContent=error.message;}
+}
+async function saveJobRequest(id,button){
+ const status=document.getElementById("jobRequestStatus"),old=button.textContent;
+ button.disabled=true;button.textContent="Tehirizina...";
+ try{
+  const response=await fetch("/api/admin/requests",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+   request_id:id,status:document.getElementById("request-status-"+id).value,
+   agreed_budget_ariary:document.getElementById("request-budget-"+id).value?Number(document.getElementById("request-budget-"+id).value):null,
+   admin_note:document.getElementById("request-note-"+id).value
+  })});
+  const result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||"Tsy voatahiry.");
+  status.textContent=result.message;await loadJobRequests();
+ }catch(error){status.textContent=error.message;}
+ finally{button.disabled=false;button.textContent=old;}
+}
+loadJobRequests();
+
 
 </script></body>
 </html>

@@ -35,10 +35,7 @@ export async function onRequestGet({ request, env }) {
         ORDER BY m.created_at DESC LIMIT 100
       `).all();
     } else if (user.role === "client") {
-      rows = await env.DB.prepare(`
-        SELECT id, title, description, category, budget_ariary, workers_needed, status, created_at
-        FROM missions WHERE client_id = ? ORDER BY created_at DESC LIMIT 100
-      `).bind(user.id).all();
+      return json({ success:false, message:"Ny Mpanjifa dia mijery ny fangatahana asa fa tsy ny iraka natokana ho an'ny Mpiasa." }, 403);
     } else {
       return json({ success:false, message:"Tsy natao ho an'ity karazana kaonty ity." }, 403);
     }
@@ -52,7 +49,7 @@ export async function onRequestPost({ request, env }) {
   try {
     const user = await getUser(request, env);
     if (!user || user.status !== "active") return json({ success:false, message:"Midira amin'ny kaonty voamarina aloha." }, 401);
-    if (user.role !== "client") return json({ success:false, message:"Ny Mpanjifa ihany no afaka mamorona iraka." }, 403);
+    if (user.role !== "admin") return json({ success:false, message:"Ny Administrateur ihany no mamadika fangatahana ekena ho iraka." }, 403);
     const data = await request.json();
     const title = String(data.title || "").trim();
     const description = String(data.description || "").trim();
