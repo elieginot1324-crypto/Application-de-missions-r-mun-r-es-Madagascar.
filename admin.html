@@ -197,6 +197,11 @@
       <div id="jobRequestList" class="menu"></div>
     </section>
     <section class="welcome">
+      <h2>Asa nalefan'ny Mpiasa — fanamarinana ataon'ny Administrateur</h2>
+      <p id="adminSubmissionsStatus" class="stat-status">Miandry ny asa nalefa...</p>
+      <div id="adminSubmissionsList" class="menu"></div>
+    </section>
+    <section class="welcome">
       <h2>Mpikambana miandry fanamarinana</h2>
       <p id="pendingMembersStatus" class="stat-status"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></p>
       <div id="pendingMembersList" class="menu"></div>
@@ -447,6 +452,37 @@ async function loadPendingMembers() {
 }
 
 loadPendingMembers();
+
+
+async function loadAdminSubmissions(){
+ const status=document.getElementById("adminSubmissionsStatus"),list=document.getElementById("adminSubmissionsList");
+ try{
+  const response=await fetch("/api/admin/submissions",{credentials:"same-origin",cache:"no-store"});
+  const result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||"Tsy afaka naka ny asa nalefa.");
+  const items=result.submissions||[];status.textContent=items.length?items.length+" asa mila jerena na misy fanitsiana.":"Tsy misy asa miandry fanamarinana.";
+  const safe=v=>String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  list.innerHTML=items.map(s=>'<article class="item"><h2>'+safe(s.mission_title)+'</h2><p><strong>Mpiasa:</strong> '+safe(s.worker_name)+'</p><p>'+safe(s.details||"")+'</p>'+
+   (s.proof_url?'<p><a href="'+safe(s.proof_url)+'" target="_blank" rel="noopener noreferrer">Hijery porofo</a></p>':"")+
+   '<label for="submission-note-'+Number(s.id)+'">Antony / fanamarihana (takiana raha misy fanitsiana na fandavana)</label><textarea id="submission-note-'+Number(s.id)+'" rows="2"></textarea>'+
+   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+',\\'approved\\',this)">Ekena</button>'+
+   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+',\\'revision\\',this)">Angataho fanitsiana</button>'+
+   '<button type="button" style="background:#a63a35" onclick="reviewAdminSubmission('+Number(s.id)+',\\'rejected\\',this)">Lavina</button></article>').join("");
+ }catch(error){status.textContent=error.message;}
+}
+async function reviewAdminSubmission(id,decision,button){
+ const note=document.getElementById("submission-note-"+id).value.trim();
+ if((decision==="revision"||decision==="rejected")&&note.length<5){alert("Lazao mazava ny antony na ny fanitsiana ilaina.");return;}
+ if(!confirm("Hanamarina ity asa ity ve ianao?"))return;
+ const old=button.textContent;button.disabled=true;button.textContent="Miandry...";
+ try{
+  const response=await fetch("/api/admin/submissions",{method:"POST",credentials:"same-origin",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify({submission_id:id,decision,note})});
+  const result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||"Tsy tontosa.");
+  document.getElementById("adminSubmissionsStatus").textContent=result.message;await loadAdminSubmissions();
+ }catch(error){document.getElementById("adminSubmissionsStatus").textContent=error.message;}
+ finally{button.disabled=false;button.textContent=old;}
+}
+loadAdminSubmissions();
+
 
 
 async function loadJobRequests(){
