@@ -7,7 +7,7 @@ async function hashToken(token) {
 }
 async function getUser(request, env) {
   const cookie = request.headers.get("Cookie") || "";
-  const match = cookie.match(/(?:^|;\\s*)me_session=([a-f0-9]{64})(?:;|$)/);
+  const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
   if (!match) return null;
   return env.DB.prepare(`
     SELECT users.id, users.role, users.status, users.security_status
@@ -48,7 +48,7 @@ export async function onRequestPost({request,env}) {
     if(description.length<20||description.length>5000) return json({success:false,message:"Ny fanazavana dia tokony ho 20 ka hatramin'ny 5 000 tarehintsoratra."},400);
     if(budget!==null&&(!Number.isSafeInteger(budget)||budget<1000||budget>1000000000))
       return json({success:false,message:"Tsy mety ny tetibola natolotra."},400);
-    if(deadline&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(deadline))
+    if(deadline&&!/^\d{4}-\d{2}-\d{2}$/.test(deadline))
       return json({success:false,message:"Tsy mety ny daty farany."},400);
     const result=await env.DB.prepare(`
       INSERT INTO job_requests (client_id,title,category,description,proposed_budget_ariary,deadline_date)
