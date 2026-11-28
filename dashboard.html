@@ -105,13 +105,13 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <article class="card balance" id="walletCard"><div class="label">Vola ao amin'ny kitapom-bolanao</div><div class="amount" id="balance">0 Ar</div><p>Ny vola aseho eto dia ny vola voarakitra ao amin'ny kaontinao.</p></article>
 <article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty voamarina</span></article>
 <article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
-<article class="card"><h2>Iraka sy asa</h2><p>Jereo ny iraka misokatra na mamoròna iraka vaovao arakaraka ny karazana kaontinao.</p><p style="margin-top:12px"><a href="/missions.html" style="display:inline-block;background:#087c54;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny iraka</a></p></article>
+<article class="card"><h2 id="workTitle">Iraka sy asa</h2><p id="workDescription">Jereo ny asa sy iraka mifanaraka amin’ny kaontinao.</p><p style="margin-top:12px"><a id="workLink" href="/missions.html" style="display:inline-block;background:#087c54;color:#fff;padding:10px 14px;border-radius:9px">Hijery</a></p></article>
 <article class="card" id="submissionsCard"><h2>Fandefasana asa</h2><p>Ho hita eto ny asa nalefanao sy ny valin'ny fanamarinana azy.</p></article>
 <article class="card" style="grid-column:1/-1"><h2>Fampandrenesana</h2><p id="notificationStatus" class="muted">Eo am-pakana...</p><ul id="notificationList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul></article>
 <article class="card"><h2>Fanampiana</h2><p>Raha misy olana amin'ny kaontinao dia ampiasao ny pejy fifandraisana.</p></article>
 <article class="card" id="adminAccess" hidden><h2>Fitantanana lehibe</h2><p>Midira amin'ny toerana manokana hitantanana ny MADAGASCAR EARN.</p><p style="margin-top:12px"><a href="/admin.html" style="display:inline-block;background:#07583d;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny fitantanana</a></p></article>
 </div>
-<div class="status">Efa misy ny fijerena iraka, famoronana iraka miandry fanamarinana, fandefasana asa ary fangatahana fanitsiana. Mbola eo am-panamboarana ny famatsiam-bola sy ny fandoavana valisoa.</div>
+<div class="status">Ny asa sy iraka aseho dia miankina amin’ny karazana kaontinao. Mbola eo am-panamboarana ny famatsiam-bola sy ny fandoavana valisoa.</div>
 </section>
 </main>
 <script>
@@ -126,7 +126,21 @@ async function loadDashboard(){
   document.getElementById("welcome").textContent = displayName ? `Tongasoa, ${displayName} !` : "Tongasoa eto amin’ny kaontinao !";
   document.getElementById("walletCard").hidden = u.role === "client";
   document.getElementById("submissionsCard").hidden = u.role === "client";
-  if (u.role === "client") document.querySelector('.card a[href="/missions.html"]').textContent = "Hanolotra asa";
+  const workTitle=document.getElementById("workTitle"),workDescription=document.getElementById("workDescription"),workLink=document.getElementById("workLink");
+  if(u.role==="client"){
+   workTitle.textContent="Hanolotra asa";
+   workDescription.textContent="Manana asa na tetikasa hotanterahina ve ianao? Atolory eto amin’ny MADAGASCAR EARN izany. Ny Administrateur no hikarakara ny fifanarahana sy hitady Mpiasa.";
+   workLink.textContent="Hanolotra asa";
+  }else if(u.role==="worker"){
+   workTitle.textContent="Iraka sy asa";
+   workDescription.textContent="Jereo ny iraka misokatra, fidio izay mifanaraka aminao, ary tanteraho ny asa.";
+   workLink.textContent="Hijery iraka";
+  }else{
+   workTitle.textContent="Fitantanana asa";
+   workDescription.textContent="Tantano ny asa atolotry ny Mpanjifa sy ny iraka omena ny Mpiasa.";
+   workLink.textContent="Hiditra amin’ny fitantanana";
+   workLink.href="/admin.html";
+  }
   document.getElementById("balance").textContent=Number(data.wallet.balance_ariary||0).toLocaleString("fr-FR")+" Ar";
   document.getElementById("role").textContent=u.role==="worker"?"Mpiasa":u.role==="client"?"Mpanjifa":"Administrateur";
   document.getElementById("adminAccess").hidden = u.role !== "admin";
