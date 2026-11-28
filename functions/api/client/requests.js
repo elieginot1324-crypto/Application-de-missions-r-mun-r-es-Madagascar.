@@ -29,7 +29,7 @@ export async function onRequestGet({request,env}) {
   } catch(error) {
     console.error("CLIENT_REQUEST_LIST_ERROR:", error?.name, error?.message, error?.stack);
     const host = new URL(request.url).hostname;
-    const isFeaturePreview = host.endsWith(".madagascar-earn-v2-pages.pages.dev") && host !== "madagascar-earn-v2-pages.pages.dev";
+    const isFeaturePreview = host.endsWith(".application-de-missions-r-mun-r-es-madagascar.pages.dev") && host !== "application-de-missions-r-mun-r-es-madagascar.pages.dev";
     return json({
       success: false,
       message: "Tsy afaka naka ny fangatahana asa.",
