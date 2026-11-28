@@ -126,7 +126,7 @@ async function loadDashboard(){
   document.getElementById("welcome").textContent = displayName ? `Tongasoa, ${displayName} !` : "Tongasoa eto amin’ny kaontinao !";
   document.getElementById("walletCard").hidden = u.role === "client";
   document.getElementById("submissionsCard").hidden = u.role === "client";
-  if (u.role === "client") document.querySelector('.card a[href="/missions.html"]').textContent = "Handefa fangatahana asa";
+  if (u.role === "client") document.querySelector('.card a[href="/missions.html"]').textContent = "Hanolotra asa";
   document.getElementById("balance").textContent=Number(data.wallet.balance_ariary||0).toLocaleString("fr-FR")+" Ar";
   document.getElementById("role").textContent=u.role==="worker"?"Mpiasa":u.role==="client"?"Mpanjifa":"Administrateur";
   document.getElementById("adminAccess").hidden = u.role !== "admin";
