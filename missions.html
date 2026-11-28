@@ -82,17 +82,17 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <main>
 <section class="panel"><h2 id="welcome">Tongasoa</h2><p class="muted" id="intro">Ampifandraisina amin'ny kaontinao ny asa sy iraka.</p><div class="status" id="pageStatus"><span class="me-loading"><span class="me-spinner" aria-hidden="true"></span>Miandry ny angona...</span></div></section>
 <section id="clientCreate" class="panel hidden">
-<h2>Handefa fangatahana asa</h2>
-<p class="muted">Alefaso amin'ny MADAGASCAR EARN ny asa tianao hotanterahina. Ny Administrateur no hiresaka aminao, hanomana tolotra sy fifanarahana, ary handamina ny Mpiasa. Tsy mifandray mivantana amin'ny Mpiasa ianao.</p>
+<h2>Hanolotra asa</h2>
+<p class="muted">Manana asa na tetikasa hotanterahina ve ianao? Atolory eto amin'ny MADAGASCAR EARN izany. Ny Administrateur no hiresaka aminao, hanomana tolotra sy fifanarahana, ary handamina ny Mpiasa. Tsy mifandray mivantana amin'ny Mpiasa ianao.</p>
 <form id="requestForm">
 <label for="title">Lohatenin'ny asa</label><input id="title" required minlength="5" maxlength="120" placeholder="Ohatra: Fanoratana lahatsoratra">
 <label for="category">Sokajy</label><input id="category" maxlength="60" placeholder="Ohatra: Asa an-tserasera">
 <label for="description">Fanazavana sy toromarika</label><textarea id="description" required minlength="20" maxlength="5000" placeholder="Hazavao mazava ny asa tokony hatao..."></textarea>
 <div class="grid"><div><label for="proposedBudget">Tetibola vinavinaina (Ar, tsy voatery)</label><input id="proposedBudget" type="number" min="1000" step="1" placeholder="Ohatra: 50000"></div><div><label for="deadline">Daty farany irina (tsy voatery)</label><input id="deadline" type="date"></div></div>
-<button type="submit">Alefa amin'ny Administrateur</button>
+<button type="submit">Alefaso amin'ny Administrateur</button>
 </form><div id="createStatus" class="status"></div>
 </section>
-<section id="clientRequests" class="panel hidden"><h2>Ny fangatahana asako</h2><p class="muted">Hita eto ny satan'ny fangatahanao sy ny valin'ny Administrateur.</p><div id="clientRequestList" class="grid"></div></section>
+<section id="clientRequests" class="panel hidden"><h2>Ny asa natolotro</h2><p class="muted">Hita eto ny satan'ny asa natolotrao sy ny valin'ny Administrateur.</p><div id="clientRequestList" class="grid"></div></section>
 <section id="workerMissions" class="panel hidden"><h2>Iraka misokatra</h2><div id="missionList" class="grid"></div></section>
 <section id="mySubmissions" class="panel hidden"><h2>Asa nalefako</h2><div id="mySubmissionList" class="grid"></div></section>
 
@@ -115,7 +115,7 @@ async function load() {
   currentUser = profile.user;
   $("welcome").textContent = "Tongasoa, "+currentUser.full_name;
   if(currentUser.role==="client") {
-   $("intro").textContent="Alefaso amin'ny Administrateur ny fangatahana asa. Izy no hikarakara ny fifanarahana sy ny Mpiasa.";
+   $("intro").textContent="Manana asa hotanterahina ve ianao? Atolory eto amin'ny MADAGASCAR EARN izany. Ny Administrateur no hikarakara ny fifanarahana sy ny Mpiasa.";
    $("clientCreate").classList.remove("hidden");
    $("clientRequests").classList.remove("hidden");
    await loadClientRequests();
@@ -144,7 +144,7 @@ $("requestForm").addEventListener("submit",async event=>{
   })});
   $("createStatus").textContent=result.message; $("requestForm").reset(); await loadClientRequests();
  } catch(error){$("createStatus").textContent=error.message;}
- finally{button.disabled=false;button.classList.remove("is-loading");button.textContent="Alefa amin'ny Administrateur";}
+ finally{button.disabled=false;button.classList.remove("is-loading");button.textContent="Alefaso amin'ny Administrateur";}
 });
 async function loadClientRequests(){
  try{
@@ -157,7 +157,7 @@ async function loadClientRequests(){
    (r.agreed_budget_ariary?'<p class="money">Tolotra nifanarahana: '+money(r.agreed_budget_ariary)+'</p>':"")+
    (r.admin_note?'<p><strong>Hafatra avy amin’ny Administrateur:</strong> '+esc(r.admin_note)+'</p>':"")+
    '<small class="muted">Nalefa: '+esc(r.created_at||"")+'</small></article>'
-  ).join(""):"<p class='muted'>Tsy mbola nandefa fangatahana asa ianao.</p>";
+  ).join(""):"<p class='muted'>Mbola tsy nanolotra asa ianao.</p>";
  }catch(error){$("clientRequestList").textContent=error.message;}
 }
 async function loadMissions(){
