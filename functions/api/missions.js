@@ -52,7 +52,7 @@ export async function onRequestPost({ request, env }) {
   try {
     const user = await getUser(request, env);
     if (!user || user.status !== "active") return json({ success:false, message:"Midira amin'ny kaonty voamarina aloha." }, 401);
-    if (user.role !== "client") return json({ success:false, message:"Ny Mpanjifa ihany no afaka mamorona iraka." }, 403);
+    if (user.role !== "admin") return json({ success:false, message:"Ny Administrateur ihany no mamadika fangatahana ekena ho iraka." }, 403);
     const data = await request.json();
     const title = String(data.title || "").trim();
     const description = String(data.description || "").trim();
