@@ -464,9 +464,9 @@ async function loadAdminSubmissions(){
   list.innerHTML=items.map(s=>'<article class="item"><h2>'+safe(s.mission_title)+'</h2><p><strong>Mpiasa:</strong> '+safe(s.worker_name)+'</p><p>'+safe(s.details||"")+'</p>'+
    (s.proof_url?'<p><a href="'+safe(s.proof_url)+'" target="_blank" rel="noopener noreferrer">Hijery porofo</a></p>':"")+
    '<label for="submission-note-'+Number(s.id)+'">Antony / fanamarihana (takiana raha misy fanitsiana na fandavana)</label><textarea id="submission-note-'+Number(s.id)+'" rows="2"></textarea>'+
-   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+','approved',this)">Ekena</button>'+
-   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+','revision',this)">Angataho fanitsiana</button>'+
-   '<button type="button" style="background:#a63a35" onclick="reviewAdminSubmission('+Number(s.id)+','rejected',this)">Lavina</button></article>').join("");
+   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+',&quot;approved&quot;,this)">Ekena</button>'+
+   '<button type="button" onclick="reviewAdminSubmission('+Number(s.id)+',&quot;revision&quot;,this)">Angataho fanitsiana</button>'+
+   '<button type="button" style="background:#a63a35" onclick="reviewAdminSubmission('+Number(s.id)+',&quot;rejected&quot;,this)">Lavina</button></article>').join("");
  }catch(error){status.textContent=error.message;}
 }
 async function reviewAdminSubmission(id,decision,button){
