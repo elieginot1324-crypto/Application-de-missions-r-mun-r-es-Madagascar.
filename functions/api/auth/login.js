@@ -85,7 +85,7 @@ export async function onRequestPost({ request, env }) {
 
     const user = await env.DB.prepare(
       `SELECT id, full_name, email, phone,
-              password_hash, role, status, security_status
+              password_hash, role, status
        FROM users
        WHERE email = ? OR phone = ?
        LIMIT 1`
@@ -110,7 +110,7 @@ if (!passwordValid) {
   }, { status: 401 });
 }
 
-if (user.status !== "active" || user.security_status !== "clear") {
+if (user.status !== "active") {
       return Response.json({
         success: false,
         message: "Mbola tsy nekena na tsy afaka miditra ny kaontinao."
