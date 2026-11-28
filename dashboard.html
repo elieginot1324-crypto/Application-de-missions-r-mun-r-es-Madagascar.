@@ -106,7 +106,7 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty voamarina</span></article>
 <article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
 <article class="card"><h2>Iraka sy asa</h2><p>Jereo ny iraka misokatra na mamoròna iraka vaovao arakaraka ny karazana kaontinao.</p><p style="margin-top:12px"><a href="/missions.html" style="display:inline-block;background:#087c54;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny iraka</a></p></article>
-<article class="card"><h2>Fandefasana asa</h2><p>Ho hita eto ny asa nalefanao sy ny valin'ny fanamarinana azy.</p></article>
+<article class="card" id="submissionsCard"><h2>Fandefasana asa</h2><p>Ho hita eto ny asa nalefanao sy ny valin'ny fanamarinana azy.</p></article>
 <article class="card" style="grid-column:1/-1"><h2>Fampandrenesana</h2><p id="notificationStatus" class="muted">Eo am-pakana...</p><ul id="notificationList" style="padding-left:20px;margin:12px 0 0;line-height:1.6"></ul></article>
 <article class="card"><h2>Fanampiana</h2><p>Raha misy olana amin'ny kaontinao dia ampiasao ny pejy fifandraisana.</p></article>
 <article class="card" id="adminAccess" hidden><h2>Fitantanana lehibe</h2><p>Midira amin'ny toerana manokana hitantanana ny MADAGASCAR EARN.</p><p style="margin-top:12px"><a href="/admin.html" style="display:inline-block;background:#07583d;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny fitantanana</a></p></article>
@@ -125,6 +125,8 @@ async function loadDashboard(){
   const displayName = String(u.full_name || "").trim().replace(/\s+/g, " ").replace(/(^|\s)\p{L}/gu, character => character.toUpperCase());
   document.getElementById("welcome").textContent = displayName ? `Tongasoa, ${displayName} !` : "Tongasoa eto amin’ny kaontinao !";
   document.getElementById("walletCard").hidden = u.role === "client";
+  document.getElementById("submissionsCard").hidden = u.role === "client";
+  if (u.role === "client") document.querySelector('.card a[href="/missions.html"]').textContent = "Handefa fangatahana asa";
   document.getElementById("balance").textContent=Number(data.wallet.balance_ariary||0).toLocaleString("fr-FR")+" Ar";
   document.getElementById("role").textContent=u.role==="worker"?"Mpiasa":u.role==="client"?"Mpanjifa":"Administrateur";
   document.getElementById("adminAccess").hidden = u.role !== "admin";
