@@ -31,13 +31,7 @@ export async function onRequestGet({ request, env }) {
         WHERE s.worker_id = ? ORDER BY s.submitted_at DESC LIMIT 100
       `).bind(user.id).all();
     } else if (user.role === "client") {
-      result = await env.DB.prepare(`
-        SELECT s.id, s.mission_id, s.worker_id, s.details, s.proof_url, s.status, s.submitted_at,
-               m.title AS mission_title, u.full_name AS worker_name
-        FROM submissions s JOIN missions m ON m.id = s.mission_id
-        JOIN users u ON u.id = s.worker_id
-        WHERE m.client_id = ? ORDER BY s.submitted_at DESC LIMIT 200
-      `).bind(user.id).all();
+      return json({success:false,message:"Ny Administrateur ihany no mijery ny asa nalefan'ny Mpiasa."},403);
     } else return json({success:false,message:"Tsy natao ho an'ity kaonty ity."},403);
     return json({success:true, submissions:result.results || []});
   } catch(error) {
@@ -81,7 +75,7 @@ export async function onRequestPost({ request, env }) {
       return json({success:true,message:"Voaray ny asa nalefanao. Miandry ny fanamarinana ataon'ny Mpanjifa."},201);
     }
     if (action === "review") {
-      if (user.role !== "client") return json({success:false,message:"Ny Mpanjifa tompon'ny iraka ihany no afaka mijery ny asa."},403);
+      if (user.role !== "admin") return json({success:false,message:"Ny Mpanjifa tompon'ny iraka ihany no afaka mijery ny asa."},403);
       const submissionId = Number(data.submission_id);
       const decision = String(data.decision || "");
       if (!Number.isSafeInteger(submissionId) || submissionId < 1 || !["revision","rejected","approved"].includes(decision)) {
