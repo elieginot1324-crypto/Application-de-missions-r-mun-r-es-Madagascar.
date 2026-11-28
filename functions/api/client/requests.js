@@ -27,8 +27,14 @@ export async function onRequestGet({request,env}) {
     `).bind(user.id).all();
     return json({success:true,requests:result.results||[]});
   } catch(error) {
-    console.error("CLIENT_REQUEST_LIST_ERROR:",error);
-    return json({success:false,message:"Tsy afaka naka ny fangatahana asa."},500);
+    console.error("CLIENT_REQUEST_LIST_ERROR:", error?.name, error?.message, error?.stack);
+    const host = new URL(request.url).hostname;
+    const isFeaturePreview = host === "feature-client-admin-workflo.madagascar-earn-v2-pages.dev";
+    return json({
+      success: false,
+      message: "Tsy afaka naka ny fangatahana asa.",
+      ...(isFeaturePreview ? { debug: String(error?.message || error || "Unknown error").slice(0, 300) } : {})
+    }, 500);
   }
 }
 export async function onRequestPost({request,env}) {
