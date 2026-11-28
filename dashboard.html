@@ -102,7 +102,7 @@ button.is-loading::before{content:"";display:inline-block;width:14px;height:14px
 <p id="error" role="alert"></p>
 <section id="content" hidden>
 <div class="grid">
-<article class="card balance"><div class="label">Vola ao amin'ny kitapom-bolanao</div><div class="amount" id="balance">0 Ar</div><p>Ny vola aseho eto dia ny vola voarakitra ao amin'ny kaontinao.</p></article>
+<article class="card balance" id="walletCard"><div class="label">Vola ao amin'ny kitapom-bolanao</div><div class="amount" id="balance">0 Ar</div><p>Ny vola aseho eto dia ny vola voarakitra ao amin'ny kaontinao.</p></article>
 <article class="card"><div class="label">Karazana kaonty</div><h2 id="role">Mpiasa</h2><span class="role">Kaonty voamarina</span></article>
 <article class="card"><h2>Mombamomba ahy</h2><p id="email"></p><p id="phone"></p></article>
 <article class="card"><h2>Iraka sy asa</h2><p>Jereo ny iraka misokatra na mamoròna iraka vaovao arakaraka ny karazana kaontinao.</p><p style="margin-top:12px"><a href="/missions.html" style="display:inline-block;background:#087c54;color:#fff;padding:10px 14px;border-radius:9px">Hiditra amin'ny iraka</a></p></article>
@@ -124,6 +124,7 @@ async function loadDashboard(){
   const u=data.user;
   const displayName = String(u.full_name || "").trim().replace(/\s+/g, " ").replace(/(^|\s)\p{L}/gu, character => character.toUpperCase());
   document.getElementById("welcome").textContent = displayName ? `Tongasoa, ${displayName} !` : "Tongasoa eto amin’ny kaontinao !";
+  document.getElementById("walletCard").hidden = u.role === "client";
   document.getElementById("balance").textContent=Number(data.wallet.balance_ariary||0).toLocaleString("fr-FR")+" Ar";
   document.getElementById("role").textContent=u.role==="worker"?"Mpiasa":u.role==="client"?"Mpanjifa":"Administrateur";
   document.getElementById("adminAccess").hidden = u.role !== "admin";
