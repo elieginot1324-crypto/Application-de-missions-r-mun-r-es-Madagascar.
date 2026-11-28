@@ -81,12 +81,11 @@ export async function onRequestPost({ request, env }) {
 
     const passwordHash = await hashPassword(password);
     const accountStatus = needsReview ? "pending" : "active";
-    const securityStatus = needsReview ? "review" : "clear";
 
     await env.DB.batch([
       env.DB.prepare(
-        "INSERT INTO users (full_name, email, phone, password_hash, role, status, security_status) VALUES (?, ?, ?, ?, ?, ?, ?)"
-      ).bind(fullName, email, phone, passwordHash, role, accountStatus, securityStatus),
+        "INSERT INTO users (full_name, email, phone, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?)"
+      ).bind(fullName, email, phone, passwordHash, role, accountStatus),
       env.DB.prepare(
         "INSERT INTO wallets (user_id) SELECT id FROM users WHERE (? IS NOT NULL AND email = ?) OR (? IS NOT NULL AND phone = ?) ORDER BY id DESC LIMIT 1"
       ).bind(email, email, phone, phone)
@@ -144,7 +143,6 @@ export async function onRequestPost({ request, env }) {
     return json({
       success: false,
       message: "Nisy olana teo am-pisoratana anarana.",
-      debug: message.slice(0, 240) || "UNKNOWN_REGISTER_ERROR"
     }, 500);
   }
 }
