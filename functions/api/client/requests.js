@@ -10,7 +10,7 @@ async function getUser(request, env) {
   const match = cookie.match(/(?:^|;\s*)me_session=([a-f0-9]{64})(?:;|$)/);
   if (!match) return null;
   return env.DB.prepare(`
-    SELECT users.id, users.role, users.status, users.security_status
+    SELECT users.id, users.role, users.status
     FROM sessions JOIN users ON users.id=sessions.user_id
     WHERE sessions.token_hash=? AND sessions.expires_at>? LIMIT 1
   `).bind(await hashToken(match[1]), new Date().toISOString()).first();
@@ -18,7 +18,7 @@ async function getUser(request, env) {
 export async function onRequestGet({request,env}) {
   try {
     const user=await getUser(request,env);
-    if (!user || user.status!=="active" || user.security_status!=="clear")
+    if (!user || user.status!=="active")
       return json({success:false,message:"Midira amin'ny kaonty voamarina aloha."},401);
     if (user.role!=="client") return json({success:false,message:"Ny Mpanjifa ihany no mahazo mijery ireo fangatahana."},403);
     const result=await env.DB.prepare(`
@@ -34,7 +34,7 @@ export async function onRequestGet({request,env}) {
 export async function onRequestPost({request,env}) {
   try {
     const user=await getUser(request,env);
-    if (!user || user.status!=="active" || user.security_status!=="clear")
+    if (!user || user.status!=="active")
       return json({success:false,message:"Midira amin'ny kaonty voamarina aloha."},401);
     if (user.role!=="client") return json({success:false,message:"Ny Mpanjifa ihany no afaka mandefa fangatahana asa."},403);
     const data=await request.json();
