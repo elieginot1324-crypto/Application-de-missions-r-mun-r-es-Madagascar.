@@ -1,0 +1,45 @@
+/* MADAGASCAR EARN V2 — fenitra iraisana ho an'ny Android */
+@media (max-width: 720px) {
+  html { -webkit-text-size-adjust: 100%; }
+  body { line-height: 1.5; }
+  header { gap: 10px; }
+  main { max-width: 100%; }
+  h1 { line-height: 1.2; }
+  h2 { line-height: 1.3; }
+  button, .btn, a.button, input[type="submit"] {
+    min-height: 38px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+  input, select, textarea {
+    min-height: 40px;
+    max-width: 100%;
+    font-size: 14px;
+  }
+  textarea { min-height: 88px; }
+  img, video, svg { max-width: 100%; }
+  .card, .panel, .item, .welcome, .auth-box {
+    border-radius: 14px;
+  }
+  .grid, .menu, .feature-grid { gap: 11px; }
+  p, li { overflow-wrap: anywhere; }
+}
+@media (max-width: 560px) {
+  header { padding-top: 12px; padding-bottom: 12px; }
+  main { padding-top: 14px; padding-bottom: 28px; }
+  h1 { font-size: clamp(20px, 6vw, 27px); }
+  h2 { font-size: clamp(16px, 4.8vw, 20px); }
+  .wrap { width: calc(100% - 24px); }
+  .panel, .card, .item, .welcome { padding: 13px; }
+  .grid, .menu, .feature-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  button, .btn, a.button, input[type="submit"] { min-height: 36px; padding: 8px 10px; font-size: 12px; }
+  label { font-size: 12px; }
+  input, select, textarea { padding: 9px 10px; font-size: 13px; }
+}
+@media (max-width: 380px) {
+  header { padding-left: 10px; padding-right: 10px; }
+  main { padding-left: 10px; padding-right: 10px; }
+  .panel, .card, .item, .welcome { padding: 11px; }
+  .brand { font-size: 14px; }
+}
