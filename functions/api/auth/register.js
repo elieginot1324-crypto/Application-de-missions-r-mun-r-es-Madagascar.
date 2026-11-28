@@ -143,7 +143,8 @@ export async function onRequestPost({ request, env }) {
     }
     return json({
       success: false,
-      message: "Nisy olana teo am-pisoratana anarana."
+      message: "Nisy olana teo am-pisoratana anarana.",
+      debug: message.slice(0, 240) || "UNKNOWN_REGISTER_ERROR"
     }, 500);
   }
 }
