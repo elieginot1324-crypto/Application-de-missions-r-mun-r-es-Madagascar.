@@ -168,10 +168,14 @@ if (user.status !== "active") {
 
   } catch (error) {
     console.error("LOGIN_ERROR:", error);
+    const host = new URL(request.url).hostname;
+    const isFeaturePreview = host.endsWith(".application-de-missions-r-mun-r-es-madagascar.pages.dev") &&
+      host !== "application-de-missions-r-mun-r-es-madagascar.pages.dev";
 
     return Response.json({
       success: false,
-      message: "Nisy olana teo am-pidirana."
-    }, { status: 500 });
+      message: "Nisy olana teo am-pidirana.",
+      ...(isFeaturePreview ? { debug: String(error?.message || error || "Unknown error").slice(0, 300) } : {})
+    }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
