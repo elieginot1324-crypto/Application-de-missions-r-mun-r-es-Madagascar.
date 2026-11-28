@@ -35,10 +35,7 @@ export async function onRequestGet({ request, env }) {
         ORDER BY m.created_at DESC LIMIT 100
       `).all();
     } else if (user.role === "client") {
-      rows = await env.DB.prepare(`
-        SELECT id, title, description, category, budget_ariary, workers_needed, status, created_at
-        FROM missions WHERE client_id = ? ORDER BY created_at DESC LIMIT 100
-      `).bind(user.id).all();
+      return json({ success:false, message:"Ny Mpanjifa dia mijery ny fangatahana asa fa tsy ny iraka natokana ho an'ny Mpiasa." }, 403);
     } else {
       return json({ success:false, message:"Tsy natao ho an'ity karazana kaonty ity." }, 403);
     }
