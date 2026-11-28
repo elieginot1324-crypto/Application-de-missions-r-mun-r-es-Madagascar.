@@ -9,7 +9,7 @@ async function getAdmin(request,env){
 export async function onRequestGet({request,env}){
  try{
   const admin=await getAdmin(request,env);if(!admin)return json({success:false,message:"Administrateur ihany no mahazo miditra."},403);
-  const result=await env.DB.prepare("SELECT s.id,s.mission_id,s.worker_id,s.details,s.proof_url,s.status,s.submitted_at,m.title AS mission_title,u.full_name AS worker_name FROM submissions s JOIN missions m ON m.id=s.mission_id JOIN users u ON u.id=s.worker_id WHERE s.status IN ('submitted','revision') ORDER BY s.submitted_at ASC LIMIT 200").all();
+  const result=await env.DB.prepare("SELECT s.id,s.mission_id,s.worker_id,s.details,s.proof_url,s.status,s.submitted_at,m.title AS mission_title,u.full_name AS worker_name FROM submissions s JOIN missions m ON m.id=s.mission_id JOIN users u ON u.id=s.worker_id WHERE s.status = 'submitted' ORDER BY s.submitted_at ASC LIMIT 200").all();
   return json({success:true,submissions:result.results||[]});
  }catch(error){console.error("ADMIN_SUBMISSIONS_LIST_ERROR:",error);return json({success:false,message:"Tsy afaka naka ny asa nalefan'ny Mpiasa."},500);}
 }
